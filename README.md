@@ -4,7 +4,9 @@
 ## Get Started
 
 ```
-python -m http.server 8080
+$ npm install
+$ webpack
+$ python -m http.server 8080
 ```
 
 then open your browser and access
