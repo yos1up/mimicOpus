@@ -12,5 +12,21 @@ module.exports = {
     filename: 'index.js',
     // 出力先のパス（v2系以降は絶対パスを指定する必要がある）
     path: path.join(__dirname, 'build')
-  }
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: ["env", "react"]
+            }
+          }
+        ],
+        exclude: /node_modules/
+      },
+    ]
+  },
 };

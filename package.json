@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/yos1up/mimicOpus#readme",
   "dependencies": {
-    "react": "^16.5.2"
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "tone": "^0.12.80"
   },
   "devDependencies": {
     "webpack": "^4.19.1",
