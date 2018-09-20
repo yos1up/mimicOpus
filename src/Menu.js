@@ -99,7 +99,7 @@ class Menu extends React.Component {
           type="text"
           id="tb_bpm"
           size="3"
-          value='150'
+          defaultValue={150}
         />
         <br />
 

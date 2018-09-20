@@ -1,3 +1,3 @@
-var scoreData = [];
+const scoreData = [];
 
 export default scoreData;
