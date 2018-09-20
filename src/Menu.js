@@ -3,7 +3,7 @@ import Tone from "Tone";
 import scoreData from "./scoreData";
 
 //サンプラー
-var sampler = new Tone.Sampler({
+const sampler = new Tone.Sampler({
   "C2" : "C2.wav",
   "E2" : "E2.wav",
   "Ab2" : "Ab2.wav",
@@ -33,6 +33,9 @@ function noteNumberToPitchName(nn){
   return ['C','C#','D','Eb','E','F','F#','G','Ab','A','Bb','B'][nn % 12] + (Math.floor(nn/12)-1);
 }
 
+var questionMelody = [];
+
+
 function play(notes, bpm=120){ //一連の音符たちを鳴らしたい場合，Tone.Part が便利．（他に Tone.Sequence というのもあるようだ）
   //bpm 例外処理・・・
   var secPerBeat = 60 / bpm;
@@ -45,20 +48,6 @@ function play(notes, bpm=120){ //一連の音符たちを鳴らしたい場合�
       sampler.triggerAttackRelease(noteNumberToPitchName(event[0]), event[1], time, 1); // 引数は，おそらく (音高，音長，絶対時刻[s]，ベロシティ[0~1])
     }, timeEventTupleList);
   melody.start(Tone.now()); //先に Tone.Transport.start() してある必要がある．
-}
-
-var questionMelody = [];
-function setAsQuestion(){
-  questionMelody = Object.values(scoreData.notes.items()).concat(); //.concat() は値コピーのため．
-  scoreData.clearNotes();
-  //bpmを変更不可能にする
-  document.getElementById('tb_bpm').disabled = true;
-  //set as question ボタンを不能にする
-  document.getElementById('b_set_as_question').disabled = true;
-  //play question ボタンを不能にする
-  document.getElementById('b_play_question').disabled = false;
-  //submit ボタンを有効にする
-  document.getElementById('b_submit').disabled = false;
 }
 
 function evaluateAnswer(qMel, aMel){
@@ -84,6 +73,31 @@ function downloadData(jsonObject) { //作業状態のダウンロード
 }
 
 class Menu extends React.Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      tb_bpm_disabled: false,
+      b_set_as_question: false,
+      b_play_question: true,
+      b_submit: true,
+    };
+
+    this.handleClickSetAsQuestion = this.handleClickSetAsQuestion.bind(this);
+  }
+
+  handleClickSetAsQuestion(){
+    questionMelody = Object.values(scoreData.notes.items()).concat(); //.concat() は値コピーのため．
+    scoreData.clearNotes();
+
+    this.setState({
+      tb_bpm_disabled: true,
+      b_set_as_question: true,
+      b_play_question: false,
+      b_submit: false,
+    });
+  }
+
   render(){
     // inputはなぜか変なエラーが出るのでmaterial ui のボタンを使いましょう
     return(
@@ -99,6 +113,7 @@ class Menu extends React.Component {
           type="text"
           id="tb_bpm"
           size="3"
+          disabled={this.state.tb_bpm_disabled}
           defaultValue={150}
         />
         <br />
@@ -107,20 +122,21 @@ class Menu extends React.Component {
           type="button"
           id="b_set_as_question"
           value="set as question"
-          onClick={() => setAsQuestion()}
+          disabled={this.state.b_set_as_question}
+          onClick={() => this.handleClickSetAsQuestion()}
         />
         <input
           type="button"
           id="b_play_question"
           value="play question"
-          disabled
+          disabled={this.state.b_play_question}
           onClick={() => play(questionMelody, document.getElementById('tb_bpm').value)}
         />
         <input
           type="button"
           id="b_submit"
           value="submit"
-          disabled
+          disabled={this.state.b_submit}
           onClick={() => evaluateAnswer(questionMelody, Object.values(scoreData.notes.items()))}
         />
         <br />
