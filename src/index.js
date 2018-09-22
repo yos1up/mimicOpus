@@ -1,22 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from "react-redux";
+import { createStore } from "redux";
 
-import PianoRollGrid from "./PianoRollGrid";
-import Menu from "./Menu";
-import scoreData from "./scoreData";
+import App from './components/App';
+import rootReducer from "./reducers";
 
+const store = createStore(rootReducer);
 
 ReactDOM.render(
-  <div>
-    <div
-      style={{
-        position: "relative",
-        left: 100,
-        top: 100,
-      }}
-      >
-      <PianoRollGrid pitchRange={[60, 72]} scoreData={scoreData}/>
-    </div>
-    <Menu/>
-  </div>
-  , document.getElementById('root'));
+  <Provider store={store}>
+    <App store={store}/>
+  </Provider>,
+  document.getElementById("root")
+);
