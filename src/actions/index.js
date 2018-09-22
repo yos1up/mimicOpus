@@ -19,3 +19,9 @@ export const delNote = function(idx){
     idx: idx,
   };
 };
+export const shiftPitchRange = function(delta){
+  return {
+    type: actionTypes.SHIFT_PITCH_RANGE,
+    delta: delta
+  };
+};

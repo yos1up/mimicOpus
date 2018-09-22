@@ -12,18 +12,20 @@ class PianoRollGrid extends React.Component{ //グリッドエリア + yラベ�
     this.state = {
       uw: 50,
       uh: 18,
-      pitchRange: props.pitchRange, //[minPitch, maxPitch]
+      //pitchRange: props.pitchRange, //[minPitch, maxPitch] //props に移しました（Reduxのcontainerの設定により）
       rows: props.pitchRange[1] - props.pitchRange[0] + 1,
       cols: 16,
       elementId: 'mainPianoRoll',
       xMargin: 36,
       selectRange: null, // [startBeat (decimal), minPitch (integer), endBeat (decimal), maxPitch (integer)]
     };
+    // 上下キー対応 
+    window.onkeydown = ((e) => this.keyDown(e));
   }
   render(){
     var elementList = [];
 
-    var pitchRange = this.state.pitchRange;
+    var pitchRange = this.props.pitchRange;
     var rows = this.state.rows;
     var cols = this.state.cols;
     var uw = this.state.uw;
@@ -83,11 +85,22 @@ class PianoRollGrid extends React.Component{ //グリッドエリア + yラベ�
             onMouseUp={this.mouseUp.bind(this)} onMouseMove={this.mouseMove.bind(this)}>{elementList}</div>)
   }
 
+  keyDown(event){
+    if (event.keyCode == 38){ // up key
+      this.props.shiftPitchRange(+1);
+    }else if (event.keyCode == 40){ // down key
+      this.props.shiftPitchRange(-1);
+    }
+  }
+
+
+
+
   wheel(event){
-    if (event.deltaY < 0 && this.state.pitchRange[1] < 127){
-      this.setState({pitch: [this.state.pitchRange[0]+1, this.state.pitchRange[1]+1]});
-    }else if (event.deltaY > 0 && this.state.pitchRange[0] > 0){
-      this.setState({pitch: [this.state.pitchRange[0]-1, this.state.pitchRange[1]-1]});
+    if (event.deltaY < 0 && this.props.pitchRange[1] < 127){
+      this.setState({pitch: [this.props.pitchRange[0]+1, this.props.pitchRange[1]+1]});
+    }else if (event.deltaY > 0 && this.props.pitchRange[0] > 0){
+      this.setState({pitch: [this.props.pitchRange[0]-1, this.props.pitchRange[1]-1]});
     }
   }
   mouseDown(event){
@@ -127,10 +140,10 @@ class PianoRollGrid extends React.Component{ //グリッドエリア + yラベ�
 
 
   relPosToTimePitch(relPos){ //relPos: グリッド左上からの座標ずれ
-    return [relPos[0]/this.state.uw, this.state.pitchRange[1] + 0.5 - relPos[1]/this.state.uh];
+    return [relPos[0]/this.state.uw, this.props.pitchRange[1] + 0.5 - relPos[1]/this.state.uh];
   }
   timePitchToRelPos(timePitch){ //timePitch: 時刻とピッチ
-    return [timePitch[0] * this.state.uw, (this.state.pitchRange[1] + 0.5 - timePitch[1]) * this.state.uh];
+    return [timePitch[0] * this.state.uw, (this.props.pitchRange[1] + 0.5 - timePitch[1]) * this.state.uh];
   }
   calculateSelectRangeByTwoRelPos(relPos1, relPos2, onePitch=true){
     var tp1 = this.relPosToTimePitch(relPos1);

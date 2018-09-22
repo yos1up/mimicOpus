@@ -2,7 +2,6 @@ import React from "react";
 
 import PianoRollGrid from "../containers/PianoRollGrid";
 import Menu from "../containers/Menu";
-import scoreData from "./scoreData";
 
 class App extends React.Component {
   render(){
@@ -15,7 +14,7 @@ class App extends React.Component {
             top: 100,
           }}
           >
-          <PianoRollGrid pitchRange={[60, 72]} scoreData={scoreData}/>
+          <PianoRollGrid pitchRange={[60, 72]}/>
         </div>
         <Menu/>
       </div>

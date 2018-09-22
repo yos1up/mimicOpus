@@ -1,6 +1,5 @@
 import React from "react";
 import Tone from "tone";
-import scoreData from "./scoreData";
 
 //サンプラー
 const sampler = new Tone.Sampler({
