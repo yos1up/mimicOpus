@@ -1,5 +1,5 @@
 import React from "react";
-import Tone from "Tone";
+import Tone from "tone";
 import scoreData from "./scoreData";
 
 //サンプラー
