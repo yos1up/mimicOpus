@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/yos1up/mimicOpus#readme",
   "dependencies": {
+    "@babel/core": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "tone": "^0.12.80"
