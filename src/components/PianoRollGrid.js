@@ -18,16 +18,7 @@ class PianoRollGrid extends React.Component{ //グリッドエリア + yラベ�
       elementId: 'mainPianoRoll',
       xMargin: 36,
       selectRange: null, // [startBeat (decimal), minPitch (integer), endBeat (decimal), maxPitch (integer)]
-      notes: {idCnt:0,
-              add:function(x){this[this.idCnt]=x;this.idCnt++;return this.idCnt-1;},
-              del:function(k){delete this[k];},
-              clear:function(){for(let k in this){if (['idCnt', 'add', 'del', 'items', 'clear'].indexOf(k)===-1) delete this[k];}},
-              items:function(){var ret={};for(let k in this){if (['idCnt', 'add', 'del', 'items', 'clear'].indexOf(k)===-1) ret[k]=this[k];} return ret;}
-            } // {idCnt:0, add:f, del:f, clear:f, items:f, (dictKey):{pitch:64, start:0, end:3}, ...} // 現在のノート配置
     };
-    //外からのアクセス用
-    this.props.scoreData.notes = this.state.notes; //ノーツの一覧
-    this.props.scoreData.clearNotes = this.clearNotes.bind(this); //ノーツの全削除
   }
   render(){
     var elementList = [];
@@ -63,21 +54,14 @@ class PianoRollGrid extends React.Component{ //グリッドエリア + yラベ�
     }
 
     //notes (Component にすべき)
-    for (let dictKey in this.state.notes.items()){
-      var note = this.state.notes[dictKey];
+    for (let i=0; i<this.props.notes.size; i++){
+      var note = this.props.notes.get(i);
       var leftBottom = this.timePitchToRelPos([note.start, note.pitch-0.5]);
       var rightTop = this.timePitchToRelPos([note.end, note.pitch+0.5]);
-      /*
-      var divStyle = {width:rightTop[0] - leftBottom[0], height:leftBottom[1] - rightTop[1], backgroundColor: 'red',
-        borderRadius: 10, position:'absolute', top:rightTop[1], left:this.state.xMargin + leftBottom[0]};
-      elementList.push(
-        <div key={elementList.length} style={divStyle}></div>
-      );
-      */
       var divStyle = {position:'absolute', top:rightTop[1], left:this.state.xMargin + leftBottom[0]};
       elementList.push(
         <div key={elementList.length} style={divStyle}>
-          <NoteBlock start={note.start} end={note.end} pitch={note.pitch} parent={this} dictKey={dictKey}/>
+          <NoteBlock start={note.start} end={note.end} pitch={note.pitch} parent={this} dictKey={i} delNote={()=>this.props.delNote(i)}/>
         </div>
       );
     }
@@ -135,7 +119,7 @@ class PianoRollGrid extends React.Component{ //グリッドエリア + yラベ�
           end: this.state.selectRange[2],
           pitch: this.state.selectRange[1]
         }
-        this.state.notes.add(note); // setState外の state書き換え（違反） 次行でsetStateしてるから良い？（ダメ）
+        this.props.addNote(note);
         this.setState({dragInfo: undefined, selectRange: null});
       }
     }
@@ -171,8 +155,7 @@ class PianoRollGrid extends React.Component{ //グリッドエリア + yラベ�
   }
 
   clearNotes(){
-    this.state.notes.clear();
-    this.setState({});
+    this.props.clearNotes();
   }
 }
 

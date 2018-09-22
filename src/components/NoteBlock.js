@@ -23,10 +23,7 @@ class NoteBlock extends React.Component { //ノーツ
   click(event){
     //クリックイベントの親オブジェクトへの伝播を止める
     event.stopPropagation();
-    //親のノートリストから自身を削除する
-    var pianoRollGrid = this.props.parent;
-    pianoRollGrid.state.notes.del(this.props.dictKey);
-    pianoRollGrid.setState({});
+    this.props.delNote();
   }
 }
 

@@ -50,8 +50,8 @@ class Menu extends React.Component {
   }
 
   handleClickSetAsQuestion(){
-    questionMelody = Object.values(scoreData.notes.items()).concat(); //.concat() は値コピーのため．
-    scoreData.clearNotes();
+    questionMelody = [...this.props.notes.values()];
+    this.props.clearNotes();
 
     this.setState({
       tb_bpm_disabled: true,
@@ -105,7 +105,7 @@ class Menu extends React.Component {
           type="button"
           id="b_show"
           value="play"
-          onClick={() => this.play(scoreData.notes.items(), document.getElementById('tb_bpm').value)}
+          onClick={() => this.play([...this.props.notes.values()], document.getElementById('tb_bpm').value)}
         />
         BPM =
         <input
@@ -136,7 +136,7 @@ class Menu extends React.Component {
           id="b_submit"
           value="submit"
           disabled={this.state.b_submit}
-          onClick={() => this.evaluateAnswer(questionMelody, Object.values(scoreData.notes.items()))}
+          onClick={() => this.evaluateAnswer(questionMelody, Object.values([...this.props.notes.values()]))}
         />
         <br />
 
@@ -144,7 +144,7 @@ class Menu extends React.Component {
           id="download"
           href="#"
           download="scoreData.json"
-          onClick={() => this.downloadData(Object.values(scoreData.notes.items()))}
+          onClick={() => this.downloadData(Object.values([...this.props.notes.values()]))}
         >
         save current state
         </a>
