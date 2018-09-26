@@ -72,13 +72,70 @@ class Menu extends React.Component {
   evaluateAnswer(qMel, aMel){
     /* 評価関数どうしますかね・・・
 
-    Wasserstein距離？ 編集距離？ 重なりの面積？ 完全一致？ F-value?
+    Wasserstein距離？ 編集距離？ 重なりの面積？ 完全一致？ F-value? 音ゲー式？
     評価対象はノートオンのみ？
+
+    qMel, aMel: ノーツオブジェクトを各要素にもつ array
+                ノーツオブジェクト： {start:(ノートオン時刻[s]), end:(ノートオフ時刻[s]), pitch:(ノートナンバー)}
     */
+    // 音ゲー式をまずは実装してみる．
+    var qEventOfEachPitch = Array(128);
+    for(let i=0;i<128;i++) qEventOfEachPitch[i] = new Array();
+    var aEventOfEachPitch = Array(128);
+    for(let i=0;i<128;i++) aEventOfEachPitch[i] = new Array();
+    for(let e of qMel) qEventOfEachPitch[e.pitch].push(e.start);
+    for(let e of aMel) aEventOfEachPitch[e.pitch].push(e.start);
+
+    const redundantPenalty = -0.5; //[pt]
+    const relevantInterval = 0.1; //[s]
+    const scoreDecay = 0.1; //[s]
+    var score = 0;
+
+    for(let i=0;i<128;i++){ //ピッチごとに採点をする．
+      if (qEventOfEachPitch[i].length == 0){
+        score += redundantPenalty * aEventOfEachPitch[i].length;
+        continue;
+      }
+      qEventOfEachPitch[i].sort();
+      aEventOfEachPitch[i].sort();
+      /*  回答の各ノーツを，時刻の早いものから順に見ていく．
+          回答の各ノーツについて，
+            その回答ノーツに「近接」した正解ノーツがある場合は
+              それらの近接度に応じてスコアを加算し（同時なら満点），その正解ノーツを「削除」する．
+            その回答ノーツに「近接」した正解ノーツがない場合は，
+              スコアを減点する．
+      */
+      var check = Array(qEventOfEachPitch[i].length).fill(false);
+      let qOffset = 0;
+      for(let t of aEventOfEachPitch[i]){
+        while(qOffset < qEventOfEachPitch[i].length && qEventOfEachPitch[i][qOffset] < t) qOffset++;
+
+        let leftidx = qOffset - 1; // tの左側で，最も近接した「未チェックノート」との時間差
+        while(leftidx >= 0 && check[leftidx]) leftidx--;
+        let left = (leftidx >= 0) ? (t - qEventOfEachPitch[i][leftidx]) : Infinity;
+
+        let rightidx = qOffset; // tの右側で，最も近接した「未チェックノート」との時間差
+        while(rightidx < qEventOfEachPitch[i].length && check[rightidx]) rightidx++;
+        let right = (rightidx < qEventOfEachPitch[i].length) ? (qEventOfEachPitch[i][rightidx] - t) : Infinity;
+
+        let minDist = Math.min(left, right);
+        console.log(minDist);
+        if (minDist < relevantInterval){ //「近接」した正解ノーツがある場合は
+          score += Math.exp(-minDist/scoreDecay);
+          check[(left < right) ? leftidx : rightidx] = true;
+        }else{ //「近接」した正解ノーツがない場合は，
+          score += redundantPenalty;
+        }
+      }
+    }
+    score = Math.max(0, score);
+    score *= 100 / qMel.length;
+
     var message = '';
     message += 'number of notes in the question: ' + qMel.length + '\n';
     message += 'number of notes in your answer: ' + aMel.length + '\n';
-    message += 'YOUR SCORE: 0';
+    message += 'YOUR SCORE: ' + score + '\n';
+    if (score >= 100) message += '!!! CONGRATULATION !!!';
     window.alert(message);
   }
 
