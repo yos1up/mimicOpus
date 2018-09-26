@@ -1,27 +1,29 @@
-"use strict";
-import actionTypes from "./actionTypes";
+import actionTypes from './actionTypes';
 
 // Notes
-export const clearNotes = function(){
+export function clearNotes() {
   return {
     type: actionTypes.CLEAR_NOTES,
   };
-};
-export const addNote = function(note){
+}
+
+export function addNote(note) {
   return {
     type: actionTypes.ADD_NOTE,
-    note: note,
+    note,
   };
-};
-export const delNote = function(idx){
+}
+
+export function delNote(idx) {
   return {
     type: actionTypes.DEL_NOTE,
-    idx: idx,
+    idx,
   };
-};
-export const shiftPitchRange = function(delta){
+}
+
+export function shiftPitchRange(delta) {
   return {
     type: actionTypes.SHIFT_PITCH_RANGE,
-    delta: delta
+    delta,
   };
-};
+}
