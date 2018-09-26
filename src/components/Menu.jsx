@@ -176,7 +176,7 @@ class Menu extends React.Component {
           type="button"
           id="b_show"
           value="play"
-          onClick={() => this.play([...notes.values()], document.getElementById('tb_bpm').value)}
+          onClick={() => Menu.play([...notes.values()], document.getElementById('tb_bpm').value)}
         />
         BPM =
         <input
@@ -200,25 +200,25 @@ class Menu extends React.Component {
           id="b_play_question"
           value="play question"
           disabled={b_play_question}
-          onClick={() => this.play(questionMelody, document.getElementById('tb_bpm').value)}
+          onClick={() => Menu.play(questionMelody, document.getElementById('tb_bpm').value)}
         />
         <input
           type="button"
           id="b_submit"
           value="submit"
           disabled={b_submit}
-          onClick={() => this.evaluateAnswer(questionMelody, Object.values([...notes.values()]))}
+          onClick={() => Menu.evaluateAnswer(questionMelody, Object.values([...notes.values()]))}
         />
         <br />
-        {/* 治し方がわからないのでMaterialUI使おう */}
-        <a
+        <button
+          type="button"
           id="download"
           href="#"
           download="scoreData.json"
-          onClick={() => this.downloadData(Object.values([...notes.values()]))}
+          onClick={() => Menu.downloadData(Object.values([...notes.values()]))}
         >
           save current state
-        </a>
+        </button>
         <br />
       </div>
     );
