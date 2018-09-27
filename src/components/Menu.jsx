@@ -117,7 +117,7 @@ class Menu extends React.Component {
     let message = '';
     message += `YOUR SCORE: ${score}\n`;
     if (score >= 100) message += '!!! CONGRATULATION !!!';
-    window.alert(message); // TODO: Unexpected Alert
+    window.alert(message); // TODO: Unexpected Alertなので代わりのものを実装
   }
 
   static play(notes, bpm = 120) { // 一連の音符たちを鳴らしたい場合，Tone.Part が便利．（他に Tone.Sequence というのもあるようだ）
@@ -176,13 +176,14 @@ class Menu extends React.Component {
 
   handleClickLoadAsQuestion() {
     // ファイルを開くダイアログを出し，jsonを読んで，問題にセットする．
+    // TODO: document.getElementByIdを使わないように
     document.getElementById('b_upload').click();
   }
 
   handleUploadOnChange(e) {
     // 作業状態の読み込み
     const file = e.target.files;
-    const reader = new FileReader();　//FileReaderの作成
+    const reader = new FileReader();// FileReaderの作成
     if (typeof file[0] !== 'undefined') {
       reader.readAsText(file[0]);// テキスト形式で読み込む
       reader.onload = (() => {
@@ -196,6 +197,9 @@ class Menu extends React.Component {
     // TODO: Material UI
     const { notes } = this.props;
     const { b_play_question, b_set_as_question, b_load_as_question, b_submit, tb_bpm} = this.state;
+
+    // TODO: bpmをstoreに入れる
+    // TODO: 変数名をcamelCaseに
     return (
       <div>
         <input
