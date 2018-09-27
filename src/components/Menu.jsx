@@ -1,5 +1,6 @@
 import React from 'react';
 import Tone from 'tone';
+import Button from '@material-ui/core/Button';
 
 // サンプラー
 const sampler = new Tone.Sampler({
@@ -199,15 +200,17 @@ class Menu extends React.Component {
     const { b_play_question, b_set_as_question, b_load_as_question, b_submit, tb_bpm} = this.state;
 
     // TODO: bpmをstoreに入れる
+    // TODO: bpmをsliderに
     // TODO: 変数名をcamelCaseに
     return (
       <div>
-        <input
-          type="button"
-          id="b_show"
-          value="play"
+        <Button
+          variant="contained"
+          color="primary"
           onClick={() => Menu.play([...notes.values()], document.getElementById('tb_bpm').value)}
-        />
+        >
+          play
+        </Button>
         BPM =
         <input
           type="text"
@@ -218,44 +221,50 @@ class Menu extends React.Component {
         />
         <br />
 
-        <input
-          type="button"
-          id="b_set_as_question"
-          value="set as question"
+
+        <Button
+          variant="contained"
+          color="primary"
           disabled={!b_set_as_question}
           onClick={() => this.handleClickSetAsQuestion()}
-        />
-        <input
-          type="button"
-          id="b_load_as_question"
-          value="load .json as question"
+        >
+          set as question
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
           disabled={!b_load_as_question}
           onClick={() => this.handleClickLoadAsQuestion()}
-        />
-        <input
-          type="button"
-          id="b_play_question"
-          value="play question"
+        >
+          load .json as question
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
           disabled={!b_play_question}
           onClick={() => Menu.play(questionMelody, document.getElementById('tb_bpm').value)}
-        />
-        <input
-          type="button"
-          id="b_submit"
-          value="submit"
+        >
+          play question
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
           disabled={!b_submit}
           onClick={() => Menu.evaluateAnswer(questionMelody, Object.values([...notes.values()]))}
-        />
+        >
+          submit
+        </Button>
         <br />
-        <button
-          type="button"
+        <Button
+          variant="contained"
+          color="primary"
           id="download"
           href="#"
           download="scoreData.json"
           onClick={() => Menu.downloadData(Object.values([...notes.values()]))}
         >
           save current state
-        </button>
+        </Button>
         <input
           type="file"
           id="b_upload"

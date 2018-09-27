@@ -247,6 +247,7 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
     return (
       <div
         role="presentation"
+        style={{ position: 'absolute', top: 100 }}
         id={elementId}
         onWheel={this.wheel}
         onMouseDown={this.mouseDown}
