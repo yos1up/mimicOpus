@@ -1,4 +1,7 @@
+import Immutable from 'immutable';
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import SimpleGrid from './SimpleGrid';
 import NoteBlock from './NoteBlock';
 
@@ -261,5 +264,13 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
     );
   }
 }
+
+PianoRollGrid.propTypes = {
+  notes: PropTypes.instanceOf(Immutable.List).isRequired,
+  pitchRange: PropTypes.arrayOf(PropTypes.number).isRequired,
+  shiftPitchRange: PropTypes.func.isRequired,
+  addNote: PropTypes.func.isRequired,
+  delNote: PropTypes.func.isRequired,
+};
 
 export default PianoRollGrid;
