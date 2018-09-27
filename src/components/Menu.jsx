@@ -40,20 +40,6 @@ function noteNumberToPitchName(nn) {
 let questionMelody = [];
 
 class Menu extends React.Component {
-  static downloadData(jsonObject) {
-    // 作業状態のダウンロード
-    const blob = new Blob([JSON.stringify(jsonObject)], { type: 'text/json' });
-    if (window.navigator.msSaveBlob) {
-      window.navigator.msSaveBlob(blob, '_.json');
-    } else {
-      // TODO: もうちょっとうまいやり方ないかなあ
-      const a = document.getElementById('a_download');
-      a.href = window.URL.createObjectURL(blob);
-      a.download = 'scoreData.json';
-      a.click();
-    }
-  }
-
   static evaluateAnswer(qMel, aMel) {
     /* 評価関数どうしますかね・・・
 
@@ -155,6 +141,7 @@ class Menu extends React.Component {
       enablePlayQuestionBtn: false,
       enableLoadAsQuestionBtn: true,
       enableSubmitBtn: false,
+      bpm: 150,
     };
 
     this.handleClickSetAsQuestion = this.handleClickSetAsQuestion.bind(this);
@@ -174,6 +161,20 @@ class Menu extends React.Component {
     });
   }
 
+  downloadData(jsonObject) {
+    // 作業状態のダウンロード
+    const blob = new Blob([JSON.stringify(jsonObject)], { type: 'text/json' });
+    if (window.navigator.msSaveBlob) {
+      window.navigator.msSaveBlob(blob, '_.json');
+    } else {
+      // TODO: もうちょっとうまいやり方ないかなあ
+      const a = this.downloadAnchor;
+      a.href = window.URL.createObjectURL(blob);
+      a.download = 'scoreData.json';
+      a.click();
+    }
+  }
+
   handleClickSetAsQuestion() {
     const { notes } = this.props;
     // 現在のエディタの状態を，問題にセットする．
@@ -182,8 +183,7 @@ class Menu extends React.Component {
 
   handleClickLoadAsQuestion() {
     // ファイルを開くダイアログを出し，jsonを読んで，問題にセットする．
-    // TODO: document.getElementByIdを使わないように
-    document.getElementById('b_upload').click();
+    this.uploadBtn.click();
   }
 
   handleUploadOnChange(e) {
@@ -208,6 +208,7 @@ class Menu extends React.Component {
       enableLoadAsQuestionBtn,
       enableSubmitBtn,
       enableBpmTxtfld,
+      bpm,
     } = this.state;
 
     // TODO: bpmをstoreに入れる
@@ -219,7 +220,7 @@ class Menu extends React.Component {
           style={{ position: 'absolute', top: 10, left: 10 }}
           variant="contained"
           color="primary"
-          onClick={() => Menu.play([...notes.values()], document.getElementById('tb_bpm').value)}
+          onClick={() => Menu.play([...notes.values()], bpm)}
         >
           play
         </Button>
@@ -230,10 +231,10 @@ class Menu extends React.Component {
         </Typography>
         <TextField
           style={{ position: 'absolute', top: 10, left: 140 }}
-          id="tb_bpm"
+          value={bpm}
+          onChange={e => this.setState({ bpm: parseInt(e.target.value, 10) })}
           size="3"
           disabled={!enableBpmTxtfld}
-          defaultValue={150}
         />
         <br />
 
@@ -261,7 +262,7 @@ class Menu extends React.Component {
           variant="contained"
           color="primary"
           disabled={!enablePlayQuestionBtn}
-          onClick={() => Menu.play(questionMelody, document.getElementById('enableBpmTxtfld').value)}
+          onClick={() => Menu.play(questionMelody, bpm)}
         >
           play question
         </Button>
@@ -288,12 +289,14 @@ class Menu extends React.Component {
         </Button>
         <input
           type="file"
+          ref={(uploadBtn) => { this.uploadBtn = uploadBtn; }}
           id="b_upload"
           onChange={this.handleUploadOnChange}
           hidden
         />
         <a
           id="a_download"
+          ref={(downloadAnchor) => { this.downloadAnchor = downloadAnchor; }}
           hidden
         />
         <br />
