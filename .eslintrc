@@ -3,7 +3,6 @@
   "globals": {
     "window": true,
     "Blob": true,
-    "document": true,
     "FileReader": true,
   },
 }

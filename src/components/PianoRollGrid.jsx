@@ -18,7 +18,6 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
       // pitchRange: props.pitchRange, [minPitch, maxPitch] props に移しました（Reduxのcontainerの設定により）
       rows: pitchRange[1] - pitchRange[0] + 1,
       cols: 16,
-      elementId: 'mainPianoRoll',
       xMargin: 36,
       selectRange: null,
       // [startBeat (decimal), minPitch (integer), endBeat (decimal), maxPitch (integer)]
@@ -51,10 +50,10 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
   }
 
   mouseDown(event) {
-    const { elementId, xMargin } = this.state;
+    const { xMargin } = this.state;
 
     // 要素の位置を取得
-    const clientRect = document.getElementById(elementId).getBoundingClientRect();
+    const clientRect = this.mainPianoRoll.getBoundingClientRect();
     const originPos = [
       clientRect.left + window.pageXOffset + xMargin,
       clientRect.top + window.pageYOffset,
@@ -148,7 +147,7 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
   render() {
     const { pitchRange, notes, delNote } = this.props;
     const {
-      rows, cols, uw, uh, xMargin, selectRange, elementId,
+      rows, cols, uw, uh, xMargin, selectRange,
     } = this.state;
 
     const elementList = [];
@@ -253,7 +252,7 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
       <div
         role="presentation"
         style={{ position: 'absolute', top: 100 }}
-        id={elementId}
+        ref={(mainPianoRoll) => { this.mainPianoRoll = mainPianoRoll; }}
         onWheel={this.wheel}
         onMouseDown={this.mouseDown}
         onMouseUp={this.mouseUp}
