@@ -1,7 +1,11 @@
-import React from "react";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-/* script type="text/babel" */
-class SimpleGrid extends React.Component{ //グリッドエリア内のみ．
+
+/* script type='text/babel' */
+function SimpleGrid({
+  rows, cols, uw, uh, hlw, vlw, bgr,
+}) { // グリッドエリア内のみ．
   /*
   rows: 行数 (number)
   cols: 列数 (number)
@@ -11,38 +15,64 @@ class SimpleGrid extends React.Component{ //グリッドエリア内のみ．
   vlw: 垂直線の幅 (長さ col+1 の array) (指定ない場合は全て 1 になる)
   bgr: 各行の背景色 (長さ row+1 の array．各要素の例：'#DDDDFF' (青色になる) null (描画されない)) (指定ない場合は描画されない)
   */
-  constructor(props){super(props);}
-  render(){
-    var elementList = [];
-    var width = this.props.uw * this.props.cols;
-    var height = this.props.uh * this.props.rows;
+  const elementList = [];
+  const width = uw * cols;
+  const height = uh * rows;
 
-    //horizontal background color
-    if (typeof this.props.bgr !== 'undefined'){
-      for(let i=0;i<this.props.rows;i++){
-        var bgColor = this.props.bgr[i % this.props.bgr.length];
-        if (bgColor !== null){
-          var divStyle = {width:width, height:this.props.uh, backgroundColor:bgColor, position:'absolute', top:i*this.props.uh, left:0};
-          elementList.push(
-            <div key={elementList.length} style={divStyle}></div>
-          );
-        }
+  // horizontal background color
+  if (typeof bgr !== 'undefined') {
+    for (let i = 0; i < rows; i += 1) {
+      const bgColor = bgr[i % bgr.length];
+      if (bgColor !== null) {
+        const divStyle = {
+          width,
+          height: uh,
+          backgroundColor: bgColor,
+          position: 'absolute',
+          top: i * uh,
+          left: 0,
+        };
+        elementList.push(<div key={elementList.length} style={divStyle} />);
       }
     }
-    for(let i=0;i<=this.props.rows;i++){ //horizontal lines
-      var lw = 1;
-      if (typeof this.props.hlw !== 'undefined') lw = this.props.hlw[i % this.props.hlw.length];
-      var divStyle = {width:width, height:lw, backgroundColor:'black', position:'absolute', top:i*this.props.uh, left:0};
-      elementList.push(<div key={elementList.length} style={divStyle}></div>);
-    }
-    for(let j=0;j<=this.props.cols;j++){ //vertical lines
-      var lw = 1;
-      if (typeof this.props.vlw !== 'undefined') lw = this.props.vlw[j % this.props.vlw.length];
-      var divStyle = {width:lw, height:height, backgroundColor:'black', position:'absolute', top:0, left:j*this.props.uw};
-      elementList.push(<div key={elementList.length} style={divStyle}></div>);
-    }
-    return(<div>{elementList}</div>)
   }
+  for (let i = 0; i <= rows; i += 1) { // horizontal lines
+    let lw = 1;
+    if (typeof hlw !== 'undefined') lw = hlw[i % hlw.length];
+    const divStyle = {
+      width,
+      height: lw,
+      backgroundColor: 'black',
+      position: 'absolute',
+      top: i * uh,
+      left: 0,
+    };
+    elementList.push(<div key={elementList.length} style={divStyle} />);
+  }
+  for (let j = 0; j <= cols; j += 1) { // vertical lines
+    let lw = 1;
+    if (typeof vlw !== 'undefined') lw = vlw[j % vlw.length];
+    const divStyle = {
+      width: lw,
+      height,
+      backgroundColor: 'black',
+      position: 'absolute',
+      top: 0,
+      left: j * uw,
+    };
+    elementList.push(<div key={elementList.length} style={divStyle} />);
+  }
+  return (<div>{elementList}</div>);
 }
+
+SimpleGrid.propTypes = {
+  rows: PropTypes.number.isRequired,
+  cols: PropTypes.number.isRequired,
+  uw: PropTypes.number.isRequired,
+  uh: PropTypes.number.isRequired,
+  hlw: PropTypes.arrayOf(PropTypes.number).isRequired,
+  vlw: PropTypes.arrayOf(PropTypes.number).isRequired,
+  bgr: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
 export default SimpleGrid;
