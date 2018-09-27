@@ -213,7 +213,6 @@ class Menu extends React.Component {
 
     // TODO: bpmをstoreに入れる
     // TODO: bpmをsliderに
-    // TODO: 変数名をcamelCaseに
     return (
       <div>
         <Button
