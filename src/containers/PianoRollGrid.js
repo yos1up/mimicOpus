@@ -1,21 +1,23 @@
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import { clearNotes, addNote, delNote, shiftPitchRange } from "../actions";
-import PianoRollGrid from "../components/PianoRollGrid";
+import {
+  clearNotes, addNote, delNote, shiftPitchRange,
+} from '../actions';
+import PianoRollGrid from '../components/PianoRollGrid';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   notes: state.notes,
-  pitchRange: state.pitchRange
+  pitchRange: state.pitchRange,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   clearNotes: () => dispatch(clearNotes()),
-  addNote: (note) => dispatch(addNote(note)),
-  delNote: (idx) => dispatch(delNote(idx)),
-  shiftPitchRange: (delta) => dispatch(shiftPitchRange(delta)),
+  addNote: note => dispatch(addNote(note)),
+  delNote: idx => dispatch(delNote(idx)),
+  shiftPitchRange: delta => dispatch(shiftPitchRange(delta)),
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(PianoRollGrid);
