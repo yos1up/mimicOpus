@@ -41,8 +41,10 @@ class Menu extends React.Component {
     if (window.navigator.msSaveBlob) {
       window.navigator.msSaveBlob(blob, '_.json');
     } else {
-      console.log(jsonObject);
-      document.getElementById('download').href = window.URL.createObjectURL(blob);
+      const a = document.getElementById('a_download');
+      a.href = window.URL.createObjectURL(blob);
+      a.download = 'scoreData.json';
+      a.click();
     }
   }
 
@@ -238,6 +240,10 @@ class Menu extends React.Component {
         <input
           type="file"
           id="b_upload"
+          hidden
+        />
+        <a
+          id="a_download"
           hidden
         />
         <br />
