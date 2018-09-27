@@ -1,4 +1,6 @@
+import Immutable from 'immutable';
 import React from 'react';
+import PropTypes from 'prop-types';
 import Tone from 'tone';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -44,6 +46,7 @@ class Menu extends React.Component {
     if (window.navigator.msSaveBlob) {
       window.navigator.msSaveBlob(blob, '_.json');
     } else {
+      // TODO: もうちょっとうまいやり方ないかなあ
       const a = document.getElementById('a_download');
       a.href = window.URL.createObjectURL(blob);
       a.download = 'scoreData.json';
@@ -147,11 +150,11 @@ class Menu extends React.Component {
     super(props);
 
     this.state = {
-      tb_bpm: true,
-      b_set_as_question: true,
-      b_play_question: false,
-      b_load_as_question: true,
-      b_submit: false,
+      enableBpmTxtfld: true,
+      enableSetAsQuestionBtn: true,
+      enablePlayQuestionBtn: false,
+      enableLoadAsQuestionBtn: true,
+      enableSubmitBtn: false,
     };
 
     this.handleClickSetAsQuestion = this.handleClickSetAsQuestion.bind(this);
@@ -163,11 +166,11 @@ class Menu extends React.Component {
     questionMelody = melodyArray;
     clearNotes();
     this.setState({
-      tb_bpm: false,
-      b_set_as_question: false,
-      b_play_question: true,
-      b_load_as_question: false,
-      b_submit: true,
+      enableBpmTxtfld: false,
+      enableSetAsQuestionBtn: false,
+      enablePlayQuestionBtn: true,
+      enableLoadAsQuestionBtn: false,
+      enableSubmitBtn: true,
     });
   }
 
@@ -199,7 +202,13 @@ class Menu extends React.Component {
   render() {
     // TODO: Material UI
     const { notes } = this.props;
-    const { b_play_question, b_set_as_question, b_load_as_question, b_submit, tb_bpm} = this.state;
+    const {
+      enablePlayQuestionBtn,
+      enableSetAsQuestionBtn,
+      enableLoadAsQuestionBtn,
+      enableSubmitBtn,
+      enableBpmTxtfld,
+    } = this.state;
 
     // TODO: bpmをstoreに入れる
     // TODO: bpmをsliderに
@@ -223,7 +232,7 @@ class Menu extends React.Component {
           style={{ position: 'absolute', top: 10, left: 140 }}
           id="tb_bpm"
           size="3"
-          disabled={!tb_bpm}
+          disabled={!enableBpmTxtfld}
           defaultValue={150}
         />
         <br />
@@ -233,7 +242,7 @@ class Menu extends React.Component {
           style={{ position: 'absolute', top: 60, left: 10 }}
           variant="contained"
           color="primary"
-          disabled={!b_set_as_question}
+          disabled={!enableSetAsQuestionBtn}
           onClick={() => this.handleClickSetAsQuestion()}
         >
           set as question
@@ -242,7 +251,7 @@ class Menu extends React.Component {
           style={{ position: 'absolute', top: 60, left: 180 }}
           variant="contained"
           color="primary"
-          disabled={!b_load_as_question}
+          disabled={!enableLoadAsQuestionBtn}
           onClick={() => this.handleClickLoadAsQuestion()}
         >
           load .json as question
@@ -251,8 +260,8 @@ class Menu extends React.Component {
           style={{ position: 'absolute', top: 60, left: 400 }}
           variant="contained"
           color="primary"
-          disabled={!b_play_question}
-          onClick={() => Menu.play(questionMelody, document.getElementById('tb_bpm').value)}
+          disabled={!enablePlayQuestionBtn}
+          onClick={() => Menu.play(questionMelody, document.getElementById('enableBpmTxtfld').value)}
         >
           play question
         </Button>
@@ -260,7 +269,7 @@ class Menu extends React.Component {
           style={{ position: 'absolute', top: 60, left: 560 }}
           variant="contained"
           color="primary"
-          disabled={!b_submit}
+          disabled={!enableSubmitBtn}
           onClick={() => Menu.evaluateAnswer(questionMelody, Object.values([...notes.values()]))}
         >
           submit
@@ -291,7 +300,11 @@ class Menu extends React.Component {
       </div>
     );
   }
-
 }
+
+Menu.propTypes = {
+  clearNotes: PropTypes.func.isRequired,
+  notes: PropTypes.instanceOf(Immutable.List).isRequired,
+};
 
 export default Menu;
