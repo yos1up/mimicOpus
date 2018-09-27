@@ -23,11 +23,11 @@ class NoteBlock extends React.Component { // ノーツ
 
   render() {
     const {
-      start, end, parent: pianoRollGrid,
+      start, end, uw, uh,
     } = this.props;
     const divStyle = {
-      width: pianoRollGrid.state.uw * (end - start),
-      height: pianoRollGrid.state.uh,
+      width: uw * (end - start),
+      height: uh,
       backgroundColor: 'blue',
       borderRadius: 10,
       position: 'absolute',
@@ -49,7 +49,8 @@ class NoteBlock extends React.Component { // ノーツ
 NoteBlock.propTypes = {
   start: PropTypes.number.isRequired,
   end: PropTypes.number.isRequired,
-  parent: PropTypes.object.isRequired,
+  uw: PropTypes.number.isRequired,
+  uh: PropTypes.number.isRequired,
   delNote: PropTypes.func.isRequired,
 };
 

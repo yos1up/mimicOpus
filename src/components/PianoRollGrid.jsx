@@ -214,6 +214,8 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
           <NoteBlock
             start={note.start}
             end={note.end}
+            uw={uw}
+            uh={uh}
             pitch={note.pitch}
             parent={this}
             dictKey={i}
