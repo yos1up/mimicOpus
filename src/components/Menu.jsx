@@ -1,6 +1,8 @@
 import React from 'react';
 import Tone from 'tone';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
 // サンプラー
 const sampler = new Tone.Sampler({
@@ -205,15 +207,20 @@ class Menu extends React.Component {
     return (
       <div>
         <Button
+          style={{ position: 'absolute', top: 10, left: 10 }}
           variant="contained"
           color="primary"
           onClick={() => Menu.play([...notes.values()], document.getElementById('tb_bpm').value)}
         >
           play
         </Button>
-        BPM =
-        <input
-          type="text"
+        <Typography
+          style={{ position: 'absolute', top: 20, left: 100 }}
+        >
+        BPM
+        </Typography>
+        <TextField
+          style={{ position: 'absolute', top: 10, left: 140 }}
           id="tb_bpm"
           size="3"
           disabled={!tb_bpm}
@@ -223,6 +230,7 @@ class Menu extends React.Component {
 
 
         <Button
+          style={{ position: 'absolute', top: 60, left: 10 }}
           variant="contained"
           color="primary"
           disabled={!b_set_as_question}
@@ -231,6 +239,7 @@ class Menu extends React.Component {
           set as question
         </Button>
         <Button
+          style={{ position: 'absolute', top: 60, left: 180 }}
           variant="contained"
           color="primary"
           disabled={!b_load_as_question}
@@ -239,6 +248,7 @@ class Menu extends React.Component {
           load .json as question
         </Button>
         <Button
+          style={{ position: 'absolute', top: 60, left: 400 }}
           variant="contained"
           color="primary"
           disabled={!b_play_question}
@@ -247,6 +257,7 @@ class Menu extends React.Component {
           play question
         </Button>
         <Button
+          style={{ position: 'absolute', top: 60, left: 560 }}
           variant="contained"
           color="primary"
           disabled={!b_submit}
@@ -256,6 +267,7 @@ class Menu extends React.Component {
         </Button>
         <br />
         <Button
+          style={{ position: 'absolute', top: 110, left: 10 }}
           variant="contained"
           color="primary"
           id="download"
