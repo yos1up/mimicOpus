@@ -73,7 +73,6 @@ class Menu extends React.Component {
     for (let i = 0; i < 128; i += 1) { // ピッチごとに採点をする．
       if (qEventOfEachPitch[i].length === 0) {
         score += redundantPenalty * aEventOfEachPitch[i].length;
-        continue;
       } else {
         qEventOfEachPitch[i].sort();
         aEventOfEachPitch[i].sort();
@@ -153,11 +152,13 @@ class Menu extends React.Component {
     };
 
     this.handleClickSetAsQuestion = this.handleClickSetAsQuestion.bind(this);
+    this.handleUploadOnChange = this.handleUploadOnChange.bind(this);
   }
 
-  setAsQuestion(melodyArray){
+  setAsQuestion(melodyArray) {
+    const { clearNotes } = this.props;
     questionMelody = melodyArray;
-    this.props.clearNotes();
+    clearNotes();
     this.setState({
       tb_bpm: false,
       b_set_as_question: false,
@@ -167,15 +168,29 @@ class Menu extends React.Component {
     });
   }
 
-  handleClickSetAsQuestion(){
-    //現在のエディタの状態を，問題にセットする．
-    this.setAsQuestion([...this.props.notes.values()]);
+  handleClickSetAsQuestion() {
+    const { notes } = this.props;
+    // 現在のエディタの状態を，問題にセットする．
+    this.setAsQuestion([...notes.values()]);
   }
-  handleClickLoadAsQuestion(){
-    //ファイルを開くダイアログを出し，jsonを読んで，問題にセットする．
+
+  handleClickLoadAsQuestion() {
+    // ファイルを開くダイアログを出し，jsonを読んで，問題にセットする．
     document.getElementById('b_upload').click();
   }
 
+  handleUploadOnChange(e) {
+    // 作業状態の読み込み
+    const file = e.target.files;
+    const reader = new FileReader();　//FileReaderの作成
+    if (typeof file[0] !== 'undefined') {
+      reader.readAsText(file[0]);// テキスト形式で読み込む
+      reader.onload = (() => {
+        // 読込終了後の処理
+        this.setAsQuestion(JSON.parse(reader.result));
+      });
+    }
+  }
 
   render() {
     // TODO: Material UI
@@ -240,6 +255,7 @@ class Menu extends React.Component {
         <input
           type="file"
           id="b_upload"
+          onChange={this.handleUploadOnChange}
           hidden
         />
         <a
@@ -249,19 +265,6 @@ class Menu extends React.Component {
         <br />
       </div>
     );
-  }
-
-  componentDidMount(){
-    document.getElementById("b_upload").addEventListener("change",function(e){ //作業状態の読み込み
-      var file = e.target.files;
-      var reader = new FileReader();　//FileReaderの作成
-      if (typeof file[0] !== 'undefined'){
-        reader.readAsText(file[0]);　//テキスト形式で読み込む
-        reader.onload = function(e){//読込終了後の処理
-          this.setAsQuestion(JSON.parse(reader.result));
-        }.bind(this);
-      }
-    }.bind(this),false);
   }
 
 }
