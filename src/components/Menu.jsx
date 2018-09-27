@@ -39,8 +39,9 @@ class Menu extends React.Component {
     // 作業状態のダウンロード
     const blob = new Blob([JSON.stringify(jsonObject)], { type: 'text/json' });
     if (window.navigator.msSaveBlob) {
-      window.navigator.msSaveBlob(blob, 'net.json');
+      window.navigator.msSaveBlob(blob, '_.json');
     } else {
+      console.log(jsonObject);
       document.getElementById('download').href = window.URL.createObjectURL(blob);
     }
   }
@@ -60,7 +61,7 @@ class Menu extends React.Component {
     const aEventOfEachPitch = Array(128);
     for (let i = 0; i < 128; i += 1) aEventOfEachPitch[i] = new Array(0);
     for (let i = 0; i < qMel.length; i += 1) qEventOfEachPitch[qMel[i].pitch].push(qMel[i].start);
-    for (let i = 0; i < aMel.length; i += 1) qEventOfEachPitch[aMel[i].pitch].push(aMel[i].start);
+    for (let i = 0; i < aMel.length; i += 1) aEventOfEachPitch[aMel[i].pitch].push(aMel[i].start);
 
     const redundantPenalty = -0.5; // [pt]
     const relevantInterval = 0.1; // [s]
@@ -70,6 +71,7 @@ class Menu extends React.Component {
     for (let i = 0; i < 128; i += 1) { // ピッチごとに採点をする．
       if (qEventOfEachPitch[i].length === 0) {
         score += redundantPenalty * aEventOfEachPitch[i].length;
+        continue;
       } else {
         qEventOfEachPitch[i].sort();
         aEventOfEachPitch[i].sort();
@@ -112,8 +114,6 @@ class Menu extends React.Component {
     score *= 100 / qMel.length;
 
     let message = '';
-    message += `number of notes in the question: ${qMel.length}\n`;
-    message += `number of notes in your answer: ${aMel.length}\n`;
     message += `YOUR SCORE: ${score}\n`;
     if (score >= 100) message += '!!! CONGRATULATION !!!';
     window.alert(message); // TODO: Unexpected Alert
@@ -143,33 +143,42 @@ class Menu extends React.Component {
     super(props);
 
     this.state = {
-      tb_bpm_disabled: false,
-      b_set_as_question: false,
-      b_play_question: true,
-      b_submit: true,
+      tb_bpm: true,
+      b_set_as_question: true,
+      b_play_question: false,
+      b_load_as_question: true,
+      b_submit: false,
     };
 
     this.handleClickSetAsQuestion = this.handleClickSetAsQuestion.bind(this);
   }
 
-  handleClickSetAsQuestion() {
-    const { notes, clearNotes } = this.props;
-    questionMelody = [...notes.values()];
-    clearNotes();
-
+  setAsQuestion(melodyArray){
+    questionMelody = melodyArray;
+    this.props.clearNotes();
     this.setState({
-      tb_bpm_disabled: true,
-      b_set_as_question: true,
-      b_play_question: false,
-      b_submit: false,
+      tb_bpm: false,
+      b_set_as_question: false,
+      b_play_question: true,
+      b_load_as_question: false,
+      b_submit: true,
     });
+  }
+
+  handleClickSetAsQuestion(){
+    //現在のエディタの状態を，問題にセットする．
+    this.setAsQuestion([...this.props.notes.values()]);
+  }
+  handleClickLoadAsQuestion(){
+    //ファイルを開くダイアログを出し，jsonを読んで，問題にセットする．
+    document.getElementById('b_upload').click();
   }
 
 
   render() {
     // TODO: Material UI
     const { notes } = this.props;
-    const { b_play_question, b_set_as_question, b_submit, tb_bpm_disabled } = this.state;
+    const { b_play_question, b_set_as_question, b_load_as_question, b_submit, tb_bpm} = this.state;
     return (
       <div>
         <input
@@ -183,7 +192,7 @@ class Menu extends React.Component {
           type="text"
           id="tb_bpm"
           size="3"
-          disabled={tb_bpm_disabled}
+          disabled={!tb_bpm}
           defaultValue={150}
         />
         <br />
@@ -192,21 +201,28 @@ class Menu extends React.Component {
           type="button"
           id="b_set_as_question"
           value="set as question"
-          disabled={b_set_as_question}
+          disabled={!b_set_as_question}
           onClick={() => this.handleClickSetAsQuestion()}
+        />
+        <input
+          type="button"
+          id="b_load_as_question"
+          value="load .json as question"
+          disabled={!b_load_as_question}
+          onClick={() => this.handleClickLoadAsQuestion()}
         />
         <input
           type="button"
           id="b_play_question"
           value="play question"
-          disabled={b_play_question}
+          disabled={!b_play_question}
           onClick={() => Menu.play(questionMelody, document.getElementById('tb_bpm').value)}
         />
         <input
           type="button"
           id="b_submit"
           value="submit"
-          disabled={b_submit}
+          disabled={!b_submit}
           onClick={() => Menu.evaluateAnswer(questionMelody, Object.values([...notes.values()]))}
         />
         <br />
@@ -219,10 +235,29 @@ class Menu extends React.Component {
         >
           save current state
         </button>
+        <input
+          type="file"
+          id="b_upload"
+          hidden
+        />
         <br />
       </div>
     );
   }
+
+  componentDidMount(){
+    document.getElementById("b_upload").addEventListener("change",function(e){ //作業状態の読み込み
+      var file = e.target.files;
+      var reader = new FileReader();　//FileReaderの作成
+      if (typeof file[0] !== 'undefined'){
+        reader.readAsText(file[0]);　//テキスト形式で読み込む
+        reader.onload = function(e){//読込終了後の処理
+          this.setAsQuestion(JSON.parse(reader.result));
+        }.bind(this);
+      }
+    }.bind(this),false);
+  }
+
 }
 
 export default Menu;
