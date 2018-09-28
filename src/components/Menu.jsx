@@ -252,7 +252,7 @@ class Menu extends React.Component {
           variant="fab"
           color="primary"
           aria-label="SetQuestion"
-          style={{ position: 'absolute', top: 60, left: 10 }}
+          style={{ position: 'absolute', top: 10, left: 350 }}
           disabled={!enableSetAsQuestionBtn}
           onClick={() => this.handleClickSetAsQuestion()}
         >
@@ -262,7 +262,7 @@ class Menu extends React.Component {
           variant="fab"
           color="primary"
           aria-label="Load"
-          style={{ position: 'absolute', top: 60, left: 180 }}
+          style={{ position: 'absolute', top: 10, left: 420 }}
           disabled={!enableLoadAsQuestionBtn}
           onClick={() => this.handleClickLoadAsQuestion()}
         >
@@ -272,7 +272,7 @@ class Menu extends React.Component {
           variant="fab"
           color="primary"
           aria-label="PlayQuestion"
-          style={{ position: 'absolute', top: 60, left: 400 }}
+          style={{ position: 'absolute', top: 10, left: 490 }}
           disabled={!enablePlayQuestionBtn}
           onClick={() => Menu.play(questionMelody, bpm)}
         >
@@ -282,7 +282,7 @@ class Menu extends React.Component {
           variant="fab"
           color="primary"
           aria-label="Submit"
-          style={{ position: 'absolute', top: 60, left: 560 }}
+          style={{ position: 'absolute', top: 10, left: 560 }}
           disabled={!enableSubmitBtn}
           onClick={() => Menu.evaluateAnswer(questionMelody, Object.values([...notes.values()]))}
         >
@@ -293,7 +293,7 @@ class Menu extends React.Component {
           variant="fab"
           color="primary"
           aria-label="Save"
-          style={{ position: 'absolute', top: 110, left: 10 }}
+          style={{ position: 'absolute', top: 10, left: 630 }}
           href="#"
           download="scoreData.json"
           onClick={() => this.downloadData(Object.values([...notes.values()]))}
