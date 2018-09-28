@@ -5,10 +5,16 @@ import Menu from '../containers/Menu';
 
 function App() {
   return (
-    <div>
+    <div
+      style={{
+        position: 'relative',
+        margin: '0px auto',
+        width: 1200,
+      }}
+    >
       <div
         style={{
-          position: 'relative',
+          position: 'absolute',
           left: 100,
           top: 100,
         }}
