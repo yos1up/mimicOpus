@@ -4,7 +4,12 @@ import PropTypes from 'prop-types';
 import Tone from 'tone';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
+import FolderIcon from '@material-ui/icons/Folder';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import SaveIcon from '@material-ui/icons/Save';
+import SendIcon from '@material-ui/icons/Send';
 import Slider from '@material-ui/lab/Slider';
 
 // サンプラー
@@ -146,6 +151,7 @@ class Menu extends React.Component {
 
     this.handleClickSetAsQuestion = this.handleClickSetAsQuestion.bind(this);
     this.handleUploadOnChange = this.handleUploadOnChange.bind(this);
+    this.downloadData = this.downloadData.bind(this);
   }
 
   setAsQuestion(melodyArray) {
@@ -214,7 +220,7 @@ class Menu extends React.Component {
         <Button
           variant="fab"
           color="primary"
-          aria-label="Add"
+          aria-label="Play"
           style={{ position: 'absolute', top: 10, left: 10 }}
           onClick={() => Menu.play([...notes.values()], bpm)}
         >
@@ -243,52 +249,56 @@ class Menu extends React.Component {
 
 
         <Button
-          style={{ position: 'absolute', top: 60, left: 10 }}
-          variant="contained"
+          variant="fab"
           color="primary"
+          aria-label="SetQuestion"
+          style={{ position: 'absolute', top: 60, left: 10 }}
           disabled={!enableSetAsQuestionBtn}
           onClick={() => this.handleClickSetAsQuestion()}
         >
-          set as question
+          <AddIcon />
         </Button>
         <Button
-          style={{ position: 'absolute', top: 60, left: 180 }}
-          variant="contained"
+          variant="fab"
           color="primary"
+          aria-label="Load"
+          style={{ position: 'absolute', top: 60, left: 180 }}
           disabled={!enableLoadAsQuestionBtn}
           onClick={() => this.handleClickLoadAsQuestion()}
         >
-          load .json as question
+          <FolderIcon />
         </Button>
         <Button
-          style={{ position: 'absolute', top: 60, left: 400 }}
-          variant="contained"
+          variant="fab"
           color="primary"
+          aria-label="PlayQuestion"
+          style={{ position: 'absolute', top: 60, left: 400 }}
           disabled={!enablePlayQuestionBtn}
           onClick={() => Menu.play(questionMelody, bpm)}
         >
-          play question
+          <PlayCircleOutlineIcon />
         </Button>
         <Button
-          style={{ position: 'absolute', top: 60, left: 560 }}
-          variant="contained"
+          variant="fab"
           color="primary"
+          aria-label="Submit"
+          style={{ position: 'absolute', top: 60, left: 560 }}
           disabled={!enableSubmitBtn}
           onClick={() => Menu.evaluateAnswer(questionMelody, Object.values([...notes.values()]))}
         >
-          submit
+          <SendIcon />
         </Button>
         <br />
         <Button
-          style={{ position: 'absolute', top: 110, left: 10 }}
-          variant="contained"
+          variant="fab"
           color="primary"
-          id="download"
+          aria-label="Save"
+          style={{ position: 'absolute', top: 110, left: 10 }}
           href="#"
           download="scoreData.json"
-          onClick={() => Menu.downloadData(Object.values([...notes.values()]))}
+          onClick={() => this.downloadData(Object.values([...notes.values()]))}
         >
-          save current state
+          <SaveIcon />
         </Button>
         <input
           type="file"
