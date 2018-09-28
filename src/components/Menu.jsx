@@ -5,6 +5,7 @@ import Tone from 'tone';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import Slider from '@material-ui/lab/Slider';
 
 // サンプラー
 const sampler = new Tone.Sampler({
@@ -224,16 +225,23 @@ class Menu extends React.Component {
           play
         </Button>
         <Typography
-          style={{ position: 'absolute', top: 20, left: 100 }}
+          style={{ position: 'absolute', top: 10, left: 100 }}
         >
-        BPM
+          BPM
+          {bpm}
         </Typography>
-        <TextField
-          style={{ position: 'absolute', top: 10, left: 140 }}
+        <Slider
+          min={60}
+          max={180}
+          step={1}
           value={bpm}
-          onChange={e => this.setState({ bpm: parseInt(e.target.value, 10) })}
-          size="3"
-          disabled={!enableBpmTxtfld}
+          onChange={(e, v) => this.setState({ bpm: v })}
+          style={{
+            position: 'absolute',
+            top: 25,
+            left: 100,
+            width: 200,
+          }}
         />
         <br />
 
