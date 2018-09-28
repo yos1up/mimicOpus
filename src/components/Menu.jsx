@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Tone from 'tone';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import Slider from '@material-ui/lab/Slider';
 
 // サンプラー
@@ -137,7 +137,6 @@ class Menu extends React.Component {
     super(props);
 
     this.state = {
-      enableBpmTxtfld: true,
       enableSetAsQuestionBtn: true,
       enablePlayQuestionBtn: false,
       enableLoadAsQuestionBtn: true,
@@ -154,7 +153,6 @@ class Menu extends React.Component {
     questionMelody = melodyArray;
     clearNotes();
     this.setState({
-      enableBpmTxtfld: false,
       enableSetAsQuestionBtn: false,
       enablePlayQuestionBtn: true,
       enableLoadAsQuestionBtn: false,
@@ -208,21 +206,19 @@ class Menu extends React.Component {
       enableSetAsQuestionBtn,
       enableLoadAsQuestionBtn,
       enableSubmitBtn,
-      enableBpmTxtfld,
       bpm,
     } = this.state;
 
-    // TODO: bpmをstoreに入れる
-    // TODO: bpmをsliderに
     return (
       <div>
         <Button
-          style={{ position: 'absolute', top: 10, left: 10 }}
-          variant="contained"
+          variant="fab"
           color="primary"
+          aria-label="Add"
+          style={{ position: 'absolute', top: 10, left: 10 }}
           onClick={() => Menu.play([...notes.values()], bpm)}
         >
-          play
+          <PlayArrowIcon />
         </Button>
         <Typography
           style={{ position: 'absolute', top: 10, left: 100 }}
