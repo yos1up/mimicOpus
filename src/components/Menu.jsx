@@ -75,8 +75,8 @@ class Menu extends React.Component {
       if (qEventOfEachPitch[i].length === 0) {
         score += redundantPenalty * aEventOfEachPitch[i].length;
       } else {
-        qEventOfEachPitch[i].sort();
-        aEventOfEachPitch[i].sort();
+        qEventOfEachPitch[i].sort((a, b) => a - b);
+        aEventOfEachPitch[i].sort((a, b) => a - b);
         /*  回答の各ノーツを，時刻の早いものから順に見ていく．
             回答の各ノーツについて，
               その回答ノーツに「近接」した正解ノーツがある場合は
