@@ -146,7 +146,7 @@ class Menu extends React.Component {
       enablePlayQuestionBtn: false,
       enableLoadAsQuestionBtn: true,
       enableSubmitBtn: false,
-      bpm: 150,
+      bpm: 120,
       dialogOpened: false,
       dialogText: '',
     };
