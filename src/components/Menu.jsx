@@ -11,6 +11,9 @@ import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import SaveIcon from '@material-ui/icons/Save';
 import SendIcon from '@material-ui/icons/Send';
 import Slider from '@material-ui/lab/Slider';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
 
 // サンプラー
 const sampler = new Tone.Sampler({
@@ -112,10 +115,7 @@ class Menu extends React.Component {
     score = Math.max(0, score);
     score *= 100 / qMel.length;
 
-    let message = '';
-    message += `YOUR SCORE: ${score}\n`;
-    if (score >= 100) message += '!!! CONGRATULATION !!!';
-    window.alert(message); // TODO: Unexpected Alertなので代わりのものを実装
+    return score;
   }
 
   static play(notes, bpm = 120) { // 一連の音符たちを鳴らしたい場合，Tone.Part が便利．（他に Tone.Sequence というのもあるようだ）
@@ -147,11 +147,14 @@ class Menu extends React.Component {
       enableLoadAsQuestionBtn: true,
       enableSubmitBtn: false,
       bpm: 150,
+      dialogOpened: false,
+      dialogText: '',
     };
 
     this.handleClickSetAsQuestion = this.handleClickSetAsQuestion.bind(this);
     this.handleUploadOnChange = this.handleUploadOnChange.bind(this);
     this.downloadData = this.downloadData.bind(this);
+    // this.handleOpenDialog = this.handleOpenDialog.bind(this);
   }
 
   setAsQuestion(melodyArray) {
@@ -164,6 +167,17 @@ class Menu extends React.Component {
       enableLoadAsQuestionBtn: false,
       enableSubmitBtn: true,
     });
+  }
+
+
+  evaluateAndReport(qMel, aMel) {
+    const score = Menu.evaluateAnswer(qMel, aMel);
+    let message = '';
+    message += `YOUR SCORE: ${score}\n`;
+    // if (score >= 100) message += '!!! CONGRATULATION !!!';
+
+    // スコアを表示．
+    this.handleOpenDialog(message); // TODO: Unexpected Alertなので代わりのものを実装
   }
 
   downloadData(jsonObject) {
@@ -204,6 +218,14 @@ class Menu extends React.Component {
     }
   }
 
+  handleCloseDialog() {
+    this.setState({ dialogOpened: false });
+  }
+
+  handleOpenDialog(message) {
+    this.setState({ dialogOpened: true, dialogText: message });
+  }
+
   render() {
     // TODO: Material UI
     const { notes } = this.props;
@@ -213,6 +235,8 @@ class Menu extends React.Component {
       enableLoadAsQuestionBtn,
       enableSubmitBtn,
       bpm,
+      dialogOpened,
+      dialogText,
     } = this.state;
 
     return (
@@ -284,7 +308,7 @@ class Menu extends React.Component {
           aria-label="Submit"
           style={{ position: 'absolute', top: 10, left: 560 }}
           disabled={!enableSubmitBtn}
-          onClick={() => Menu.evaluateAnswer(questionMelody, Object.values([...notes.values()]))}
+          onClick={() => this.evaluateAndReport(questionMelody, Object.values([...notes.values()]))}
         >
           <SendIcon />
         </Button>
@@ -300,6 +324,16 @@ class Menu extends React.Component {
         >
           <SaveIcon />
         </Button>
+
+        <Dialog open={dialogOpened} onClose={() => this.handleCloseDialog()}>
+          <DialogTitle id="simple-dialog-title">RESULT</DialogTitle>
+          <DialogContent>
+            <Typography>
+              {dialogText}
+            </Typography>
+          </DialogContent>
+        </Dialog>
+
         <input
           type="file"
           ref={(uploadBtn) => { this.uploadBtn = uploadBtn; }}
