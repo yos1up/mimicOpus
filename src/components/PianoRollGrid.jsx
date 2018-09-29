@@ -197,34 +197,36 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
       );
     }
 
-    // notes (Component にすべき)
+    // notes
     for (let i = 0; i < notes.size; i += 1) {
       const note = notes.get(i);
-      const leftBottom = this.timePitchToRelPos([
-        note.start, note.pitch - 0.5,
-      ]);
-      const rightTop = this.timePitchToRelPos([
-        note.end, note.pitch + 0.5,
-      ]);
-      const divStyle = {
-        position: 'absolute',
-        top: rightTop[1],
-        left: xMargin + leftBottom[0],
-      };
-      elementList.push(
-        <div key={elementList.length} style={divStyle}>
-          <NoteBlock
-            start={note.start}
-            end={note.end}
-            uw={uw}
-            uh={uh}
-            pitch={note.pitch}
-            parent={this}
-            dictKey={i}
-            delNote={() => delNote(i)}
-          />
-        </div>,
-      );
+      if (pitchRange[0] <= note.pitch && note.pitch <= pitchRange[1]) {
+        const leftBottom = this.timePitchToRelPos([
+          note.start, note.pitch - 0.5,
+        ]);
+        const rightTop = this.timePitchToRelPos([
+          note.end, note.pitch + 0.5,
+        ]);
+        const divStyle = {
+          position: 'absolute',
+          top: rightTop[1],
+          left: xMargin + leftBottom[0],
+        };
+        elementList.push(
+          <div key={elementList.length} style={divStyle}>
+            <NoteBlock
+              start={note.start}
+              end={note.end}
+              uw={uw}
+              uh={uh}
+              pitch={note.pitch}
+              parent={this}
+              dictKey={i}
+              delNote={() => delNote(i)}
+            />
+          </div>,
+        );
+      }
     }
 
     // selection
