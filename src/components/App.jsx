@@ -9,19 +9,12 @@ function App() {
       style={{
         position: 'relative',
         margin: '0px auto',
-        width: 1200,
+        width: 850,
+        height: 350,
       }}
     >
-      <div
-        style={{
-          position: 'absolute',
-          left: 100,
-          top: 100,
-        }}
-      >
-        <PianoRollGrid pitchRange={[60, 72]} />
-      </div>
       <Menu />
+      <PianoRollGrid pitchRange={[60, 72]} />
     </div>
   );
 }
