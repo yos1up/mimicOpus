@@ -39,19 +39,22 @@ export function setQuestionMelody(melody) {
 }
 
 export function uploadQuestionMelody(melody) {
-  return questionsRef.doc('test').set({
+  return questionsRef.add({
     melody,
+    uploadedAt: new Date(),
   });
 }
 
 export function loadQuestionMelody(dispatch) {
-  questionsRef.doc('test').get().then((doc) => {
-    if (doc.exists) {
-      dispatch(setQuestionMelody(doc.data().melody));
-      // console.log('Document data:', doc.data());
-    } else {
-      // doc.data() will be undefined in this case
-      // console.log('No such document!');
-    }
-  });
+  // 件数のチェック
+  // questionsRef.get().then((qss) => { console.log(`#records: ${qss.size}`); });
+
+  // 最新の一件を取得
+  questionsRef.orderBy('uploadedAt', 'desc').limit(1).get().then(
+    (querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        dispatch(setQuestionMelody(doc.data().melody));
+      });
+    },
+  );
 }

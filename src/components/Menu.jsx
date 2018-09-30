@@ -248,7 +248,7 @@ class Menu extends React.Component {
         </Typography>
         <Slider
           min={60}
-          max={180}
+          max={200}
           step={1}
           value={bpm}
           onChange={(e, v) => this.setState({ bpm: v })}
