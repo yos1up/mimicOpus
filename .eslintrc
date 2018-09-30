@@ -4,5 +4,6 @@
     "window": true,
     "Blob": true,
     "FileReader": true,
+    "document": true,
   },
 }
