@@ -319,7 +319,6 @@ class Menu extends React.Component {
           aria-label="Save"
           style={{ position: 'absolute', top: 10, left: 630 }}
           href="#"
-          download="scoreData.json"
           onClick={() => this.downloadData(Object.values([...notes.values()]))}
         >
           <SaveIcon />
