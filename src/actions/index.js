@@ -27,3 +27,10 @@ export function shiftPitchRange(delta) {
     delta,
   };
 }
+
+export function setQuestionMelody(melody) {
+  return {
+    type: actionTypes.SET_QUESTION_MELODY,
+    melody,
+  };
+}

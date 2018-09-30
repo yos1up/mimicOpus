@@ -46,7 +46,6 @@ function noteNumberToPitchName(nn) {
   return ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'][nn % 12] + (Math.floor(nn / 12) - 1);
 }
 
-let questionMelody = [];
 
 class Menu extends React.Component {
   static evaluateAnswer(qMel, aMel) {
@@ -158,8 +157,8 @@ class Menu extends React.Component {
   }
 
   setAsQuestion(melodyArray) {
-    const { clearNotes } = this.props;
-    questionMelody = melodyArray;
+    const { clearNotes, setQuestionMelody } = this.props;
+    setQuestionMelody(melodyArray);
     clearNotes();
     this.setState({
       enableSetAsQuestionBtn: false,
@@ -228,7 +227,7 @@ class Menu extends React.Component {
 
   render() {
     // TODO: Material UI
-    const { notes } = this.props;
+    const { notes, questionMelody } = this.props;
     const {
       enablePlayQuestionBtn,
       enableSetAsQuestionBtn,
@@ -298,7 +297,7 @@ class Menu extends React.Component {
           aria-label="PlayQuestion"
           style={{ position: 'absolute', top: 10, left: 490 }}
           disabled={!enablePlayQuestionBtn}
-          onClick={() => Menu.play(questionMelody, bpm)}
+          onClick={() => Menu.play([...questionMelody.values()], bpm)}
         >
           <PlayCircleOutlineIcon />
         </Button>
@@ -308,7 +307,9 @@ class Menu extends React.Component {
           aria-label="Submit"
           style={{ position: 'absolute', top: 10, left: 560 }}
           disabled={!enableSubmitBtn}
-          onClick={() => this.evaluateAndReport(questionMelody, Object.values([...notes.values()]))}
+          onClick={() => this.evaluateAndReport(
+            [...questionMelody.values()], Object.values([...notes.values()]),
+          )}
         >
           <SendIcon />
         </Button>
@@ -352,8 +353,10 @@ class Menu extends React.Component {
 }
 
 Menu.propTypes = {
-  clearNotes: PropTypes.func.isRequired,
   notes: PropTypes.instanceOf(Immutable.List).isRequired,
+  questionMelody: PropTypes.instanceOf(Immutable.List).isRequired,
+  clearNotes: PropTypes.func.isRequired,
+  setQuestionMelody: PropTypes.func.isRequired,
 };
 
 export default Menu;

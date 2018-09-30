@@ -3,6 +3,7 @@ const actionTypes = {
   ADD_NOTE: 'ADD_NOTE',
   DEL_NOTE: 'DEL_NOTE',
   SHIFT_PITCH_RANGE: 'SHIFT_PITCH_RANGE',
+  SET_QUESTION_MELODY: 'SET_QUESTION_MELODY',
 };
 
 export default actionTypes;
