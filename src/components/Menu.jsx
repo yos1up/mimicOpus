@@ -152,8 +152,6 @@ class Menu extends React.Component {
 
     this.handleClickSetAsQuestion = this.handleClickSetAsQuestion.bind(this);
     this.handleUploadOnChange = this.handleUploadOnChange.bind(this);
-    this.downloadData = this.downloadData.bind(this);
-    // this.handleOpenDialog = this.handleOpenDialog.bind(this);
   }
 
   setAsQuestion(melodyArray) {
@@ -176,21 +174,7 @@ class Menu extends React.Component {
     // if (score >= 100) message += '!!! CONGRATULATION !!!';
 
     // スコアを表示．
-    this.handleOpenDialog(message); // TODO: Unexpected Alertなので代わりのものを実装
-  }
-
-  downloadData(jsonObject) {
-    // 作業状態のダウンロード
-    const blob = new Blob([JSON.stringify(jsonObject)], { type: 'text/json' });
-    if (window.navigator.msSaveBlob) {
-      window.navigator.msSaveBlob(blob, '_.json');
-    } else {
-      // TODO: もうちょっとうまいやり方ないかなあ
-      const a = this.downloadAnchor;
-      a.href = window.URL.createObjectURL(blob);
-      a.download = 'scoreData.json';
-      a.click();
-    }
+    this.handleOpenDialog(message);
   }
 
   handleClickSetAsQuestion() {
@@ -200,8 +184,15 @@ class Menu extends React.Component {
   }
 
   handleClickLoadAsQuestion() {
+    const { loadQuestionMelody } = this.props;
     // ファイルを開くダイアログを出し，jsonを読んで，問題にセットする．
-    this.uploadBtn.click();
+    loadQuestionMelody();
+    this.setState({
+      enableSetAsQuestionBtn: false,
+      enablePlayQuestionBtn: true,
+      enableLoadAsQuestionBtn: false,
+      enableSubmitBtn: true,
+    });
   }
 
   handleUploadOnChange(e) {
@@ -227,7 +218,7 @@ class Menu extends React.Component {
 
   render() {
     // TODO: Material UI
-    const { notes, questionMelody } = this.props;
+    const { notes, questionMelody, uploadQuestionMelody } = this.props;
     const {
       enablePlayQuestionBtn,
       enableSetAsQuestionBtn,
@@ -320,7 +311,9 @@ class Menu extends React.Component {
           aria-label="Save"
           style={{ position: 'absolute', top: 10, left: 630 }}
           href="#"
-          onClick={() => this.downloadData(Object.values([...notes.values()]))}
+          onClick={() => {
+            uploadQuestionMelody([...notes.values()]);
+          }}
         >
           <SaveIcon />
         </Button>
@@ -333,19 +326,6 @@ class Menu extends React.Component {
             </Typography>
           </DialogContent>
         </Dialog>
-
-        <input
-          type="file"
-          ref={(uploadBtn) => { this.uploadBtn = uploadBtn; }}
-          id="b_upload"
-          onChange={this.handleUploadOnChange}
-          hidden
-        />
-        <a
-          id="a_download"
-          ref={(downloadAnchor) => { this.downloadAnchor = downloadAnchor; }}
-          hidden
-        />
         <br />
       </div>
     );
@@ -357,6 +337,8 @@ Menu.propTypes = {
   questionMelody: PropTypes.instanceOf(Immutable.List).isRequired,
   clearNotes: PropTypes.func.isRequired,
   setQuestionMelody: PropTypes.func.isRequired,
+  uploadQuestionMelody: PropTypes.func.isRequired,
+  loadQuestionMelody: PropTypes.func.isRequired,
 };
 
 export default Menu;

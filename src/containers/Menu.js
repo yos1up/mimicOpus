@@ -5,6 +5,8 @@ import {
   addNote,
   delNote,
   setQuestionMelody,
+  uploadQuestionMelody,
+  loadQuestionMelody,
 } from '../actions';
 import Menu from '../components/Menu';
 
@@ -18,6 +20,8 @@ const mapDispatchToProps = dispatch => ({
   addNote: note => dispatch(addNote(note)),
   delNote: idx => dispatch(delNote(idx)),
   setQuestionMelody: melody => dispatch(setQuestionMelody(melody)),
+  uploadQuestionMelody,
+  loadQuestionMelody: () => loadQuestionMelody(dispatch),
 });
 
 export default connect(
