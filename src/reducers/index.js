@@ -2,40 +2,24 @@ import Immutable from 'immutable';
 
 import actionTypes from '../actions/actionTypes';
 
-export default function (state = {
+const StateRecord = Immutable.Record({
   notes: Immutable.List(),
   pitchRange: [60, 72],
   questionMelody: Immutable.List(),
   showSignIn: false,
   uid: null,
-}, action) {
+});
+
+export default function (state = new StateRecord(), action) {
   switch (action.type) {
     case actionTypes.CLEAR_NOTES:
-      return {
-        notes: Immutable.List(),
-        pitchRange: state.pitchRange,
-        questionMelody: state.questionMelody,
-        showSignIn: state.showSignIn,
-        uid: state.uid,
-      };
+      return state.set('notes', Immutable.List());
 
     case actionTypes.ADD_NOTE:
-      return {
-        notes: state.notes.push(action.note),
-        pitchRange: state.pitchRange,
-        questionMelody: state.questionMelody,
-        showSignIn: state.showSignIn,
-        uid: state.uid,
-      };
+      return state.update('notes', notes => notes.push(action.note));
 
     case actionTypes.DEL_NOTE:
-      return {
-        notes: state.notes.delete(action.idx),
-        pitchRange: state.pitchRange,
-        questionMelody: state.questionMelody,
-        showSignIn: state.showSignIn,
-        uid: state.uid,
-      };
+      return state.update('notes', notes => notes.delete(action.idx));
 
     case actionTypes.SHIFT_PITCH_RANGE: {
       let newPitchRange = [state.pitchRange[0] + action.delta,
@@ -45,41 +29,17 @@ export default function (state = {
       } else if (newPitchRange[1] > 127) {
         newPitchRange = [127 - newPitchRange[1] + newPitchRange[0], 127];
       }
-      return {
-        notes: state.notes,
-        pitchRange: newPitchRange,
-        questionMelody: state.questionMelody,
-        showSignIn: state.showSignIn,
-        uid: state.uid,
-      };
+      return state.set('pitchRange', newPitchRange);
     }
 
     case actionTypes.SET_QUESTION_MELODY:
-      return {
-        notes: state.notes,
-        pitchRange: state.pitchRange,
-        questionMelody: Immutable.List(action.melody),
-        showSignIn: state.showSignIn,
-        uid: state.uid,
-      };
+      return state.set('questionMelody', Immutable.List(action.melody));
 
     case actionTypes.OPEN_SIGN_IN_DIALOG:
-      return {
-        notes: state.notes,
-        pitchRange: state.pitchRange,
-        questionMelody: state.questionMelody,
-        showSignIn: true,
-        uid: state.uid,
-      };
+      return state.set('showSignIn', true);
 
     case actionTypes.CLOSE_SIGN_IN_DIALOG:
-      return {
-        notes: state.notes,
-        pitchRange: state.pitchRange,
-        questionMelody: state.questionMelody,
-        showSignIn: false,
-        uid: action.uid,
-      };
+      return state.set('showSignIn', false);
 
     default:
       return state;
