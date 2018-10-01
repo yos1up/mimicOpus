@@ -3,33 +3,25 @@ import Immutable from 'immutable';
 import actionTypes from '../actions/actionTypes';
 
 // TODO: separate reducers ?? (for Menu and PianoRollGrid)
-export default function (state = {
-  notes: Immutable.List(), pitchRange: [60, 72], questionMelody: Immutable.List(), bpm: 120,
-}, action) {
+const StateRecord = Immutable.Record({
+  notes: Immutable.List(),
+  pitchRange: [60, 72],
+  questionMelody: Immutable.List(),
+  showSignIn: false,
+  uid: null,
+  uimage: '',
+});
+
+export default function (state = new StateRecord(), action) {
   switch (action.type) {
     case actionTypes.CLEAR_NOTES:
-      return {
-        notes: Immutable.List(),
-        pitchRange: state.pitchRange,
-        questionMelody: state.questionMelody,
-        bpm: state.bpm,
-      };
+      return state.set('notes', Immutable.List());
 
     case actionTypes.ADD_NOTE:
-      return {
-        notes: state.notes.push(action.note),
-        pitchRange: state.pitchRange,
-        questionMelody: state.questionMelody,
-        bpm: state.bpm,
-      };
+      return state.update('notes', notes => notes.push(action.note));
 
     case actionTypes.DEL_NOTE:
-      return {
-        notes: state.notes.delete(action.idx),
-        pitchRange: state.pitchRange,
-        questionMelody: state.questionMelody,
-        bpm: state.bpm,
-      };
+      return state.update('notes', notes => notes.delete(action.idx));
 
     case actionTypes.SHIFT_PITCH_RANGE: {
       let newPitchRange = [state.pitchRange[0] + action.delta,
@@ -39,29 +31,26 @@ export default function (state = {
       } else if (newPitchRange[1] > 127) {
         newPitchRange = [127 - newPitchRange[1] + newPitchRange[0], 127];
       }
-      return {
-        notes: state.notes,
-        pitchRange: newPitchRange,
-        questionMelody: state.questionMelody,
-        bpm: state.bpm,
-      };
+      return state.set('pitchRange', newPitchRange);
     }
 
     case actionTypes.SET_QUESTION_MELODY:
-      return {
-        notes: state.notes,
-        pitchRange: state.pitchRange,
-        questionMelody: Immutable.List(action.melody),
-        bpm: state.bpm,
-      };
+      return state.set('questionMelody', Immutable.List(action.melody));
 
     case actionTypes.SET_BPM:
-      return {
-        notes: state.notes,
-        pitchRange: state.pitchRange,
-        questionMelody: state.questionMelody,
-        bpm: action.bpm,
-      };
+      return state.set('bpm', action.bpm);
+
+    case actionTypes.OPEN_SIGN_IN_DIALOG:
+      return state.set('showSignIn', true);
+
+    case actionTypes.CLOSE_SIGN_IN_DIALOG:
+      return state.set('showSignIn', false);
+
+    case actionTypes.SET_UID:
+      return state.set('uid', action.uid);
+
+    case actionTypes.SET_UIMAGE:
+      return state.set('uimage', action.uimage);
 
     default:
       return state;
