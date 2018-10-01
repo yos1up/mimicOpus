@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { closeSignInDialog, setUid } from '../actions';
+import { closeSignInDialog } from '../actions';
 import SignIn from '../components/SignIn';
 
 const mapStateToProps = state => ({
@@ -9,7 +9,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   closeSignInDialog: () => dispatch(closeSignInDialog()),
-  setUid: uid => dispatch(setUid(uid)),
 });
 
 export default connect(

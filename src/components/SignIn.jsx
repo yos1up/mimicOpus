@@ -7,7 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 
 
-function SignIn({ open, closeSignInDialog, setUid }) {
+function SignIn({ open, closeSignInDialog }) {
   const uiConfig = {
     signInFlow: 'popup',
     signInSuccessUrl: '/signedIn',
@@ -15,8 +15,7 @@ function SignIn({ open, closeSignInDialog, setUid }) {
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     ],
     callbacks: {
-      signInSuccessWithAuthResult: (authResult) => {
-        setUid(authResult.user.uid);
+      signInSuccessWithAuthResult: () => {
         closeSignInDialog();
       },
     },
@@ -34,7 +33,6 @@ function SignIn({ open, closeSignInDialog, setUid }) {
 SignIn.propTypes = {
   open: PropTypes.bool.isRequired,
   closeSignInDialog: PropTypes.func.isRequired,
-  setUid: PropTypes.func.isRequired,
 };
 
 export default SignIn;
