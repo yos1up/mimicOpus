@@ -2,8 +2,9 @@ import Immutable from 'immutable';
 
 import actionTypes from '../actions/actionTypes';
 
+// TODO: separate reducers ?? (for Menu and PianoRollGrid)
 export default function (state = {
-  notes: Immutable.List(), pitchRange: [60, 72], questionMelody: Immutable.List(),
+  notes: Immutable.List(), pitchRange: [60, 72], questionMelody: Immutable.List(), bpm: 120,
 }, action) {
   switch (action.type) {
     case actionTypes.CLEAR_NOTES:
@@ -11,6 +12,7 @@ export default function (state = {
         notes: Immutable.List(),
         pitchRange: state.pitchRange,
         questionMelody: state.questionMelody,
+        bpm: state.bpm,
       };
 
     case actionTypes.ADD_NOTE:
@@ -18,6 +20,7 @@ export default function (state = {
         notes: state.notes.push(action.note),
         pitchRange: state.pitchRange,
         questionMelody: state.questionMelody,
+        bpm: state.bpm,
       };
 
     case actionTypes.DEL_NOTE:
@@ -25,6 +28,7 @@ export default function (state = {
         notes: state.notes.delete(action.idx),
         pitchRange: state.pitchRange,
         questionMelody: state.questionMelody,
+        bpm: state.bpm,
       };
 
     case actionTypes.SHIFT_PITCH_RANGE: {
@@ -39,6 +43,7 @@ export default function (state = {
         notes: state.notes,
         pitchRange: newPitchRange,
         questionMelody: state.questionMelody,
+        bpm: state.bpm,
       };
     }
 
@@ -47,6 +52,15 @@ export default function (state = {
         notes: state.notes,
         pitchRange: state.pitchRange,
         questionMelody: Immutable.List(action.melody),
+        bpm: state.bpm,
+      };
+
+    case actionTypes.SET_BPM:
+      return {
+        notes: state.notes,
+        pitchRange: state.pitchRange,
+        questionMelody: state.questionMelody,
+        bpm: action.bpm,
       };
 
     default:

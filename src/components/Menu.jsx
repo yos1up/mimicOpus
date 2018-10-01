@@ -145,7 +145,6 @@ class Menu extends React.Component {
       enablePlayQuestionBtn: false,
       enableLoadAsQuestionBtn: true,
       enableSubmitBtn: false,
-      bpm: 120,
       dialogOpened: false,
       dialogText: '',
     };
@@ -155,6 +154,11 @@ class Menu extends React.Component {
   }
 
   setAsQuestion(melodyArray) {
+    /*
+      与えられた melodyArray を「現在の問題」にセットします．(アクション setQuestionMelody)
+      また，現在打ち込まれているノートを全て消去し，
+      UIのボタンの有効・非有効を適切に変更します．
+    */
     const { clearNotes, setQuestionMelody } = this.props;
     setQuestionMelody(melodyArray);
     clearNotes();
@@ -168,6 +172,7 @@ class Menu extends React.Component {
 
 
   evaluateAndReport(qMel, aMel) {
+    console.log(`this.props.bpm = ${this.props.bpm}`);
     const score = Menu.evaluateAnswer(qMel, aMel);
     let message = '';
     message += `YOUR SCORE: ${score}\n`;
@@ -184,8 +189,13 @@ class Menu extends React.Component {
   }
 
   handleClickLoadAsQuestion() {
+    /*
+      最新の問題をサーバーから取得して「現在の問題」にセットします．(アクション loadQuestionMelody)
+      また，UIボタンの状態を適切に変更します．
+
+      （なお「現在の回答」をサーバーに保存する手続きは，アクション uploadQuestionMelody として実装されている）
+    */
     const { loadQuestionMelody } = this.props;
-    // ファイルを開くダイアログを出し，jsonを読んで，問題にセットする．
     loadQuestionMelody();
     this.setState({
       enableSetAsQuestionBtn: false,
@@ -196,7 +206,9 @@ class Menu extends React.Component {
   }
 
   handleUploadOnChange(e) {
-    // 作業状態の読み込み
+    /*
+      ローカルファイル (json形式) からのノーツ情報の読み込み
+    */
     const file = e.target.files;
     const reader = new FileReader();// FileReaderの作成
     if (typeof file[0] !== 'undefined') {
@@ -209,22 +221,25 @@ class Menu extends React.Component {
   }
 
   handleCloseDialog() {
+    /* モーダルダイアログを閉じる */
     this.setState({ dialogOpened: false });
   }
 
   handleOpenDialog(message) {
+    /* モーダルダイアログを開く */
     this.setState({ dialogOpened: true, dialogText: message });
   }
 
   render() {
     // TODO: Material UI
-    const { notes, questionMelody, uploadQuestionMelody } = this.props;
+    const {
+      notes, questionMelody, uploadQuestionMelody, bpm, setBPM,
+    } = this.props;
     const {
       enablePlayQuestionBtn,
       enableSetAsQuestionBtn,
       enableLoadAsQuestionBtn,
       enableSubmitBtn,
-      bpm,
       dialogOpened,
       dialogText,
     } = this.state;
@@ -251,7 +266,7 @@ class Menu extends React.Component {
           max={200}
           step={1}
           value={bpm}
-          onChange={(e, v) => this.setState({ bpm: v })}
+          onChange={(e, v) => setBPM(v)}
           style={{
             position: 'absolute',
             top: 25,
@@ -339,6 +354,8 @@ Menu.propTypes = {
   setQuestionMelody: PropTypes.func.isRequired,
   uploadQuestionMelody: PropTypes.func.isRequired,
   loadQuestionMelody: PropTypes.func.isRequired,
+  bpm: PropTypes.number.isRequired,
+  setBPM: PropTypes.func.isRequired,
 };
 
 export default Menu;

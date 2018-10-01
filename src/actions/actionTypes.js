@@ -4,6 +4,7 @@ const actionTypes = {
   DEL_NOTE: 'DEL_NOTE',
   SHIFT_PITCH_RANGE: 'SHIFT_PITCH_RANGE',
   SET_QUESTION_MELODY: 'SET_QUESTION_MELODY',
+  SET_BPM: 'SET_BPM',
 };
 
 export default actionTypes;

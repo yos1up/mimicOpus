@@ -38,9 +38,17 @@ export function setQuestionMelody(melody) {
   };
 }
 
+export function setBPM(bpm) {
+  return {
+    type: actionTypes.SET_BPM,
+    bpm,
+  };
+}
+
 export function uploadQuestionMelody(melody) {
   return questionsRef.add({
     melody,
+    bpm: 123.456, // TODO
     uploadedAt: new Date(),
   });
 }
@@ -54,6 +62,7 @@ export function loadQuestionMelody(dispatch) {
     (querySnapshot) => {
       querySnapshot.forEach((doc) => {
         dispatch(setQuestionMelody(doc.data().melody));
+        dispatch(setBPM(doc.data().bpm));
       });
     },
   );
