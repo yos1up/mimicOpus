@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Tone from 'tone';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import AddIcon from '@material-ui/icons/Add';
 import FolderIcon from '@material-ui/icons/Folder';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
@@ -218,7 +219,9 @@ class Menu extends React.Component {
 
   render() {
     // TODO: Material UI
-    const { notes, questionMelody, uploadQuestionMelody } = this.props;
+    const {
+      notes, questionMelody, uploadQuestionMelody, openSignInDialog,
+    } = this.props;
     const {
       enablePlayQuestionBtn,
       enableSetAsQuestionBtn,
@@ -317,6 +320,16 @@ class Menu extends React.Component {
         >
           <SaveIcon />
         </Button>
+        <Button
+          variant="fab"
+          color="primary"
+          aria-label="Save"
+          style={{ position: 'absolute', top: 10, left: 700 }}
+          href="#"
+          onClick={() => openSignInDialog()}
+        >
+          <AccountCircleIcon />
+        </Button>
 
         <Dialog open={dialogOpened} onClose={() => this.handleCloseDialog()}>
           <DialogTitle id="simple-dialog-title">RESULT</DialogTitle>
@@ -339,6 +352,7 @@ Menu.propTypes = {
   setQuestionMelody: PropTypes.func.isRequired,
   uploadQuestionMelody: PropTypes.func.isRequired,
   loadQuestionMelody: PropTypes.func.isRequired,
+  openSignInDialog: PropTypes.func.isRequired,
 };
 
 export default Menu;

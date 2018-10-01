@@ -7,6 +7,7 @@ import {
   setQuestionMelody,
   uploadQuestionMelody,
   loadQuestionMelody,
+  openSignInDialog,
 } from '../actions';
 import Menu from '../components/Menu';
 
@@ -22,6 +23,7 @@ const mapDispatchToProps = dispatch => ({
   setQuestionMelody: melody => dispatch(setQuestionMelody(melody)),
   uploadQuestionMelody,
   loadQuestionMelody: () => loadQuestionMelody(dispatch),
+  openSignInDialog: () => dispatch(openSignInDialog()),
 });
 
 export default connect(

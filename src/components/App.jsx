@@ -2,6 +2,7 @@ import React from 'react';
 
 import PianoRollGrid from '../containers/PianoRollGrid';
 import Menu from '../containers/Menu';
+import SignIn from '../containers/SignIn';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
     >
       <Menu />
       <PianoRollGrid pitchRange={[60, 72]} />
+      <SignIn />
     </div>
   );
 }

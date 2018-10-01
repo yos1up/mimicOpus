@@ -58,3 +58,22 @@ export function loadQuestionMelody(dispatch) {
     },
   );
 }
+
+export function openSignInDialog() {
+  return {
+    type: actionTypes.OPEN_SIGN_IN_DIALOG,
+  };
+}
+
+export function closeSignInDialog() {
+  return {
+    type: actionTypes.CLOSE_SIGN_IN_DIALOG,
+  };
+}
+
+export function setUid(uid) {
+  return {
+    type: actionTypes.SET_UID,
+    uid,
+  };
+}
