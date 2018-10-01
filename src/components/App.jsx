@@ -1,5 +1,6 @@
 import React from 'react';
 import firebase from 'firebase';
+import PropTypes from 'prop-types';
 
 import PianoRollGrid from '../containers/PianoRollGrid';
 import Menu from '../containers/Menu';
@@ -8,9 +9,10 @@ import SignIn from '../containers/SignIn';
 
 class App extends React.Component {
   componentDidMount() {
-    firebase.auth().onAuthStateChanged((/* user */) => {
-      // ここにユーザー変わった時の処理を入れます
-      // console.log(user);
+    const { setUid, setUimage } = this.props;
+    firebase.auth().onAuthStateChanged((user) => {
+      setUid(user.uid);
+      setUimage(user.photoURL);
     });
   }
 
@@ -31,5 +33,10 @@ class App extends React.Component {
     );
   }
 }
+
+App.propTypes = {
+  setUid: PropTypes.func.isRequired,
+  setUimage: PropTypes.func.isRequired,
+};
 
 export default App;

@@ -77,3 +77,10 @@ export function setUid(uid) {
     uid,
   };
 }
+
+export function setUimage(uimage) {
+  return {
+    type: actionTypes.SET_UIMAGE,
+    uimage,
+  };
+}

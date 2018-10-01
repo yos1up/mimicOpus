@@ -7,6 +7,7 @@ const actionTypes = {
   OPEN_SIGN_IN_DIALOG: 'OPEN_SIGN_IN_DIALOG',
   CLOSE_SIGN_IN_DIALOG: 'CLOSE_SIGN_IN_DIALOG',
   SET_UID: 'SET_UID',
+  SET_UIMAGE: 'SET_UIMAGE',
 };
 
 export default actionTypes;

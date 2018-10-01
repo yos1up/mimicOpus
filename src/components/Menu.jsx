@@ -15,6 +15,7 @@ import Slider from '@material-ui/lab/Slider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
+import Avatar from '@material-ui/core/Avatar';
 
 // サンプラー
 const sampler = new Tone.Sampler({
@@ -220,7 +221,7 @@ class Menu extends React.Component {
   render() {
     // TODO: Material UI
     const {
-      notes, questionMelody, uploadQuestionMelody, openSignInDialog,
+      notes, questionMelody, uploadQuestionMelody, openSignInDialog, uimage,
     } = this.props;
     const {
       enablePlayQuestionBtn,
@@ -330,6 +331,12 @@ class Menu extends React.Component {
         >
           <AccountCircleIcon />
         </Button>
+
+        <Avatar
+          alt="no image"
+          src={uimage}
+          style={{ position: 'absolute', top: 10, left: 770 }}
+        />
 
         <Dialog open={dialogOpened} onClose={() => this.handleCloseDialog()}>
           <DialogTitle id="simple-dialog-title">RESULT</DialogTitle>

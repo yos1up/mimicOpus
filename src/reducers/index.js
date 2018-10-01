@@ -8,6 +8,7 @@ const StateRecord = Immutable.Record({
   questionMelody: Immutable.List(),
   showSignIn: false,
   uid: null,
+  uimage: '',
 });
 
 export default function (state = new StateRecord(), action) {
@@ -40,6 +41,12 @@ export default function (state = new StateRecord(), action) {
 
     case actionTypes.CLOSE_SIGN_IN_DIALOG:
       return state.set('showSignIn', false);
+
+    case actionTypes.SET_UID:
+      return state.set('uid', action.uid);
+
+    case actionTypes.SET_UIMAGE:
+      return state.set('uimage', action.uimage);
 
     default:
       return state;

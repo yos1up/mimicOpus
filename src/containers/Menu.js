@@ -14,6 +14,7 @@ import Menu from '../components/Menu';
 const mapStateToProps = state => ({
   notes: state.notes,
   questionMelody: state.questionMelody,
+  uimage: state.uimage,
 });
 
 const mapDispatchToProps = dispatch => ({
