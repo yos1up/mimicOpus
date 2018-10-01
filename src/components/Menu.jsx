@@ -355,6 +355,7 @@ class Menu extends React.Component {
 Menu.propTypes = {
   notes: PropTypes.instanceOf(Immutable.List).isRequired,
   questionMelody: PropTypes.instanceOf(Immutable.List).isRequired,
+  uimage: PropTypes.string.isRequired,
   clearNotes: PropTypes.func.isRequired,
   setQuestionMelody: PropTypes.func.isRequired,
   uploadQuestionMelody: PropTypes.func.isRequired,
