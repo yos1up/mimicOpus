@@ -27,7 +27,7 @@ class App extends React.Component {
         }}
       >
         <Menu />
-        <PianoRollGrid pitchRange={[60, 72]} />
+        <PianoRollGrid />
         <SignIn />
       </div>
     );
