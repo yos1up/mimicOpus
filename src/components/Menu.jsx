@@ -146,6 +146,7 @@ class Menu extends React.Component {
       enableSetAsQuestionBtn: true,
       enablePlayQuestionBtn: false,
       enableLoadAsQuestionBtn: true,
+      enableBPMSlider: true,
       enableSubmitBtn: false,
       dialogOpened: false,
       dialogText: '',
@@ -169,12 +170,12 @@ class Menu extends React.Component {
       enablePlayQuestionBtn: true,
       enableLoadAsQuestionBtn: false,
       enableSubmitBtn: true,
+      enableBPMSlider: false,
     });
   }
 
 
   evaluateAndReport(qMel, aMel) {
-    console.log(`this.props.bpm = ${this.props.bpm}`);
     const score = Menu.evaluateAnswer(qMel, aMel);
     let message = '';
     message += `YOUR SCORE: ${score}\n`;
@@ -204,6 +205,7 @@ class Menu extends React.Component {
       enablePlayQuestionBtn: true,
       enableLoadAsQuestionBtn: false,
       enableSubmitBtn: true,
+      enableBPMSlider: false,
     });
   }
 
@@ -242,6 +244,7 @@ class Menu extends React.Component {
       enableSetAsQuestionBtn,
       enableLoadAsQuestionBtn,
       enableSubmitBtn,
+      enableBPMSlider,
       dialogOpened,
       dialogText,
     } = this.state;
@@ -275,6 +278,7 @@ class Menu extends React.Component {
             left: 100,
             width: 200,
           }}
+          disabled={!enableBPMSlider}
         />
         <br />
 
@@ -329,7 +333,7 @@ class Menu extends React.Component {
           style={{ position: 'absolute', top: 10, left: 630 }}
           href="#"
           onClick={() => {
-            uploadQuestionMelody([...notes.values()]);
+            uploadQuestionMelody([...notes.values()], bpm);
           }}
         >
           <SaveIcon />

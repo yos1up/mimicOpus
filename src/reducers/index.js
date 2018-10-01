@@ -7,6 +7,7 @@ const StateRecord = Immutable.Record({
   notes: Immutable.List(),
   pitchRange: [60, 72],
   questionMelody: Immutable.List(),
+  bpm: 120,
   showSignIn: false,
   uid: null,
   uimage: '',

@@ -45,10 +45,10 @@ export function setBPM(bpm) {
   };
 }
 
-export function uploadQuestionMelody(melody) {
+export function uploadQuestionMelody(melody, bpm) {
   return questionsRef.add({
     melody,
-    bpm: 123.456, // TODO
+    bpm,
     uploadedAt: new Date(),
   });
 }
