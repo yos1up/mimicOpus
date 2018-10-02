@@ -1,3 +1,4 @@
+import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -9,7 +10,6 @@ import TableRow from '@material-ui/core/TableRow';
 
 
 function QuestionsList({ questionsList }) {
-  console.log(questionsList);
   return (
     <div id="QuestionsList" style={{ position: 'absolute', top: 400 }}>
       <Table>
@@ -19,18 +19,24 @@ function QuestionsList({ questionsList }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {questionsList.map((item, idx) => (
-            <TableRow key={idx} hover>
-              <TableCell component="th" scope="row">
-                melody
-                {idx}
-              </TableCell>
-            </TableRow>
-          ))}
+          {// TODO do not use array index
+            questionsList.map((item, idx) => (
+              <TableRow key={idx} hover>
+                <TableCell component="th" scope="row">
+                  melody
+                  {idx}
+                </TableCell>
+              </TableRow>
+            ))
+          }
         </TableBody>
       </Table>
     </div>
   );
 }
+
+QuestionsList.propTypes = {
+  questionsList: PropTypes.instanceOf(Immutable.List).isRequired,
+};
 
 export default QuestionsList;
