@@ -338,22 +338,24 @@ class Menu extends React.Component {
         >
           <SaveIcon />
         </Button>
-        <Button
-          variant="fab"
-          color="primary"
-          aria-label="Save"
-          style={{ position: 'absolute', top: 10, left: 700 }}
-          href="#"
-          onClick={() => openSignInDialog()}
-        >
-          <AccountCircleIcon />
-        </Button>
 
-        <Avatar
-          alt="no image"
-          src={uimage}
-          style={{ position: 'absolute', top: 10, left: 770 }}
-        />
+        {(uimage !== null && uimage !== undefined && uimage !== '')
+          ? (
+            <Avatar
+              alt="no image"
+              src={uimage}
+              style={{ position: 'absolute', top: 10, left: 700 }}
+              onClick={() => openSignInDialog()}
+            />
+          ) : (
+            <Avatar
+              style={{ position: 'absolute', top: 10, left: 700 }}
+              onClick={() => openSignInDialog()}
+            >
+              <AccountCircleIcon />
+            </Avatar>
+          )
+        }
 
         <Dialog open={dialogOpened} onClose={() => this.handleCloseDialog()}>
           <DialogTitle id="simple-dialog-title">RESULT</DialogTitle>
