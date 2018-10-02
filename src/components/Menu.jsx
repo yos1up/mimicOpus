@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Tone from 'tone';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import AddIcon from '@material-ui/icons/Add';
 import FolderIcon from '@material-ui/icons/Folder';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
@@ -15,7 +14,6 @@ import Slider from '@material-ui/lab/Slider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
-import Avatar from '@material-ui/core/Avatar';
 
 // サンプラー
 const sampler = new Tone.Sampler({
@@ -237,7 +235,7 @@ class Menu extends React.Component {
   render() {
     // TODO: Material UI
     const {
-      notes, questionMelody, uploadQuestionMelody, setBPM, bpm, openSignInDialog, uimage, uid,
+      notes, questionMelody, uploadQuestionMelody, setBPM, bpm, uid,
     } = this.props;
     const {
       enablePlayQuestionBtn,
@@ -339,24 +337,6 @@ class Menu extends React.Component {
           <SaveIcon />
         </Button>
 
-        {(uimage !== null && uimage !== undefined && uimage !== '')
-          ? (
-            <Avatar
-              alt="no image"
-              src={uimage}
-              style={{ position: 'absolute', top: 10, left: 700 }}
-              onClick={() => openSignInDialog()}
-            />
-          ) : (
-            <Avatar
-              style={{ position: 'absolute', top: 10, left: 700 }}
-              onClick={() => openSignInDialog()}
-            >
-              <AccountCircleIcon />
-            </Avatar>
-          )
-        }
-
         <Dialog open={dialogOpened} onClose={() => this.handleCloseDialog()}>
           <DialogTitle id="simple-dialog-title">RESULT</DialogTitle>
           <DialogContent>
@@ -374,7 +354,6 @@ class Menu extends React.Component {
 Menu.propTypes = {
   notes: PropTypes.instanceOf(Immutable.List).isRequired,
   questionMelody: PropTypes.instanceOf(Immutable.List).isRequired,
-  uimage: PropTypes.string.isRequired,
   uid: PropTypes.string.isRequired,
   clearNotes: PropTypes.func.isRequired,
   setQuestionMelody: PropTypes.func.isRequired,
@@ -382,7 +361,6 @@ Menu.propTypes = {
   loadQuestionMelody: PropTypes.func.isRequired,
   bpm: PropTypes.number.isRequired,
   setBPM: PropTypes.func.isRequired,
-  openSignInDialog: PropTypes.func.isRequired,
 };
 
 export default Menu;

@@ -3,12 +3,14 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import React from 'react';
 import PropTypes from 'prop-types';
+import Avatar from '@material-ui/core/Avatar';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import { displayModes } from '../reducers/display';
 
 
 function Header({
-  mode, changeDisplayMode,
+  mode, uimage, changeDisplayMode, openSignInDialog,
 }) {
   return (
     <div id="Header">
@@ -36,12 +38,30 @@ function Header({
             onChange={(e, v) => changeDisplayMode(v)}
             indicatorColor="primary"
             textColor="primary"
+            style={{ float: 'left' }}
           >
             <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} />
             <Tab label="問題を解く" value={displayModes.PLAY_QUESTION} />
             <Tab label="検索" value={displayModes.SEARCH} />
             <Tab label="ユーザー" value={displayModes.onMouseEnter} />
           </Tabs>
+          {(uimage !== null && uimage !== undefined && uimage !== '')
+            ? (
+              <Avatar
+                alt="no image"
+                src={uimage}
+                style={{ float: 'left', left: 10, top: 5 }}
+                onClick={() => openSignInDialog()}
+              />
+            ) : (
+              <Avatar
+                style={{ float: 'left', left: 10, top: 5 }}
+                onClick={() => openSignInDialog()}
+              >
+                <AccountCircleIcon />
+              </Avatar>
+            )
+          }
         </div>
       </AppBar>
     </div>
@@ -50,7 +70,9 @@ function Header({
 
 Header.propTypes = {
   mode: PropTypes.string.isRequired,
+  uimage: PropTypes.string.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
+  openSignInDialog: PropTypes.func.isRequired,
 };
 
 export default Header;

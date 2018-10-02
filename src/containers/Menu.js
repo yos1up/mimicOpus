@@ -8,7 +8,6 @@ import {
   setBPM,
   uploadQuestionMelody,
   loadQuestionMelody,
-  openSignInDialog,
 } from '../actions';
 import Menu from '../components/Menu';
 
@@ -16,7 +15,6 @@ const mapStateToProps = state => ({
   notes: state.music.notes,
   questionMelody: state.music.questionMelody,
   bpm: state.music.bpm,
-  uimage: state.auth.uimage,
   uid: state.auth.uid,
 });
 
@@ -28,7 +26,6 @@ const mapDispatchToProps = dispatch => ({
   setBPM: bpm => dispatch(setBPM(bpm)),
   uploadQuestionMelody,
   loadQuestionMelody: () => loadQuestionMelody(dispatch),
-  openSignInDialog: () => dispatch(openSignInDialog()),
 });
 
 export default connect(
