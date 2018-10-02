@@ -6,6 +6,7 @@ import PianoRollGrid from '../containers/PianoRollGrid';
 import Menu from '../containers/Menu';
 import SignIn from '../containers/SignIn';
 import QuestionsList from '../containers/QuestionsList';
+import Header from '../containers/Header';
 
 
 class App extends React.Component {
@@ -24,13 +25,22 @@ class App extends React.Component {
         style={{
           position: 'relative',
           margin: '0px auto',
-          width: 850,
+          width: 1000,
         }}
       >
-        <Menu />
-        <PianoRollGrid />
-        <SignIn />
-        <QuestionsList />
+        <Header />
+        <div
+          id="contents"
+          style={{
+            position: 'absolute',
+            top: 50,
+          }}
+        >
+          <Menu />
+          <PianoRollGrid />
+          <SignIn />
+          <QuestionsList />
+        </div>
       </div>
     );
   }

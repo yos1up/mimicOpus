@@ -30,6 +30,14 @@ export function setUimage(uimage) {
   };
 }
 
+// display
+export function changeDisplayMode(mode) {
+  return {
+    type: actionTypes.CHANGE_DISPLAY_MODE,
+    mode,
+  };
+}
+
 // music
 export function clearNotes() {
   return {

@@ -10,6 +10,7 @@ const actionTypes = {
   SET_UID: 'SET_UID',
   SET_UIMAGE: 'SET_UIMAGE',
   ADD_QUESTION_TO_LIST: 'ADD_QUESTION_TO_LIST',
+  CHANGE_DISPLAY_MODE: 'CHANGE_DISPLAY_MODE',
 };
 
 export default actionTypes;
