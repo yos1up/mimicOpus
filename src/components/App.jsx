@@ -2,11 +2,18 @@ import React from 'react';
 import firebase from 'firebase';
 import PropTypes from 'prop-types';
 
-import PianoRollGrid from '../containers/PianoRollGrid';
-import Menu from '../containers/Menu';
+// import PianoRollGrid from '../containers/PianoRollGrid';
+// import Menu from '../containers/Menu';
 import SignIn from '../containers/SignIn';
-import QuestionsList from '../containers/QuestionsList';
+// import QuestionsList from '../containers/QuestionsList';
 import Header from '../containers/Header';
+
+import MakeQuestion from './MakeQuestion';
+import PlayQuestion from './PlayQuestion';
+import Search from './Search';
+import User from './User';
+
+import { displayModes } from '../reducers/display';
 
 
 class App extends React.Component {
@@ -20,6 +27,7 @@ class App extends React.Component {
   }
 
   render() {
+    const { mode } = this.props;
     return (
       <div
         style={{
@@ -36,17 +44,22 @@ class App extends React.Component {
             top: 50,
           }}
         >
-          <Menu />
+          {(mode === displayModes.MAKE_QUESTION) ? (<MakeQuestion />) : null}
+          {(mode === displayModes.PLAY_QUESTION) ? (<PlayQuestion />) : null}
+          {(mode === displayModes.SEARCH) ? (<Search />) : null}
+          {(mode === displayModes.USER) ? (<User />) : null}
+          {/* <Menu />
           <PianoRollGrid />
-          <SignIn />
-          <QuestionsList />
+          <QuestionsList /> */}
         </div>
+        <SignIn />
       </div>
     );
   }
 }
 
 App.propTypes = {
+  mode: PropTypes.string.isRequired,
   setUid: PropTypes.func.isRequired,
   setUimage: PropTypes.func.isRequired,
   loadQuestionsList: PropTypes.func.isRequired,

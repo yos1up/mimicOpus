@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import { setUid, setUimage, loadQuestionsList } from '../actions';
 import App from '../components/App';
 
-const mapStateToProps = () => ({});
+const mapStateToProps = state => ({
+  mode: state.display.mode,
+});
 
 const mapDispatchToProps = dispatch => ({
   setUid: uid => dispatch(setUid(uid)),
