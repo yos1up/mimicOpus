@@ -4,7 +4,7 @@ import { closeSignInDialog } from '../actions';
 import SignIn from '../components/SignIn';
 
 const mapStateToProps = state => ({
-  open: state.showSignIn,
+  open: state.auth.showSignIn,
 });
 
 const mapDispatchToProps = dispatch => ({

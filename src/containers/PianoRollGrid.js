@@ -6,8 +6,8 @@ import {
 import PianoRollGrid from '../components/PianoRollGrid';
 
 const mapStateToProps = state => ({
-  notes: state.notes,
-  pitchRange: state.pitchRange,
+  notes: state.music.notes,
+  pitchRange: state.music.pitchRange,
 });
 
 const mapDispatchToProps = dispatch => ({

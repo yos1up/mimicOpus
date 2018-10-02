@@ -13,10 +13,10 @@ import {
 import Menu from '../components/Menu';
 
 const mapStateToProps = state => ({
-  notes: state.notes,
-  questionMelody: state.questionMelody,
-  bpm: state.bpm,
-  uimage: state.uimage,
+  notes: state.music.notes,
+  questionMelody: state.music.questionMelody,
+  bpm: state.music.bpm,
+  uimage: state.auth.uimage,
 });
 
 const mapDispatchToProps = dispatch => ({
