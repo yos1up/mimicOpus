@@ -6,6 +6,7 @@ const MusicState = Immutable.Record({
   notes: Immutable.List(),
   pitchRange: [60, 72],
   questionMelody: Immutable.List(),
+  questionsList: Immutable.List(),
   bpm: 120,
 });
 
@@ -36,6 +37,9 @@ export default function (state = new MusicState(), action) {
 
     case actionTypes.SET_BPM:
       return state.set('bpm', action.bpm);
+
+    case actionTypes.ADD_QUESTION_TO_LIST:
+      return state.update('questionsList', ql => ql.push(Immutable.List(action.melody)));
 
     default:
       return state;

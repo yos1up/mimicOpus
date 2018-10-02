@@ -5,15 +5,17 @@ import PropTypes from 'prop-types';
 import PianoRollGrid from '../containers/PianoRollGrid';
 import Menu from '../containers/Menu';
 import SignIn from '../containers/SignIn';
+import QuestionsList from '../containers/QuestionsList';
 
 
 class App extends React.Component {
   componentDidMount() {
-    const { setUid, setUimage } = this.props;
+    const { setUid, setUimage, loadQuestionsList } = this.props;
     firebase.auth().onAuthStateChanged((user) => {
       setUid(user.uid);
       setUimage(user.photoURL);
     });
+    loadQuestionsList();
   }
 
   render() {
@@ -23,12 +25,12 @@ class App extends React.Component {
           position: 'relative',
           margin: '0px auto',
           width: 850,
-          height: 350,
         }}
       >
         <Menu />
         <PianoRollGrid />
         <SignIn />
+        <QuestionsList />
       </div>
     );
   }
@@ -37,6 +39,7 @@ class App extends React.Component {
 App.propTypes = {
   setUid: PropTypes.func.isRequired,
   setUimage: PropTypes.func.isRequired,
+  loadQuestionsList: PropTypes.func.isRequired,
 };
 
 export default App;

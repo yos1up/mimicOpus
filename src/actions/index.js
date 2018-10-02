@@ -3,7 +3,34 @@ import { db } from '../firebase';
 
 const questionsRef = db.collection('questions');
 
-// Notes
+// auth
+export function openSignInDialog() {
+  return {
+    type: actionTypes.OPEN_SIGN_IN_DIALOG,
+  };
+}
+
+export function closeSignInDialog() {
+  return {
+    type: actionTypes.CLOSE_SIGN_IN_DIALOG,
+  };
+}
+
+export function setUid(uid) {
+  return {
+    type: actionTypes.SET_UID,
+    uid,
+  };
+}
+
+export function setUimage(uimage) {
+  return {
+    type: actionTypes.SET_UIMAGE,
+    uimage,
+  };
+}
+
+// music
 export function clearNotes() {
   return {
     type: actionTypes.CLEAR_NOTES,
@@ -69,28 +96,19 @@ export function loadQuestionMelody(dispatch) {
   );
 }
 
-export function openSignInDialog() {
+export function addQuestionToList(melody) {
   return {
-    type: actionTypes.OPEN_SIGN_IN_DIALOG,
+    type: actionTypes.ADD_QUESTION_TO_LIST,
+    melody,
   };
 }
 
-export function closeSignInDialog() {
-  return {
-    type: actionTypes.CLOSE_SIGN_IN_DIALOG,
-  };
-}
-
-export function setUid(uid) {
-  return {
-    type: actionTypes.SET_UID,
-    uid,
-  };
-}
-
-export function setUimage(uimage) {
-  return {
-    type: actionTypes.SET_UIMAGE,
-    uimage,
-  };
+export function loadQuestionsList(dispatch) {
+  questionsRef.orderBy('uploadedAt', 'desc').limit(10).get().then(
+    (querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        dispatch(addQuestionToList(doc.data().melody));
+      });
+    },
+  );
 }

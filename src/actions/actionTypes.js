@@ -9,6 +9,7 @@ const actionTypes = {
   CLOSE_SIGN_IN_DIALOG: 'CLOSE_SIGN_IN_DIALOG',
   SET_UID: 'SET_UID',
   SET_UIMAGE: 'SET_UIMAGE',
+  ADD_QUESTION_TO_LIST: 'ADD_QUESTION_TO_LIST',
 };
 
 export default actionTypes;
