@@ -17,6 +17,7 @@ const mapStateToProps = state => ({
   questionMelody: state.music.questionMelody,
   bpm: state.music.bpm,
   uimage: state.auth.uimage,
+  uid: state.auth.uid,
 });
 
 const mapDispatchToProps = dispatch => ({

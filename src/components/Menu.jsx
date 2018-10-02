@@ -237,7 +237,7 @@ class Menu extends React.Component {
   render() {
     // TODO: Material UI
     const {
-      notes, questionMelody, uploadQuestionMelody, setBPM, bpm, openSignInDialog, uimage,
+      notes, questionMelody, uploadQuestionMelody, setBPM, bpm, openSignInDialog, uimage, uid,
     } = this.props;
     const {
       enablePlayQuestionBtn,
@@ -333,7 +333,7 @@ class Menu extends React.Component {
           style={{ position: 'absolute', top: 10, left: 630 }}
           href="#"
           onClick={() => {
-            uploadQuestionMelody([...notes.values()], bpm);
+            uploadQuestionMelody([...notes.values()], bpm, uid);
           }}
         >
           <SaveIcon />
