@@ -6,6 +6,7 @@ import Tone from 'tone';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import SaveIcon from '@material-ui/icons/Save';
 import Slider from '@material-ui/lab/Slider';
 
 import PianoRollGrid from '../ui/PianoRollGrid';
@@ -64,7 +65,7 @@ class MakeQuestion extends React.Component {
 
   render() {
     const {
-      notes, pitchRange, bpm, addNote, delNote, shiftPitchRange, setBPM,
+      notes, pitchRange, bpm, uid, addNote, delNote, shiftPitchRange, setBPM, uploadQuestionMelody,
     } = this.props;
     return (
       <div>
@@ -96,6 +97,17 @@ class MakeQuestion extends React.Component {
             width: 200,
           }}
         />
+        <Button
+          variant="fab"
+          color="primary"
+          aria-label="Save"
+          style={{ position: 'absolute', top: 10, left: 350 }}
+          onClick={() => {
+            uploadQuestionMelody([...notes.values()], bpm, uid);
+          }}
+        >
+          <SaveIcon />
+        </Button>
 
         <PianoRollGrid
           addNote={addNote}
@@ -113,10 +125,12 @@ MakeQuestion.propTypes = {
   notes: PropTypes.instanceOf(Immutable.List).isRequired,
   pitchRange: PropTypes.arrayOf(PropTypes.number).isRequired,
   bpm: PropTypes.number.isRequired,
+  uid: PropTypes.string.isRequired,
   shiftPitchRange: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
   setBPM: PropTypes.func.isRequired,
+  uploadQuestionMelody: PropTypes.func.isRequired,
 };
 
 export default MakeQuestion;
