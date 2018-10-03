@@ -9,7 +9,7 @@ import SignIn from '../containers/SignIn';
 import Header from '../containers/Header';
 
 import MakeQuestion from '../containers/MakeQuestion';
-import PlayQuestion from './PlayQuestion';
+import PlayQuestion from '../containers/PlayQuestion';
 import Search from './Search';
 import User from './User';
 
