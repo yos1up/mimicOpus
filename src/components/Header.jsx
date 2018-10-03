@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-import { displayModes } from '../reducers/display';
+import displayModes from '../data/displayModes';
 
 
 function Header({

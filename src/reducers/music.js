@@ -1,14 +1,8 @@
 import Immutable from 'immutable';
 
 import actionTypes from '../actions/actionTypes';
+import MusicState from '../data/musicState';
 
-const MusicState = Immutable.Record({
-  notes: Immutable.List(),
-  pitchRange: [60, 72],
-  questionMelody: Immutable.List(),
-  questionsList: Immutable.List(),
-  bpm: 120,
-});
 
 export default function (state = new MusicState(), action) {
   switch (action.type) {

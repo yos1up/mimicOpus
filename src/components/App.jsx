@@ -10,7 +10,7 @@ import PlayQuestion from '../containers/PlayQuestion';
 import Search from '../containers/Search';
 import User from '../containers/User';
 
-import { displayModes } from '../reducers/display';
+import displayModes from '../data/displayModes';
 
 
 class App extends React.Component {

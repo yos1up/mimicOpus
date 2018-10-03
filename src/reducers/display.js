@@ -1,18 +1,6 @@
-import Immutable from 'immutable';
-
 import actionTypes from '../actions/actionTypes';
+import DisplayState from '../data/displayState';
 
-export const displayModes = {
-  MAKE_QUESTION: 'MAKE_QUESTION',
-  PLAY_QUESTION: 'PLAY_QUESTION',
-  SEARCH: 'SEARCH',
-  USER: 'USER',
-};
-
-class DisplayState extends Immutable.Record({
-  mode: displayModes.MAKE_QUESTION,
-}) {
-}
 
 const display = (state = new DisplayState(), action) => {
   switch (action.type) {

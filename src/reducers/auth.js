@@ -1,12 +1,6 @@
-import Immutable from 'immutable';
-
 import actionTypes from '../actions/actionTypes';
+import AuthState from '../data/authState';
 
-const AuthState = Immutable.Record({
-  showSignIn: false,
-  uid: '',
-  uimage: '',
-});
 
 export default function (state = new AuthState(), action) {
   switch (action.type) {
