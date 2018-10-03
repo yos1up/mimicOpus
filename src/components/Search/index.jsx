@@ -74,6 +74,9 @@ class Search extends React.Component {
             <TableRow>
               <TableCell />
               <TableCell>Melodies</TableCell>
+              <TableCell>BPM</TableCell>
+              <TableCell>UID</TableCell>
+              <TableCell>uploadedAt</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -102,6 +105,9 @@ class Search extends React.Component {
                     question
                     {idx}
                   </TableCell>
+                  <TableCell>{questionsList.get(idx).bpm}</TableCell>
+                  <TableCell>{questionsList.get(idx).uid}</TableCell>
+                  <TableCell>{questionsList.get(idx).uploadedAt.toString()}</TableCell>
                 </TableRow>
               ))
             }
