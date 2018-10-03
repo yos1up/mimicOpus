@@ -8,7 +8,7 @@ import SignIn from '../containers/SignIn';
 // import QuestionsList from '../containers/QuestionsList';
 import Header from '../containers/Header';
 
-import MakeQuestion from './MakeQuestion';
+import MakeQuestion from '../containers/MakeQuestion';
 import PlayQuestion from './PlayQuestion';
 import Search from './Search';
 import User from './User';
