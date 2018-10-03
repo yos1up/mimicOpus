@@ -79,7 +79,7 @@ class Search extends React.Component {
               questionsList.map((item, idx) => (
                 <TableRow key={idx} hover>
                   <TableCell>
-                    <IconButton aria-label="Play" onClick={() => Search.play(questionsList.get(idx).notes)}>
+                    <IconButton aria-label="Play" onClick={() => Search.play(questionsList.get(idx).notes, questionsList.get(idx).bpm)}>
                       <PlayArrowIcon />
                     </IconButton>
                   </TableCell>
