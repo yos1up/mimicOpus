@@ -100,9 +100,10 @@ export function loadQuestion(dispatch) {
   );
 }
 
-export function addQuestionToList(question) {
+export function addQuestionToList(id, question) {
   return {
     type: actionTypes.ADD_QUESTION_TO_LIST,
+    id,
     question,
   };
 }
@@ -111,7 +112,7 @@ export function loadQuestionsList(dispatch) {
   questionsRef.orderBy('uploadedAt', 'desc').limit(10).get().then(
     (querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        dispatch(addQuestionToList(Question.fromJS(doc.data())));
+        dispatch(addQuestionToList(doc.id, Question.fromJS(doc.data())));
       });
     },
   );

@@ -33,7 +33,7 @@ export default function (state = new MusicState(), action) {
       return state.set('bpm', action.bpm);
 
     case actionTypes.ADD_QUESTION_TO_LIST:
-      return state.update('questionsList', ql => ql.push(action.question));
+      return state.update('questionsList', ql => ql.set(action.id, action.question));
 
     default:
       return state;

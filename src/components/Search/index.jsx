@@ -83,13 +83,13 @@ class Search extends React.Component {
           </TableHead>
           <TableBody>
             {// TODO do not use array index
-              questionsList.map((item, idx) => (
+              [...questionsList.entries()].map(v => (
                 <TableRow
-                  key={idx}
+                  key={v[0]}
                   hover
                   onClick={() => {
-                    setQuestion(questionsList.get(idx));
-                    setBPM(questionsList.get(idx).bpm);
+                    setQuestion(v[1]);
+                    setBPM(v[1].bpm);
                     changeDisplayMode(displayModes.PLAY_QUESTION);
                   }}
                 >
@@ -97,7 +97,7 @@ class Search extends React.Component {
                     <IconButton
                       aria-label="Play"
                       onClick={(e) => {
-                        Search.play(questionsList.get(idx).notes, questionsList.get(idx).bpm);
+                        Search.play(v[1].notes, v[1].bpm);
                         e.stopPropagation();
                       }}
                     >
@@ -106,11 +106,11 @@ class Search extends React.Component {
                   </TableCell>
                   <TableCell component="th" scope="row">
                     question
-                    {idx}
+                    {v[0]}
                   </TableCell>
-                  <TableCell>{questionsList.get(idx).bpm}</TableCell>
-                  <TableCell>{questionsList.get(idx).uid}</TableCell>
-                  <TableCell>{questionsList.get(idx).uploadedAt.toString()}</TableCell>
+                  <TableCell>{v[1].bpm}</TableCell>
+                  <TableCell>{v[1].uid}</TableCell>
+                  <TableCell>{v[1].uploadedAt.toString()}</TableCell>
                 </TableRow>
               ))
             }
@@ -122,7 +122,7 @@ class Search extends React.Component {
 }
 
 Search.propTypes = {
-  questionsList: PropTypes.instanceOf(Immutable.List).isRequired,
+  questionsList: PropTypes.instanceOf(Immutable.Map).isRequired,
   setQuestion: PropTypes.func.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
   setBPM: PropTypes.func.isRequired,
