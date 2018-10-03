@@ -21,7 +21,7 @@ function SignIn({ open, closeSignInDialog }) {
     },
   };
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onClose={() => closeSignInDialog()}>
       <DialogTitle id="simple-dialog-title">Sign In</DialogTitle>
       <DialogContent>
         <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
