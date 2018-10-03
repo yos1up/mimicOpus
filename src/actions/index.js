@@ -1,5 +1,6 @@
 import actionTypes from './actionTypes';
 import { db } from '../firebase';
+import Question from '../data/question';
 
 const questionsRef = db.collection('questions');
 
@@ -66,10 +67,10 @@ export function shiftPitchRange(delta) {
   };
 }
 
-export function setQuestionMelody(melody) {
+export function setQuestion(question) {
   return {
-    type: actionTypes.SET_QUESTION_MELODY,
-    melody,
+    type: actionTypes.SET_QUESTION,
+    question,
   };
 }
 
@@ -80,16 +81,11 @@ export function setBPM(bpm) {
   };
 }
 
-export function uploadQuestionMelody(melody, bpm, uid) {
-  return questionsRef.add({
-    melody,
-    bpm,
-    uid,
-    uploadedAt: new Date(),
-  });
+export function uploadQuestion(question) {
+  return questionsRef.add(question.toJS());
 }
 
-export function loadQuestionMelody(dispatch) {
+export function loadQuestion(dispatch) {
   // 件数のチェック
   // questionsRef.get().then((qss) => { console.log(`#records: ${qss.size}`); });
 
@@ -97,17 +93,17 @@ export function loadQuestionMelody(dispatch) {
   questionsRef.orderBy('uploadedAt', 'desc').limit(1).get().then(
     (querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        dispatch(setQuestionMelody(doc.data().melody));
+        dispatch(setQuestion(Question.fromJS(doc.data())));
         dispatch(setBPM(doc.data().bpm));
       });
     },
   );
 }
 
-export function addQuestionToList(melody) {
+export function addQuestionToList(question) {
   return {
     type: actionTypes.ADD_QUESTION_TO_LIST,
-    melody,
+    question,
   };
 }
 
@@ -115,7 +111,7 @@ export function loadQuestionsList(dispatch) {
   questionsRef.orderBy('uploadedAt', 'desc').limit(10).get().then(
     (querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        dispatch(addQuestionToList(doc.data().melody));
+        dispatch(addQuestionToList(Question.fromJS(doc.data())));
       });
     },
   );

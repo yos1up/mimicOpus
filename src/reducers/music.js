@@ -26,14 +26,14 @@ export default function (state = new MusicState(), action) {
       return state.set('pitchRange', newPitchRange);
     }
 
-    case actionTypes.SET_QUESTION_MELODY:
-      return state.set('questionMelody', Immutable.List(action.melody));
+    case actionTypes.SET_QUESTION:
+      return state.set('question', action.question);
 
     case actionTypes.SET_BPM:
       return state.set('bpm', action.bpm);
 
     case actionTypes.ADD_QUESTION_TO_LIST:
-      return state.update('questionsList', ql => ql.push(Immutable.List(action.melody)));
+      return state.update('questionsList', ql => ql.push(action.question));
 
     default:
       return state;

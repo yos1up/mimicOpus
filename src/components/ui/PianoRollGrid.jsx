@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import SimpleGrid from './SimpleGrid';
 import NoteBlock from './NoteBlock';
+import Note from '../../data/note';
 
 class PianoRollGrid extends React.Component { // グリッドエリア + yラベル
   /*
@@ -91,11 +92,11 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
     // ノーツを発生させる
     if (selectRange !== null) {
       if (selectRange[0] < selectRange[2]) { // 長さゼロ区間の場合を除く
-        const note = {
+        const note = new Note({
           start: selectRange[0],
           end: selectRange[2],
           pitch: selectRange[1],
-        };
+        });
         addNote(note);
         this.setState({ dragInfo: undefined, selectRange: null });
       }

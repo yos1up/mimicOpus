@@ -15,6 +15,8 @@ import Typography from '@material-ui/core/Typography';
 
 import PianoRollGrid from '../ui/PianoRollGrid';
 
+import Question from '../../data/question';
+
 // サンプラー
 const sampler = new Tone.Sampler({
   C2: 'C2.wav',
@@ -47,7 +49,7 @@ function noteNumberToPitchName(nn) {
 }
 
 class PlayQuestion extends React.Component {
-  static evaluateAnswer(qMel, aMel) {
+  static evaluateAnswer(qNotes, aNotes) {
     /* 評価関数どうしますかね・・・
 
     Wasserstein距離？ 編集距離？ 重なりの面積？ 完全一致？ F-value? 音ゲー式？
@@ -61,8 +63,12 @@ class PlayQuestion extends React.Component {
     for (let i = 0; i < 128; i += 1) qEventOfEachPitch[i] = new Array(0);
     const aEventOfEachPitch = Array(128);
     for (let i = 0; i < 128; i += 1) aEventOfEachPitch[i] = new Array(0);
-    for (let i = 0; i < qMel.length; i += 1) qEventOfEachPitch[qMel[i].pitch].push(qMel[i].start);
-    for (let i = 0; i < aMel.length; i += 1) aEventOfEachPitch[aMel[i].pitch].push(aMel[i].start);
+    for (let i = 0; i < qNotes.size; i += 1) {
+      qEventOfEachPitch[qNotes.get(i).pitch].push(qNotes.get(i).start);
+    }
+    for (let i = 0; i < aNotes.size; i += 1) {
+      aEventOfEachPitch[aNotes.get(i).pitch].push(aNotes.get(i).start);
+    }
 
     const redundantPenalty = -0.5; // [pt]
     const relevantInterval = 0.1; // [s]
@@ -111,7 +117,7 @@ class PlayQuestion extends React.Component {
       }
     }
     score = Math.max(0, score);
-    score *= 100 / qMel.length;
+    score *= 100 / qNotes.size;
 
     return score;
   }
@@ -120,8 +126,8 @@ class PlayQuestion extends React.Component {
     // bpm 例外処理・・・
     const secPerBeat = 60 / bpm;
     const timeEventTupleList = [];
-    for (let i = 0; i < Object.values(notes).length; i += 1) {
-      const note = Object.values(notes)[i];
+    for (let i = 0; i < notes.size; i += 1) {
+      const note = notes.get(i);
       timeEventTupleList.push(
         [note.start * secPerBeat, [note.pitch, (note.end - note.start) * secPerBeat]],
       );
@@ -144,8 +150,8 @@ class PlayQuestion extends React.Component {
     };
   }
 
-  evaluateAndReport(qMel, aMel) {
-    const score = PlayQuestion.evaluateAnswer(qMel, aMel);
+  evaluateAndReport(qNotes, aNotes) {
+    const score = PlayQuestion.evaluateAnswer(qNotes, aNotes);
     let message = '';
     message += `YOUR SCORE: ${score}\n`;
     // if (score >= 100) message += '!!! CONGRATULATION !!!';
@@ -166,18 +172,18 @@ class PlayQuestion extends React.Component {
 
   handleClickLoadAsQuestion() {
     /*
-      最新の問題をサーバーから取得して「現在の問題」にセットします．(アクション loadQuestionMelody)
+      最新の問題をサーバーから取得して「現在の問題」にセットします．(アクション loadQuestion)
       また，UIボタンの状態を適切に変更します．
 
       （なお「現在の回答」をサーバーに保存する手続きは，アクション uploadQuestionMelody として実装されている）
     */
-    const { loadQuestionMelody } = this.props;
-    loadQuestionMelody();
+    const { loadQuestion } = this.props;
+    loadQuestion();
   }
 
   render() {
     const {
-      notes, questionMelody, pitchRange, bpm, addNote, delNote, shiftPitchRange,
+      notes, question, pitchRange, bpm, addNote, delNote, shiftPitchRange,
     } = this.props;
     const {
       dialogOpened,
@@ -190,7 +196,7 @@ class PlayQuestion extends React.Component {
           color="primary"
           aria-label="Play"
           style={{ position: 'absolute', top: 10, left: 10 }}
-          onClick={() => PlayQuestion.play([...notes.values()], bpm)}
+          onClick={() => PlayQuestion.play(notes, bpm)}
         >
           <PlayArrowIcon />
         </Button>
@@ -209,7 +215,7 @@ class PlayQuestion extends React.Component {
           color="primary"
           aria-label="PlayQuestion"
           style={{ position: 'absolute', top: 10, left: 150 }}
-          onClick={() => PlayQuestion.play([...questionMelody.values()], bpm)}
+          onClick={() => PlayQuestion.play(question.notes, question.bpm)}
         >
           <PlayCircleOutlineIcon />
         </Button>
@@ -219,7 +225,7 @@ class PlayQuestion extends React.Component {
           aria-label="Submit"
           style={{ position: 'absolute', top: 10, left: 220 }}
           onClick={() => this.evaluateAndReport(
-            [...questionMelody.values()], Object.values([...notes.values()]),
+            question.notes, notes,
           )}
         >
           <SendIcon />
@@ -248,13 +254,13 @@ class PlayQuestion extends React.Component {
 
 PlayQuestion.propTypes = {
   notes: PropTypes.instanceOf(Immutable.List).isRequired,
-  questionMelody: PropTypes.instanceOf(Immutable.List).isRequired,
+  question: PropTypes.instanceOf(Question).isRequired,
   pitchRange: PropTypes.arrayOf(PropTypes.number).isRequired,
   bpm: PropTypes.number.isRequired,
   shiftPitchRange: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
-  loadQuestionMelody: PropTypes.func.isRequired,
+  loadQuestion: PropTypes.func.isRequired,
 };
 
 export default PlayQuestion;

@@ -10,6 +10,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import Slider from '@material-ui/lab/Slider';
 
 import PianoRollGrid from '../ui/PianoRollGrid';
+import Question from '../../data/question';
 
 // サンプラー
 const sampler = new Tone.Sampler({
@@ -47,8 +48,8 @@ class MakeQuestion extends React.Component {
     // bpm 例外処理・・・
     const secPerBeat = 60 / bpm;
     const timeEventTupleList = [];
-    for (let i = 0; i < Object.values(notes).length; i += 1) {
-      const note = Object.values(notes)[i];
+    for (let i = 0; i < notes.size; i += 1) {
+      const note = notes.get(i);
       timeEventTupleList.push(
         [note.start * secPerBeat, [note.pitch, (note.end - note.start) * secPerBeat]],
       );
@@ -65,7 +66,7 @@ class MakeQuestion extends React.Component {
 
   render() {
     const {
-      notes, pitchRange, bpm, uid, addNote, delNote, shiftPitchRange, setBPM, uploadQuestionMelody,
+      notes, pitchRange, bpm, uid, addNote, delNote, shiftPitchRange, setBPM, uploadQuestion,
     } = this.props;
     return (
       <div id="MakeQuestion">
@@ -74,7 +75,7 @@ class MakeQuestion extends React.Component {
           color="primary"
           aria-label="Play"
           style={{ position: 'absolute', top: 10, left: 10 }}
-          onClick={() => MakeQuestion.play([...notes.values()], bpm)}
+          onClick={() => MakeQuestion.play(notes, bpm)}
         >
           <PlayArrowIcon />
         </Button>
@@ -103,7 +104,12 @@ class MakeQuestion extends React.Component {
           aria-label="Save"
           style={{ position: 'absolute', top: 10, left: 350 }}
           onClick={() => {
-            uploadQuestionMelody([...notes.values()], bpm, uid);
+            uploadQuestion(new Question({
+              notes,
+              bpm,
+              uid,
+              uploadedAt: new Date(),
+            }));
           }}
         >
           <SaveIcon />
@@ -130,7 +136,7 @@ MakeQuestion.propTypes = {
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
   setBPM: PropTypes.func.isRequired,
-  uploadQuestionMelody: PropTypes.func.isRequired,
+  uploadQuestion: PropTypes.func.isRequired,
 };
 
 export default MakeQuestion;

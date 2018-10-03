@@ -47,8 +47,8 @@ class Search extends React.Component {
     // bpm 例外処理・・・
     const secPerBeat = 60 / bpm;
     const timeEventTupleList = [];
-    for (let i = 0; i < Object.values(notes).length; i += 1) {
-      const note = Object.values(notes)[i];
+    for (let i = 0; i < notes.size; i += 1) {
+      const note = notes.get(i);
       timeEventTupleList.push(
         [note.start * secPerBeat, [note.pitch, (note.end - note.start) * secPerBeat]],
       );
@@ -79,12 +79,12 @@ class Search extends React.Component {
               questionsList.map((item, idx) => (
                 <TableRow key={idx} hover>
                   <TableCell>
-                    <IconButton aria-label="Play" onClick={() => Search.play([...questionsList.get(idx).values()])}>
+                    <IconButton aria-label="Play" onClick={() => Search.play(questionsList.get(idx).notes)}>
                       <PlayArrowIcon />
                     </IconButton>
                   </TableCell>
                   <TableCell component="th" scope="row">
-                    melody
+                    question
                     {idx}
                   </TableCell>
                 </TableRow>
