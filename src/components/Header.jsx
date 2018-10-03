@@ -73,18 +73,22 @@ class Header extends React.Component {
             </Tabs>
             {(uimage !== null && uimage !== undefined && uimage !== '')
               ? (
-                <ButtonBase buttonRef={(node) => { this.anchorEl = node; }}>
+                <ButtonBase
+                  buttonRef={(node) => { this.anchorEl = node; }}
+                  style={{ float: 'right', top: 5 }}
+                >
                   <Avatar
                     alt="no image"
                     src={uimage}
-                    style={{ float: 'left', left: 10, top: 5 }}
                     onClick={() => this.handleOpenUserMenu()}
                   />
                 </ButtonBase>
               ) : (
-                <ButtonBase buttonRef={(node) => { this.anchorEl = node; }}>
+                <ButtonBase
+                  buttonRef={(node) => { this.anchorEl = node; }}
+                  style={{ float: 'right', top: 5 }}
+                >
                   <Avatar
-                    style={{ float: 'left', left: 10, top: 5 }}
                     ref={(node) => { this.anchorEl = node; }}
                     onClick={() => this.handleOpenUserMenu()}
                   >
