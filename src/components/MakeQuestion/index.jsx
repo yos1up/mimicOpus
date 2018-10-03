@@ -68,7 +68,7 @@ class MakeQuestion extends React.Component {
       notes, pitchRange, bpm, uid, addNote, delNote, shiftPitchRange, setBPM, uploadQuestionMelody,
     } = this.props;
     return (
-      <div>
+      <div id="MakeQuestion">
         <Button
           variant="fab"
           color="primary"

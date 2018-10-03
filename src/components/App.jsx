@@ -7,8 +7,8 @@ import Header from '../containers/Header';
 
 import MakeQuestion from '../containers/MakeQuestion';
 import PlayQuestion from '../containers/PlayQuestion';
-import Search from './Search';
-import User from './User';
+import Search from '../containers/Search';
+import User from '../containers/User';
 
 import { displayModes } from '../reducers/display';
 

@@ -184,7 +184,7 @@ class PlayQuestion extends React.Component {
       dialogText,
     } = this.state;
     return (
-      <div>
+      <div id="PlayQuestion">
         <Button
           variant="fab"
           color="primary"
