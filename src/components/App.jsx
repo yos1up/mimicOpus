@@ -17,8 +17,13 @@ class App extends React.Component {
   componentDidMount() {
     const { setUid, setUimage, loadQuestionsList } = this.props;
     firebase.auth().onAuthStateChanged((user) => {
-      setUid(user.uid);
-      setUimage(user.photoURL);
+      if (user !== null && user !== undefined) {
+        setUid(user.uid);
+        setUimage(user.photoURL);
+      } else {
+        setUid('');
+        setUimage('');
+      }
     });
     loadQuestionsList();
   }
