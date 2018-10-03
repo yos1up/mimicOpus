@@ -8,6 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 
 function SignIn({ open, closeSignInDialog }) {
+  // TODO: エラー処理
   const uiConfig = {
     signInFlow: 'popup',
     signInSuccessUrl: '/signedIn',

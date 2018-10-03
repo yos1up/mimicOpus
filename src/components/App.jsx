@@ -16,13 +16,14 @@ import displayModes from '../data/displayModes';
 class App extends React.Component {
   componentDidMount() {
     const { setUid, setUimage, loadQuestionsList } = this.props;
+    // TODO: action creatorに移動した方が良い？？
     firebase.auth().onAuthStateChanged((user) => {
       if (user !== null && user !== undefined) {
         setUid(user.uid);
         setUimage(user.photoURL);
       } else {
-        setUid('');
-        setUimage('');
+        // TODO: エラー処理
+        firebase.auth().signInAnonymously();
       }
     });
     loadQuestionsList();
