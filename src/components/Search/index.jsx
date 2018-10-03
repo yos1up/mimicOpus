@@ -11,6 +11,8 @@ import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 
+import displayModes from '../../data/displayModes';
+
 // サンプラー
 const sampler = new Tone.Sampler({
   C2: 'C2.wav',
@@ -64,7 +66,7 @@ class Search extends React.Component {
   }
 
   render() {
-    const { questionsList } = this.props;
+    const { questionsList, setQuestion, changeDisplayMode } = this.props;
     return (
       <div id="Search">
         <Table>
@@ -77,9 +79,22 @@ class Search extends React.Component {
           <TableBody>
             {// TODO do not use array index
               questionsList.map((item, idx) => (
-                <TableRow key={idx} hover>
+                <TableRow
+                  key={idx}
+                  hover
+                  onClick={() => {
+                    setQuestion(questionsList.get(idx));
+                    changeDisplayMode(displayModes.PLAY_QUESTION);
+                  }}
+                >
                   <TableCell>
-                    <IconButton aria-label="Play" onClick={() => Search.play(questionsList.get(idx).notes, questionsList.get(idx).bpm)}>
+                    <IconButton
+                      aria-label="Play"
+                      onClick={(e) => {
+                        Search.play(questionsList.get(idx).notes, questionsList.get(idx).bpm);
+                        e.stopPropagation();
+                      }}
+                    >
                       <PlayArrowIcon />
                     </IconButton>
                   </TableCell>
@@ -99,6 +114,8 @@ class Search extends React.Component {
 
 Search.propTypes = {
   questionsList: PropTypes.instanceOf(Immutable.List).isRequired,
+  setQuestion: PropTypes.func.isRequired,
+  changeDisplayMode: PropTypes.func.isRequired,
 };
 
 export default Search;
