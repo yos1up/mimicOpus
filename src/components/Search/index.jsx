@@ -66,14 +66,16 @@ class Search extends React.Component {
   }
 
   render() {
-    const { questionsList, setQuestion, changeDisplayMode } = this.props;
+    const {
+      questionsList, setQuestion, changeDisplayMode, setBPM,
+    } = this.props;
     return (
       <div id="Search">
         <Table>
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell>Melodies</TableCell>
+              <TableCell>Questions</TableCell>
               <TableCell>BPM</TableCell>
               <TableCell>UID</TableCell>
               <TableCell>uploadedAt</TableCell>
@@ -87,6 +89,7 @@ class Search extends React.Component {
                   hover
                   onClick={() => {
                     setQuestion(questionsList.get(idx));
+                    setBPM(questionsList.get(idx).bpm);
                     changeDisplayMode(displayModes.PLAY_QUESTION);
                   }}
                 >
@@ -122,6 +125,7 @@ Search.propTypes = {
   questionsList: PropTypes.instanceOf(Immutable.List).isRequired,
   setQuestion: PropTypes.func.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
+  setBPM: PropTypes.func.isRequired,
 };
 
 export default Search;

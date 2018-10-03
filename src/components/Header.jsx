@@ -34,15 +34,16 @@ function Header({
           }}
         >
           <Tabs
-            value={mode}
+            value={(mode === displayModes.SEARCH
+              || mode === displayModes.MAKE_QUESTION
+              || mode === displayModes.USER) ? mode : false}
             onChange={(e, v) => changeDisplayMode(v)}
             indicatorColor="primary"
             textColor="primary"
             style={{ float: 'left' }}
           >
-            <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} />
-            <Tab label="問題を解く" value={displayModes.PLAY_QUESTION} />
             <Tab label="検索" value={displayModes.SEARCH} />
+            <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} />
             <Tab label="ユーザー" value={displayModes.USER} />
           </Tabs>
           {(uimage !== null && uimage !== undefined && uimage !== '')
