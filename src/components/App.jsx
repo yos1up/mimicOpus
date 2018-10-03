@@ -2,10 +2,7 @@ import React from 'react';
 import firebase from 'firebase';
 import PropTypes from 'prop-types';
 
-// import PianoRollGrid from '../containers/PianoRollGrid';
-// import Menu from '../containers/Menu';
 import SignIn from '../containers/SignIn';
-// import QuestionsList from '../containers/QuestionsList';
 import Header from '../containers/Header';
 
 import MakeQuestion from '../containers/MakeQuestion';
@@ -48,9 +45,6 @@ class App extends React.Component {
           {(mode === displayModes.PLAY_QUESTION) ? (<PlayQuestion />) : null}
           {(mode === displayModes.SEARCH) ? (<Search />) : null}
           {(mode === displayModes.USER) ? (<User />) : null}
-          {/* <Menu />
-          <PianoRollGrid />
-          <QuestionsList /> */}
         </div>
         <SignIn />
       </div>
