@@ -12,9 +12,9 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 exports.questionsList = functions.https.onCall((data, context) => {
   return questionsRef.orderBy('uploadedAt', 'desc').limit(10).get().then(
     (querySnapshot) => {
-      return {questionsList: querySnapshot.docs.map(
+      return querySnapshot.docs.map(
         item => ({id: item.id, data: item.data()})
-      )};
+      );
     }
   );
 })

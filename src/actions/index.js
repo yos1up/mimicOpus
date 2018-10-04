@@ -96,7 +96,7 @@ export function addQuestionToList(id, question) {
 export function loadQuestionsList(dispatch) {
   functions.httpsCallable('questionsList')().then(
     (result) => {
-      const { questionsList } = result.data;
+      const questionsList = result.data;
       questionsList.forEach((question) => {
         dispatch(addQuestionToList(question.id, Question.fromJS(question.data)));
       });
