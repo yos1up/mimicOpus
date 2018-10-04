@@ -1,5 +1,5 @@
 import actionTypes from './actionTypes';
-import { db } from '../firebase';
+import { db, functions } from '../firebase';
 import Question from '../data/question';
 
 const questionsRef = db.collection('questions');
@@ -109,10 +109,11 @@ export function addQuestionToList(id, question) {
 }
 
 export function loadQuestionsList(dispatch) {
-  questionsRef.orderBy('uploadedAt', 'desc').limit(10).get().then(
-    (querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        dispatch(addQuestionToList(doc.id, Question.fromJS(doc.data())));
+  functions.httpsCallable('questionsList')().then(
+    (result) => {
+      const { questionsList } = result.data;
+      questionsList.forEach((question) => {
+        dispatch(addQuestionToList(question.id, Question.fromJS(question.data)));
       });
     },
   );
