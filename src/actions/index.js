@@ -85,21 +85,6 @@ export function uploadQuestion(question) {
   return questionsRef.add(question.toJS());
 }
 
-export function loadQuestion(dispatch) {
-  // 件数のチェック
-  // questionsRef.get().then((qss) => { console.log(`#records: ${qss.size}`); });
-
-  // 最新の一件を取得
-  questionsRef.orderBy('uploadedAt', 'desc').limit(1).get().then(
-    (querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        dispatch(setQuestion(Question.fromJS(doc.data())));
-        dispatch(setBPM(doc.data().bpm));
-      });
-    },
-  );
-}
-
 export function addQuestionToList(id, question) {
   return {
     type: actionTypes.ADD_QUESTION_TO_LIST,

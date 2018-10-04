@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import {
-  addNote, delNote, shiftPitchRange, setBPM, uploadQuestion, loadQuestion,
+  addNote, delNote, shiftPitchRange, setBPM, uploadQuestion,
 } from '../../actions';
 import PlayQuestion from '../../components/PlayQuestion';
 
@@ -18,7 +18,6 @@ const mapDispatchToProps = dispatch => ({
   shiftPitchRange: delta => dispatch(shiftPitchRange(delta)),
   setBPM: bpm => dispatch(setBPM(bpm)),
   uploadQuestion,
-  loadQuestion: () => loadQuestion(dispatch),
 });
 
 export default connect(

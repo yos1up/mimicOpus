@@ -5,7 +5,6 @@ import Tone from 'tone';
 
 import Button from '@material-ui/core/Button';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import FolderIcon from '@material-ui/icons/Folder';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import SendIcon from '@material-ui/icons/Send';
 import Dialog from '@material-ui/core/Dialog';
@@ -170,17 +169,6 @@ class PlayQuestion extends React.Component {
     this.setState({ dialogOpened: true, dialogText: message });
   }
 
-  handleClickLoadAsQuestion() {
-    /*
-      最新の問題をサーバーから取得して「現在の問題」にセットします．(アクション loadQuestion)
-      また，UIボタンの状態を適切に変更します．
-
-      （なお「現在の回答」をサーバーに保存する手続きは，アクション uploadQuestionMelody として実装されている）
-    */
-    const { loadQuestion } = this.props;
-    loadQuestion();
-  }
-
   render() {
     const {
       notes, question, pitchRange, bpm, addNote, delNote, shiftPitchRange,
@@ -204,17 +192,8 @@ class PlayQuestion extends React.Component {
         <Button
           variant="fab"
           color="primary"
-          aria-label="Load"
-          style={{ position: 'absolute', top: 10, left: 80 }}
-          onClick={() => this.handleClickLoadAsQuestion()}
-        >
-          <FolderIcon />
-        </Button>
-        <Button
-          variant="fab"
-          color="primary"
           aria-label="PlayQuestion"
-          style={{ position: 'absolute', top: 10, left: 150 }}
+          style={{ position: 'absolute', top: 10, left: 80 }}
           onClick={() => PlayQuestion.play(question.notes, question.bpm)}
         >
           <PlayCircleOutlineIcon />
@@ -223,7 +202,7 @@ class PlayQuestion extends React.Component {
           variant="fab"
           color="primary"
           aria-label="Submit"
-          style={{ position: 'absolute', top: 10, left: 220 }}
+          style={{ position: 'absolute', top: 10, left: 150 }}
           onClick={() => this.evaluateAndReport(
             question.notes, notes,
           )}
@@ -260,7 +239,6 @@ PlayQuestion.propTypes = {
   shiftPitchRange: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
-  loadQuestion: PropTypes.func.isRequired,
 };
 
 export default PlayQuestion;
