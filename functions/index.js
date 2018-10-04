@@ -3,7 +3,9 @@ const admin = require('firebase-admin');
 
 admin.initializeApp();
 
-const questionsRef = admin.firestore().collection('questions');
+const firestore = admin.firestore()
+firestore.settings({ timestampsInSnapshots: true });
+const questionsRef = firestore.collection('questions');
 
 exports.helloWorld = functions.https.onRequest((request, response) => {
   response.send('Hello from Firebase!');

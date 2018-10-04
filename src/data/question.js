@@ -1,4 +1,5 @@
 import Immutable from 'immutable';
+import firebase from 'firebase';
 
 import Note from './note';
 
@@ -12,11 +13,13 @@ class Question extends Immutable.Record({
     let { notes } = obj;
     notes.map(item => new Note(item));
     notes = Immutable.List(notes);
+    // TODO: fix
+    const uploadAt = new firebase.firestore.Timestamp(obj.uploadedAt._seconds, obj.uploadedAt._nanoseconds);
     return new Question({
       notes,
       bpm: obj.bpm,
       uid: obj.uid,
-      uploadedAt: obj.uploadedAt,
+      uploadedAt: uploadAt.toDate(),
     });
   }
 }
