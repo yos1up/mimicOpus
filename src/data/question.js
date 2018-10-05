@@ -19,7 +19,7 @@ class Question extends Immutable.Record({
       notes,
       bpm: obj.bpm,
       uid: obj.uid,
-      uploadedAt: uploadAt.toDate(),
+      uploadedAt: uploadAt,
     });
   }
 }
