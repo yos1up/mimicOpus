@@ -1,8 +1,6 @@
 import actionTypes from './actionTypes';
-import { db, functions } from '../firebase';
+import { functions } from '../firebase';
 import Question from '../data/question';
-
-const questionsRef = db.collection('questions');
 
 // auth
 export function openSignInDialog() {
@@ -82,7 +80,10 @@ export function setBPM(bpm) {
 }
 
 export function uploadQuestion(question) {
-  return questionsRef.add(question.toJS());
+  functions.httpsCallable('uploadQuestion')(question.toJS()).then(
+    () => {
+    },
+  );
 }
 
 export function addQuestionToList(id, question) {
