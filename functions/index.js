@@ -22,6 +22,7 @@ exports.questionsList = functions.https.onCall((data, context) => {
 })
 
 exports.uploadQuestion = functions.https.onCall((data, context) => {
+  data.uploadedAt = admin.firestore.FieldValue.serverTimestamp()
   return questionsRef.add(data).then(() => {
     return { errState: 0 };
   })

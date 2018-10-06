@@ -13,13 +13,15 @@ class Question extends Immutable.Record({
     let { notes } = obj;
     notes.map(item => new Note(item));
     notes = Immutable.List(notes);
-    // TODO: fix
-    const uploadAt = new firebase.firestore.Timestamp(obj.uploadedAt._seconds, obj.uploadedAt._nanoseconds);
+    // TODO fix lint
+    const uploadedAt = new firebase.firestore.Timestamp(
+      obj.uploadedAt._seconds, obj.uploadedAt._nanoseconds,
+    );
     return new Question({
       notes,
       bpm: obj.bpm,
       uid: obj.uid,
-      uploadedAt: uploadAt,
+      uploadedAt,
     });
   }
 }
