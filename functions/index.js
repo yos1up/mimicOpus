@@ -7,10 +7,6 @@ const firestore = admin.firestore()
 firestore.settings({ timestampsInSnapshots: true });
 const questionsRef = firestore.collection('questions');
 
-exports.helloWorld = functions.https.onRequest((request, response) => {
-  response.send('Hello from Firebase!');
-});
-
 exports.questionsList = functions.https.onCall((data, context) => {
   const { lowBPM, highBPM } = data;
   return questionsRef
@@ -36,6 +32,7 @@ exports.questionsList = functions.https.onCall((data, context) => {
 
 exports.uploadQuestion = functions.https.onCall((data, context) => {
   data.uploadedAt = admin.firestore.FieldValue.serverTimestamp()
+  data.uid = context.auth.uid;
   return questionsRef.add(data).then(() => {
     return { errState: 0 };
   })

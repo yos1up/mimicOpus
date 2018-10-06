@@ -1,5 +1,4 @@
 import Immutable from 'immutable';
-import firebase from 'firebase';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Tone from 'tone';
@@ -67,7 +66,7 @@ class MakeQuestion extends React.Component {
 
   render() {
     const {
-      notes, pitchRange, bpm, user, addNote, delNote, shiftPitchRange, setBPM, uploadQuestion,
+      notes, pitchRange, bpm, addNote, delNote, shiftPitchRange, setBPM, uploadQuestion,
     } = this.props;
     return (
       <div id="MakeQuestion">
@@ -108,7 +107,6 @@ class MakeQuestion extends React.Component {
             uploadQuestion(new Question({
               notes,
               bpm,
-              uid: user.uid,
             }));
           }}
         >
@@ -131,7 +129,6 @@ MakeQuestion.propTypes = {
   notes: PropTypes.instanceOf(Immutable.List).isRequired,
   pitchRange: PropTypes.arrayOf(PropTypes.number).isRequired,
   bpm: PropTypes.number.isRequired,
-  user: PropTypes.instanceOf(firebase.User).isRequired,
   shiftPitchRange: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
