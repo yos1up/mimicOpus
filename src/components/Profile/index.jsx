@@ -1,21 +1,21 @@
-import Immutable from 'immutable';
+import firebase from 'firebase';
 import React from 'react';
 import PropTypes from 'prop-types';
 
 function Profile(props) {
-  const { userInfo } = props;
+  const { user } = props;
   return (
     <div>
       <img
         alt="画像なし"
-        src={userInfo.uimage}
+        src={user.photoURL}
       />
     </div>
   );
 }
 
 Profile.propTypes = {
-  userInfo: PropTypes.instanceOf(Immutable.Record).isRequired,
+  user: PropTypes.instanceOf(firebase.User).isRequired,
 };
 
 export default Profile;

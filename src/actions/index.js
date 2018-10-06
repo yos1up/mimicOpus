@@ -15,10 +15,10 @@ export function closeSignInDialog() {
   };
 }
 
-export function setUserInfo(userInfo) {
+export function setUser(user) {
   return {
-    type: actionTypes.SET_USER_INFO,
-    userInfo,
+    type: actionTypes.SET_USER,
+    user,
   };
 }
 

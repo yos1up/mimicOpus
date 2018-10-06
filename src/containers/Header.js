@@ -7,7 +7,7 @@ import Header from '../components/Header';
 
 const mapStateToProps = state => ({
   mode: state.display.mode,
-  userInfo: state.auth.userInfo,
+  user: state.auth.user,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -9,7 +9,7 @@ const mapStateToProps = state => ({
   notes: state.music.notes,
   pitchRange: state.music.pitchRange,
   bpm: state.music.bpm,
-  userInfo: state.auth.userInfo,
+  user: state.auth.user,
 });
 
 const mapDispatchToProps = dispatch => ({

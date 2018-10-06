@@ -11,17 +11,15 @@ import Search from '../containers/Search';
 import Profile from '../containers/Profile';
 
 import displayModes from '../data/displayModes';
-import UserInfo from '../data/userInfo';
 
 
 class App extends React.Component {
   componentDidMount() {
-    const { setUserInfo, loadQuestionsList } = this.props;
+    const { setUser, loadQuestionsList } = this.props;
     // TODO: action creatorに移動した方が良い？？
     firebase.auth().onAuthStateChanged((user) => {
       if (user !== null && user !== undefined) {
-        const userInfo = new UserInfo({ uid: user.uid, uimage: user.photoURL });
-        setUserInfo(userInfo);
+        setUser(user);
       } else {
         // TODO: エラー処理
         firebase.auth().signInAnonymously();
@@ -61,7 +59,7 @@ class App extends React.Component {
 
 App.propTypes = {
   mode: PropTypes.string.isRequired,
-  setUserInfo: PropTypes.func.isRequired,
+  setUser: PropTypes.func.isRequired,
   loadQuestionsList: PropTypes.func.isRequired,
 };
 

@@ -6,7 +6,7 @@ import {
 import Profile from '../../components/Profile';
 
 const mapStateToProps = state => ({
-  userInfo: state.auth.userInfo,
+  user: state.auth.user,
 });
 
 const mapDispatchToProps = (/* dispatch */) => ({
