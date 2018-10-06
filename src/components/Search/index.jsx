@@ -77,7 +77,7 @@ class Search extends React.Component {
               <TableCell />
               <TableCell>Questions</TableCell>
               <TableCell>BPM</TableCell>
-              <TableCell>UID</TableCell>
+              <TableCell>User</TableCell>
               <TableCell>uploadedAt</TableCell>
             </TableRow>
           </TableHead>
@@ -109,7 +109,7 @@ class Search extends React.Component {
                     {v[0]}
                   </TableCell>
                   <TableCell>{v[1].bpm}</TableCell>
-                  <TableCell>{v[1].uid}</TableCell>
+                  <TableCell>{v[1].userName}</TableCell>
                   <TableCell>{v[1].uploadedAt.toDate().toString()}</TableCell>
                 </TableRow>
               ))

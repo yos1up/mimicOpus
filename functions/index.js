@@ -14,9 +14,16 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 exports.questionsList = functions.https.onCall((data, context) => {
   return questionsRef.orderBy('uploadedAt', 'desc').limit(10).get().then(
     (querySnapshot) => {
-      return querySnapshot.docs.map(
-        item => ({id: item.id, data: item.data()})
-      );
+      return Promise.all(
+        querySnapshot.docs.map(item => {
+          // TODO: fix lint(どうやって直せば良いのか・・・)
+          return admin.auth().getUser(item.data().uid).then(userRecord => {
+            const data = item.data()
+            data.userName = userRecord.displayName;
+            return {id: item.id, data};
+          })
+        })
+      )
     }
   );
 })
