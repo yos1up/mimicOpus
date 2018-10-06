@@ -120,7 +120,7 @@ class MakeQuestion extends React.Component {
             uploadQuestion(new Question({
               notes,
               bpm,
-              title,
+              title: (title !== '') ? title : 'Untitled',
             }));
           }}
         >
