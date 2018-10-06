@@ -144,7 +144,6 @@ class Header extends React.Component {
 
 Header.propTypes = {
   mode: PropTypes.string.isRequired,
-  user: PropTypes.instanceOf(firebase.User).isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
   openSignInDialog: PropTypes.func.isRequired,
 };
