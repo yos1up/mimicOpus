@@ -13,6 +13,7 @@ const actionTypes = {
   CHANGE_DISPLAY_MODE: 'CHANGE_DISPLAY_MODE',
   SET_LOW_BPM: 'SET_LOW_BPM',
   SET_HIGH_BPM: 'SET_HIGH_BPM',
+  SET_TITLE: 'SET_TITLE',
 };
 
 export default actionTypes;

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import {
-  addNote, delNote, shiftPitchRange, setBPM, uploadQuestion,
+  addNote, delNote, shiftPitchRange, setBPM, uploadQuestion, setTitle,
 } from '../../actions';
 import MakeQuestion from '../../components/MakeQuestion';
 
@@ -10,6 +10,7 @@ const mapStateToProps = state => ({
   pitchRange: state.music.pitchRange,
   bpm: state.music.bpm,
   user: state.auth.user,
+  title: state.music.title,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -17,6 +18,7 @@ const mapDispatchToProps = dispatch => ({
   delNote: idx => dispatch(delNote(idx)),
   shiftPitchRange: delta => dispatch(shiftPitchRange(delta)),
   setBPM: bpm => dispatch(setBPM(bpm)),
+  setTitle: title => dispatch(setTitle(title)),
   uploadQuestion,
 });
 

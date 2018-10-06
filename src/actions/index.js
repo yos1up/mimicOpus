@@ -72,6 +72,13 @@ export function setBPM(bpm) {
   };
 }
 
+export function setTitle(title) {
+  return {
+    type: actionTypes.SET_TITLE,
+    title,
+  };
+}
+
 export function uploadQuestion(question) {
   functions.httpsCallable('uploadQuestion')(question.toJS()).then(
     () => {

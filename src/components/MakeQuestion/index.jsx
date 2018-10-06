@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SaveIcon from '@material-ui/icons/Save';
 import Slider from '@material-ui/lab/Slider';
+import Input from '@material-ui/core/Input';
 
 import PianoRollGrid from '../ui/PianoRollGrid';
 import Question from '../../data/question';
@@ -66,21 +67,33 @@ class MakeQuestion extends React.Component {
 
   render() {
     const {
-      notes, pitchRange, bpm, addNote, delNote, shiftPitchRange, setBPM, uploadQuestion,
+      notes, pitchRange, bpm, title, addNote, delNote, shiftPitchRange, setBPM,
+      uploadQuestion, setTitle,
     } = this.props;
     return (
       <div id="MakeQuestion">
+        <Input
+          placeholder="Untitled"
+          inputProps={{
+            'aria-label': 'Description',
+          }}
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          style={{
+            position: 'absolute', top: 10, left: 10, height: 40, width: 180,
+          }}
+        />
         <Button
           variant="fab"
           color="primary"
           aria-label="Play"
-          style={{ position: 'absolute', top: 10, left: 10 }}
+          style={{ position: 'absolute', top: 10, left: 210 }}
           onClick={() => MakeQuestion.play(notes, bpm)}
         >
           <PlayArrowIcon />
         </Button>
         <Typography
-          style={{ position: 'absolute', top: 10, left: 100 }}
+          style={{ position: 'absolute', top: 10, left: 300 }}
         >
           BPM
           {bpm}
@@ -94,7 +107,7 @@ class MakeQuestion extends React.Component {
           style={{
             position: 'absolute',
             top: 25,
-            left: 100,
+            left: 300,
             width: 200,
           }}
         />
@@ -102,11 +115,12 @@ class MakeQuestion extends React.Component {
           variant="fab"
           color="primary"
           aria-label="Save"
-          style={{ position: 'absolute', top: 10, left: 350 }}
+          style={{ position: 'absolute', top: 10, left: 550 }}
           onClick={() => {
             uploadQuestion(new Question({
               notes,
               bpm,
+              title,
             }));
           }}
         >
@@ -129,11 +143,13 @@ MakeQuestion.propTypes = {
   notes: PropTypes.instanceOf(Immutable.List).isRequired,
   pitchRange: PropTypes.arrayOf(PropTypes.number).isRequired,
   bpm: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
   shiftPitchRange: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
   setBPM: PropTypes.func.isRequired,
   uploadQuestion: PropTypes.func.isRequired,
+  setTitle: PropTypes.func.isRequired,
 };
 
 export default MakeQuestion;

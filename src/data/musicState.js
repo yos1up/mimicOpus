@@ -8,6 +8,7 @@ const MusicState = Immutable.Record({
   question: new Question({}),
   questionsList: Immutable.Map(),
   bpm: 120,
+  title: '',
 });
 
 export default MusicState;

@@ -32,6 +32,9 @@ export default function (state = new MusicState(), action) {
     case actionTypes.SET_BPM:
       return state.set('bpm', action.bpm);
 
+    case actionTypes.SET_TITLE:
+      return state.set('title', action.title);
+
     case actionTypes.ADD_QUESTION_TO_LIST:
       return state.update('questionsList', ql => ql.set(action.id, action.question));
 

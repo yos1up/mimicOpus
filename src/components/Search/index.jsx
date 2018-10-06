@@ -175,7 +175,7 @@ class Search extends React.Component {
                     </IconButton>
                   </TableCell>
                   <TableCell component="th" scope="row">
-                    {v[1].name}
+                    {v[1].title}
                   </TableCell>
                   <TableCell>{v[1].bpm}</TableCell>
                   <TableCell>{v[1].userName}</TableCell>
