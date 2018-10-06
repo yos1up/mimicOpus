@@ -10,11 +10,8 @@ export default function (state = new AuthState(), action) {
     case actionTypes.CLOSE_SIGN_IN_DIALOG:
       return state.set('showSignIn', false);
 
-    case actionTypes.SET_UID:
-      return state.set('uid', action.uid);
-
-    case actionTypes.SET_UIMAGE:
-      return state.set('uimage', action.uimage);
+    case actionTypes.SET_USER_INFO:
+      return state.set('userInfo', action.userInfo);
 
     default:
       return state;

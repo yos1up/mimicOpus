@@ -8,19 +8,20 @@ import Header from '../containers/Header';
 import MakeQuestion from '../containers/MakeQuestion';
 import PlayQuestion from '../containers/PlayQuestion';
 import Search from '../containers/Search';
-import User from '../containers/User';
+import Profile from '../containers/Profile';
 
 import displayModes from '../data/displayModes';
+import UserInfo from '../data/userInfo';
 
 
 class App extends React.Component {
   componentDidMount() {
-    const { setUid, setUimage, loadQuestionsList } = this.props;
+    const { setUserInfo, loadQuestionsList } = this.props;
     // TODO: action creatorに移動した方が良い？？
     firebase.auth().onAuthStateChanged((user) => {
       if (user !== null && user !== undefined) {
-        setUid(user.uid);
-        setUimage(user.photoURL);
+        const userInfo = new UserInfo({ uid: user.uid, uimage: user.photoURL });
+        setUserInfo(userInfo);
       } else {
         // TODO: エラー処理
         firebase.auth().signInAnonymously();
@@ -50,7 +51,7 @@ class App extends React.Component {
           {(mode === displayModes.MAKE_QUESTION) ? (<MakeQuestion />) : null}
           {(mode === displayModes.PLAY_QUESTION) ? (<PlayQuestion />) : null}
           {(mode === displayModes.SEARCH) ? (<Search />) : null}
-          {(mode === displayModes.USER) ? (<User />) : null}
+          {(mode === displayModes.USER) ? (<Profile />) : null}
         </div>
         <SignIn />
       </div>
@@ -60,8 +61,7 @@ class App extends React.Component {
 
 App.propTypes = {
   mode: PropTypes.string.isRequired,
-  setUid: PropTypes.func.isRequired,
-  setUimage: PropTypes.func.isRequired,
+  setUserInfo: PropTypes.func.isRequired,
   loadQuestionsList: PropTypes.func.isRequired,
 };
 

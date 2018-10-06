@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import {
 
 } from '../../actions';
-import User from '../../components/User';
+import Profile from '../../components/Profile';
 
 const mapStateToProps = state => ({
-  uimage: state.auth.uimage,
+  userInfo: state.auth.userInfo,
 });
 
 const mapDispatchToProps = (/* dispatch */) => ({
@@ -15,4 +15,4 @@ const mapDispatchToProps = (/* dispatch */) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(User);
+)(Profile);

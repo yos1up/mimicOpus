@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import Immutable from 'immutable';
 import AppBar from '@material-ui/core/AppBar';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -36,7 +37,7 @@ class Header extends React.Component {
 
   render() {
     const {
-      mode, uimage, changeDisplayMode, openSignInDialog,
+      mode, userInfo, changeDisplayMode, openSignInDialog,
     } = this.props;
     const { openUserMenu } = this.state;
     return (
@@ -71,7 +72,7 @@ class Header extends React.Component {
               <Tab label="検索" value={displayModes.SEARCH} />
               <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} />
             </Tabs>
-            {(uimage !== null && uimage !== undefined && uimage !== '')
+            {(userInfo.uimage !== null && userInfo.uimage !== undefined && userInfo.uimage !== '')
               ? (
                 <ButtonBase
                   buttonRef={(node) => { this.anchorEl = node; }}
@@ -79,7 +80,7 @@ class Header extends React.Component {
                 >
                   <Avatar
                     alt="no image"
-                    src={uimage}
+                    src={userInfo.uimage}
                     onClick={() => this.handleOpenUserMenu()}
                   />
                 </ButtonBase>
@@ -144,7 +145,7 @@ class Header extends React.Component {
 
 Header.propTypes = {
   mode: PropTypes.string.isRequired,
-  uimage: PropTypes.string.isRequired,
+  userInfo: PropTypes.instanceOf(Immutable.Record).isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
   openSignInDialog: PropTypes.func.isRequired,
 };

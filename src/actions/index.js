@@ -15,17 +15,10 @@ export function closeSignInDialog() {
   };
 }
 
-export function setUid(uid) {
+export function setUserInfo(userInfo) {
   return {
-    type: actionTypes.SET_UID,
-    uid,
-  };
-}
-
-export function setUimage(uimage) {
-  return {
-    type: actionTypes.SET_UIMAGE,
-    uimage,
+    type: actionTypes.SET_USER_INFO,
+    userInfo,
   };
 }
 

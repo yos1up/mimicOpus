@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { setUid, setUimage, loadQuestionsList } from '../actions';
+import { setUserInfo, loadQuestionsList } from '../actions';
 import App from '../components/App';
 
 const mapStateToProps = state => ({
@@ -8,8 +8,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setUid: uid => dispatch(setUid(uid)),
-  setUimage: uimage => dispatch(setUimage(uimage)),
+  setUserInfo: userInfo => dispatch(setUserInfo(userInfo)),
   loadQuestionsList: () => loadQuestionsList(dispatch),
 });
 

@@ -1,10 +1,9 @@
 import Immutable from 'immutable';
-
+import UserInfo from './userInfo';
 
 const AuthState = Immutable.Record({
   showSignIn: false,
-  uid: '',
-  uimage: '',
+  userInfo: new UserInfo(),
 });
 
 export default AuthState;
