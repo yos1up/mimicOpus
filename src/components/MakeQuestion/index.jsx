@@ -66,7 +66,7 @@ class MakeQuestion extends React.Component {
 
   render() {
     const {
-      notes, pitchRange, bpm, uid, addNote, delNote, shiftPitchRange, setBPM, uploadQuestion,
+      notes, pitchRange, bpm, userInfo, addNote, delNote, shiftPitchRange, setBPM, uploadQuestion,
     } = this.props;
     return (
       <div id="MakeQuestion">
@@ -107,7 +107,7 @@ class MakeQuestion extends React.Component {
             uploadQuestion(new Question({
               notes,
               bpm,
-              uid,
+              uid: userInfo.uid,
             }));
           }}
         >
@@ -130,7 +130,7 @@ MakeQuestion.propTypes = {
   notes: PropTypes.instanceOf(Immutable.List).isRequired,
   pitchRange: PropTypes.arrayOf(PropTypes.number).isRequired,
   bpm: PropTypes.number.isRequired,
-  uid: PropTypes.string.isRequired,
+  userInfo: PropTypes.instanceOf(Immutable.Record).isRequired,
   shiftPitchRange: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
