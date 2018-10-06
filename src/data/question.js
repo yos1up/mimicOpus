@@ -8,6 +8,7 @@ class Question extends Immutable.Record({
   bpm: 120,
   uid: '',
   userName: '',
+  name: '',
   uploadedAt: null,
 }) {
   static fromJS(obj) {

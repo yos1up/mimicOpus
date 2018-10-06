@@ -105,8 +105,7 @@ class Search extends React.Component {
                     </IconButton>
                   </TableCell>
                   <TableCell component="th" scope="row">
-                    question
-                    {v[0]}
+                    {v[1].name}
                   </TableCell>
                   <TableCell>{v[1].bpm}</TableCell>
                   <TableCell>{v[1].userName}</TableCell>
