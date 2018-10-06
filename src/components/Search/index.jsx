@@ -152,36 +152,42 @@ class Search extends React.Component {
           </TableHead>
           <TableBody>
             {// TODO do not use array index
-              [...questionsList.entries()].map(v => (
-                <TableRow
-                  key={v[0]}
-                  hover
-                  onClick={() => {
-                    setQuestion(v[1]);
-                    setBPM(v[1].bpm);
-                    changeDisplayMode(displayModes.PLAY_QUESTION);
-                  }}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <TableCell>
-                    <IconButton
-                      aria-label="Play"
-                      onClick={(e) => {
-                        Search.play(v[1].notes, v[1].bpm);
-                        e.stopPropagation();
-                      }}
-                    >
-                      <PlayArrowIcon />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {v[1].title}
-                  </TableCell>
-                  <TableCell>{v[1].bpm}</TableCell>
-                  <TableCell>{v[1].userName}</TableCell>
-                  <TableCell>{v[1].uploadedAt.toDate().toString()}</TableCell>
-                </TableRow>
-              ))
+              [...questionsList.entries()].map((tmpV) => {
+                const k = tmpV[0];
+                const v = tmpV[1];
+                let date = v.uploadedAt.toDate();
+                date = `${date.getFullYear()}/${date.getMonth()}/${date.getDate()}`;
+                return (
+                  <TableRow
+                    key={k}
+                    hover
+                    onClick={() => {
+                      setQuestion(v);
+                      setBPM(v.bpm);
+                      changeDisplayMode(displayModes.PLAY_QUESTION);
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <TableCell>
+                      <IconButton
+                        aria-label="Play"
+                        onClick={(e) => {
+                          Search.play(v.notes, v.bpm);
+                          e.stopPropagation();
+                        }}
+                      >
+                        <PlayArrowIcon />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {v.title}
+                    </TableCell>
+                    <TableCell>{v.bpm}</TableCell>
+                    <TableCell>{v.userName}</TableCell>
+                    <TableCell>{date}</TableCell>
+                  </TableRow>
+                );
+              })
             }
           </TableBody>
         </Table>
