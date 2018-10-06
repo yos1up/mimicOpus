@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { setUser, loadQuestionsList } from '../actions';
+import { setUser } from '../actions';
 import App from '../components/App';
 
 const mapStateToProps = state => ({
@@ -9,7 +9,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setUser: user => dispatch(setUser(user)),
-  loadQuestionsList: () => loadQuestionsList(dispatch),
 });
 
 export default connect(

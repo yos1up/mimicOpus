@@ -87,8 +87,15 @@ export function addQuestionToList(id, question) {
   };
 }
 
-export function loadQuestionsList(dispatch) {
-  functions.httpsCallable('questionsList')().then(
+export function clearQuestionsList() {
+  return {
+    type: actionTypes.CLEAR_QUESTIONS_LIST,
+  };
+}
+
+export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000) {
+  dispatch(clearQuestionsList());
+  functions.httpsCallable('questionsList')({ lowBPM, highBPM }).then(
     (result) => {
       const questionsList = result.data;
       questionsList.forEach((question) => {

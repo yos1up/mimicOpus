@@ -69,9 +69,15 @@ class Search extends React.Component {
     melody.start(Tone.now()); // 先に Tone.Transport.start() してある必要がある．
   }
 
+  componentDidMount() {
+    const { lowBPM, highBPM, loadQuestionsList } = this.props;
+    loadQuestionsList(lowBPM, highBPM);
+  }
+
   render() {
     const {
       questionsList, lowBPM, highBPM, setQuestion, changeDisplayMode, setBPM, setLowBPM, setHighBPM,
+      loadQuestionsList,
     } = this.props;
     return (
       <div id="Search">
@@ -90,7 +96,10 @@ class Search extends React.Component {
           >
             <Select
               value={lowBPM}
-              onChange={e => setLowBPM(e.target.value)}
+              onChange={(e) => {
+                setLowBPM(e.target.value);
+                loadQuestionsList(e.target.value, highBPM);
+              }}
               displayEmpty
             >
               <MenuItem value={60}>60</MenuItem>
@@ -112,7 +121,10 @@ class Search extends React.Component {
           >
             <Select
               value={highBPM}
-              onChange={e => setHighBPM(e.target.value)}
+              onChange={(e) => {
+                setHighBPM(e.target.value);
+                loadQuestionsList(lowBPM, e.target.value);
+              }}
               displayEmpty
             >
               <MenuItem value={180}>180</MenuItem>
@@ -187,6 +199,7 @@ Search.propTypes = {
   setBPM: PropTypes.func.isRequired,
   setLowBPM: PropTypes.func.isRequired,
   setHighBPM: PropTypes.func.isRequired,
+  loadQuestionsList: PropTypes.func.isRequired,
 };
 
 export default Search;

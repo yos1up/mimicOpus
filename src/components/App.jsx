@@ -15,7 +15,7 @@ import displayModes from '../data/displayModes';
 
 class App extends React.Component {
   componentDidMount() {
-    const { setUser, loadQuestionsList } = this.props;
+    const { setUser } = this.props;
     // TODO: action creatorに移動した方が良い？？
     firebase.auth().onAuthStateChanged((user) => {
       if (user !== null && user !== undefined) {
@@ -25,7 +25,6 @@ class App extends React.Component {
         firebase.auth().signInAnonymously();
       }
     });
-    loadQuestionsList();
   }
 
   render() {
@@ -60,7 +59,6 @@ class App extends React.Component {
 App.propTypes = {
   mode: PropTypes.string.isRequired,
   setUser: PropTypes.func.isRequired,
-  loadQuestionsList: PropTypes.func.isRequired,
 };
 
 export default App;

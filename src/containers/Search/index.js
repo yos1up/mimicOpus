@@ -6,6 +6,7 @@ import {
   setBPM,
   setLowBPM,
   setHighBPM,
+  loadQuestionsList,
 } from '../../actions';
 import Search from '../../components/Search';
 
@@ -21,6 +22,7 @@ const mapDispatchToProps = dispatch => ({
   setBPM: bpm => dispatch(setBPM(bpm)),
   setLowBPM: bpm => dispatch(setLowBPM(bpm)),
   setHighBPM: bpm => dispatch(setHighBPM(bpm)),
+  loadQuestionsList: (lowBPM, highBPM) => loadQuestionsList(dispatch, lowBPM, highBPM),
 });
 
 export default connect(

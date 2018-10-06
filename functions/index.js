@@ -12,7 +12,13 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 });
 
 exports.questionsList = functions.https.onCall((data, context) => {
-  return questionsRef.orderBy('uploadedAt', 'desc').limit(10).get().then(
+  const { lowBPM, highBPM } = data;
+  return questionsRef
+    .where('bpm', '>=', lowBPM)
+    .where('bpm', '<=', highBPM)
+    .orderBy('bpm', 'desc')
+    .orderBy('uploadedAt', 'desc')
+    .limit(10).get().then(
     (querySnapshot) => {
       return Promise.all(
         querySnapshot.docs.map(item => {
