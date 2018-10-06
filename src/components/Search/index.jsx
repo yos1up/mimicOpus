@@ -149,6 +149,7 @@ class Search extends React.Component {
                     setBPM(v[1].bpm);
                     changeDisplayMode(displayModes.PLAY_QUESTION);
                   }}
+                  style={{ cursor: 'pointer' }}
                 >
                   <TableCell>
                     <IconButton
