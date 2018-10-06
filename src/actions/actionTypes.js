@@ -10,6 +10,8 @@ const actionTypes = {
   SET_USER: 'SET_USER',
   ADD_QUESTION_TO_LIST: 'ADD_QUESTION_TO_LIST',
   CHANGE_DISPLAY_MODE: 'CHANGE_DISPLAY_MODE',
+  SET_LOW_BPM: 'SET_LOW_BPM',
+  SET_HIGH_BPM: 'SET_HIGH_BPM',
 };
 
 export default actionTypes;

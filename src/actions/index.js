@@ -97,3 +97,18 @@ export function loadQuestionsList(dispatch) {
     },
   );
 }
+
+// search
+export function setLowBPM(bpm) {
+  return {
+    type: actionTypes.SET_LOW_BPM,
+    bpm,
+  };
+}
+
+export function setHighBPM(bpm) {
+  return {
+    type: actionTypes.SET_HIGH_BPM,
+    bpm,
+  };
+}

@@ -10,6 +10,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import Typography from '@material-ui/core/Typography';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import displayModes from '../../data/displayModes';
 
@@ -67,11 +71,64 @@ class Search extends React.Component {
 
   render() {
     const {
-      questionsList, setQuestion, changeDisplayMode, setBPM,
+      questionsList, lowBPM, highBPM, setQuestion, changeDisplayMode, setBPM, setLowBPM, setHighBPM,
     } = this.props;
     return (
       <div id="Search">
-        <Table>
+        <div id="bpm picker">
+          <Typography
+            style={{
+              position: 'absolute', top: 0, left: 10, width: 180,
+            }}
+          >
+            BPM
+          </Typography>
+          <FormControl
+            style={{
+              position: 'absolute', top: 20, left: 10, width: 100,
+            }}
+          >
+            <Select
+              value={lowBPM}
+              onChange={e => setLowBPM(e.target.value)}
+              displayEmpty
+            >
+              <MenuItem value={60}>60</MenuItem>
+              <MenuItem value={70}>70</MenuItem>
+              <MenuItem value={80}>80</MenuItem>
+            </Select>
+          </FormControl>
+          <Typography
+            style={{
+              position: 'absolute', top: 30, left: 120, width: 20,
+            }}
+          >
+            ~
+          </Typography>
+          <FormControl
+            style={{
+              position: 'absolute', top: 20, left: 140, width: 100,
+            }}
+          >
+            <Select
+              value={highBPM}
+              onChange={e => setHighBPM(e.target.value)}
+              displayEmpty
+            >
+              <MenuItem value={180}>180</MenuItem>
+              <MenuItem value={190}>190</MenuItem>
+              <MenuItem value={200}>200</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+        <Table
+          style={{
+            position: 'absolute',
+            top: 60,
+            left: 0,
+            width: 1000,
+          }}
+        >
           <TableHead>
             <TableRow>
               <TableCell />
@@ -122,9 +179,13 @@ class Search extends React.Component {
 
 Search.propTypes = {
   questionsList: PropTypes.instanceOf(Immutable.Map).isRequired,
+  lowBPM: PropTypes.number.isRequired,
+  highBPM: PropTypes.number.isRequired,
   setQuestion: PropTypes.func.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
   setBPM: PropTypes.func.isRequired,
+  setLowBPM: PropTypes.func.isRequired,
+  setHighBPM: PropTypes.func.isRequired,
 };
 
 export default Search;
