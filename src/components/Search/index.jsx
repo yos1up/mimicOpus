@@ -10,10 +10,14 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+
+import firebase from 'firebase';
 
 import displayModes from '../../data/displayModes';
 
@@ -157,17 +161,20 @@ class Search extends React.Component {
                 const v = tmpV[1];
                 let date = v.uploadedAt.toDate();
                 date = `${date.getFullYear()}/${date.getMonth()}/${date.getDate()}`;
+                const bMine = firebase.auth().currentUser.uid === v.uid;
                 return (
                   <TableRow
                     key={k}
-                    hover
+                    hover={!bMine}
                     onClick={() => {
-                      setQuestion(v);
-                      setBPM(v.bpm);
-                      changeDisplayMode(displayModes.PLAY_QUESTION);
-                      setQuestionId(k);
+                      if (!bMine) {
+                        setQuestion(v);
+                        setBPM(v.bpm);
+                        changeDisplayMode(displayModes.PLAY_QUESTION);
+                        setQuestionId(k);
+                      }
                     }}
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: (bMine) ? 'default' : 'pointer' }}
                   >
                     <TableCell>
                       <IconButton
@@ -179,6 +186,22 @@ class Search extends React.Component {
                       >
                         <PlayArrowIcon />
                       </IconButton>
+                      {(bMine) ? (
+                        <IconButton
+                          aria-label="Edit"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      ) : null
+                      }
+                      {(bMine) ? (
+                        <IconButton
+                          aria-label="Delete"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      ) : null
+                      }
                     </TableCell>
                     <TableCell component="th" scope="row">
                       {v.title}
