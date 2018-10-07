@@ -150,6 +150,7 @@ class PlayQuestion extends React.Component {
   }
 
   evaluateAndReport(qNotes, aNotes) {
+    const { questionId, saveScore } = this.props;
     const score = PlayQuestion.evaluateAnswer(qNotes, aNotes);
     let message = '';
     message += `YOUR SCORE: ${score}\n`;
@@ -157,6 +158,9 @@ class PlayQuestion extends React.Component {
 
     // スコアを表示．
     this.handleOpenDialog(message);
+
+    // データベースとうろく
+    saveScore(questionId, score);
   }
 
   handleCloseDialog() {
@@ -235,10 +239,12 @@ PlayQuestion.propTypes = {
   notes: PropTypes.instanceOf(Immutable.List).isRequired,
   question: PropTypes.instanceOf(Question).isRequired,
   pitchRange: PropTypes.arrayOf(PropTypes.number).isRequired,
+  questionId: PropTypes.string.isRequired,
   bpm: PropTypes.number.isRequired,
   shiftPitchRange: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
+  saveScore: PropTypes.func.isRequired,
 };
 
 export default PlayQuestion;

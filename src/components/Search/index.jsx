@@ -77,7 +77,7 @@ class Search extends React.Component {
   render() {
     const {
       questionsList, lowBPM, highBPM, setQuestion, changeDisplayMode, setBPM, setLowBPM, setHighBPM,
-      loadQuestionsList,
+      loadQuestionsList, setQuestionId,
     } = this.props;
     return (
       <div id="Search">
@@ -165,6 +165,7 @@ class Search extends React.Component {
                       setQuestion(v);
                       setBPM(v.bpm);
                       changeDisplayMode(displayModes.PLAY_QUESTION);
+                      setQuestionId(k);
                     }}
                     style={{ cursor: 'pointer' }}
                   >
@@ -206,6 +207,7 @@ Search.propTypes = {
   setLowBPM: PropTypes.func.isRequired,
   setHighBPM: PropTypes.func.isRequired,
   loadQuestionsList: PropTypes.func.isRequired,
+  setQuestionId: PropTypes.func.isRequired,
 };
 
 export default Search;

@@ -1,6 +1,10 @@
+import firebase from 'firebase';
+
 import actionTypes from './actionTypes';
-import { functions } from '../firebase';
+import { db, functions } from '../firebase';
 import Question from '../data/question';
+
+const scoresRef = db.collection('scores');
 
 // auth
 export function openSignInDialog() {
@@ -79,11 +83,11 @@ export function setTitle(title) {
   };
 }
 
-export function uploadQuestion(question) {
-  functions.httpsCallable('uploadQuestion')(question.toJS()).then(
-    () => {
-    },
-  );
+export function setQuestionId(questionId) {
+  return {
+    type: actionTypes.SET_QUESTION_ID,
+    questionId,
+  };
 }
 
 export function addQuestionToList(id, question) {
@@ -100,6 +104,13 @@ export function clearQuestionsList() {
   };
 }
 
+export function uploadQuestion(question) {
+  functions.httpsCallable('uploadQuestion')(question.toJS()).then(
+    () => {
+    },
+  );
+}
+
 export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000) {
   dispatch(clearQuestionsList());
   functions.httpsCallable('questionsList')({ lowBPM, highBPM }).then(
@@ -110,6 +121,14 @@ export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000) {
       });
     },
   );
+}
+
+export function saveScore(questionId, score) {
+  scoresRef.add({
+    questionId,
+    uid: firebase.auth().currentUser.uid,
+    score,
+  });
 }
 
 // search

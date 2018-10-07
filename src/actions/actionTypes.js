@@ -14,6 +14,7 @@ const actionTypes = {
   SET_LOW_BPM: 'SET_LOW_BPM',
   SET_HIGH_BPM: 'SET_HIGH_BPM',
   SET_TITLE: 'SET_TITLE',
+  SET_QUESTION_ID: 'SET_QUESTION_ID',
 };
 
 export default actionTypes;
