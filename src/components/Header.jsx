@@ -36,7 +36,7 @@ class Header extends React.Component {
 
   render() {
     const {
-      mode, user, changeDisplayMode, openSignInDialog,
+      mode, photoURL, changeDisplayMode, openSignInDialog,
     } = this.props;
     const { openUserMenu } = this.state;
     return (
@@ -72,7 +72,7 @@ class Header extends React.Component {
               <Tab label="検索" value={displayModes.SEARCH} />
               <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} />
             </Tabs>
-            {(user.photoURL !== null && user.photoURL !== undefined && user.photoURL !== '')
+            {(photoURL !== null && photoURL !== undefined && photoURL !== '')
               ? (
                 <ButtonBase
                   buttonRef={(node) => { this.anchorEl = node; }}
@@ -80,7 +80,7 @@ class Header extends React.Component {
                 >
                   <Avatar
                     alt="no image"
-                    src={user.photoURL}
+                    src={photoURL}
                     onClick={() => this.handleOpenUserMenu()}
                   />
                 </ButtonBase>
@@ -145,6 +145,7 @@ class Header extends React.Component {
 
 Header.propTypes = {
   mode: PropTypes.string.isRequired,
+  photoURL: PropTypes.string.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
   openSignInDialog: PropTypes.func.isRequired,
 };

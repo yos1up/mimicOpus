@@ -27,6 +27,14 @@ export function setUser(user) {
   };
 }
 
+export function changeDisplayName(dispatch, name) {
+  firebase.auth().currentUser.updateProfile({
+    displayName: name,
+  }).then(() => {
+    dispatch(setUser(firebase.auth().currentUser));
+  });
+}
+
 // display
 export function changeDisplayMode(mode) {
   return {

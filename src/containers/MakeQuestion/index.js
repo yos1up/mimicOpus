@@ -9,7 +9,6 @@ const mapStateToProps = state => ({
   notes: state.music.notes,
   pitchRange: state.music.pitchRange,
   bpm: state.music.bpm,
-  user: state.auth.user,
   title: state.music.title,
 });
 

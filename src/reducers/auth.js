@@ -11,7 +11,9 @@ export default function (state = new AuthState(), action) {
       return state.set('showSignIn', false);
 
     case actionTypes.SET_USER:
-      return state.set('user', action.user);
+      return state
+        .set('displayName', action.user.displayName)
+        .set('photoURL', action.user.photoURL);
 
     default:
       return state;
