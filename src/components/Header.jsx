@@ -61,13 +61,14 @@ class Header extends React.Component {
             }}
           >
             <Tabs
-              value={(mode === displayModes.SEARCH
+              value={(mode === displayModes.HOME || mode === displayModes.SEARCH
                 || mode === displayModes.MAKE_QUESTION) ? mode : false}
               onChange={(e, v) => changeDisplayMode(v)}
               indicatorColor="primary"
               textColor="primary"
               style={{ float: 'left' }}
             >
+              <Tab label="ホーム" value={displayModes.HOME} />
               <Tab label="検索" value={displayModes.SEARCH} />
               <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} />
             </Tabs>

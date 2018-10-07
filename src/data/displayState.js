@@ -3,7 +3,7 @@ import displayModes from './displayModes';
 
 
 const DisplayState = Immutable.Record({
-  mode: displayModes.SEARCH,
+  mode: displayModes.HOME,
 });
 
 export default DisplayState;
