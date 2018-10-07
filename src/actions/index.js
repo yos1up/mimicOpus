@@ -144,14 +144,37 @@ export function uploadQuestion(question) {
 
 export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000) {
   dispatch(clearQuestionsList());
-  functions.httpsCallable('questionsList')({ lowBPM, highBPM }).then(
+  // O(n)フィルター
+  // TODO: functions移植
+  // TODO: オンライン的なフィルタ（一気に全部読むのはまずい）
+  //       繰り替えしコールバック処理をすることになるけど、どうやってやるのか要調査
+  // FIY: ユーザーネームはadminないと今の所読めない
+  questionsRef
+    .orderBy('uploadedAt', 'desc')
+    .get()
+    .then(
+      (querySnapshot) => {
+        const questionsList = [];
+        querySnapshot.docs.forEach((item) => {
+          const data = item.data();
+          if (data.bpm < lowBPM) return;
+          if (data.bpm > highBPM) return;
+          questionsList.push({ id: item.id, data });
+        });
+        // functions移植に向けて分離している
+        questionsList.forEach((question) => {
+          dispatch(addQuestionToList(question.id, Question.fromJS(question.data)));
+        });
+      },
+    );
+  /* functions.httpsCallable('questionsList')({ lowBPM, highBPM }).then(
     (result) => {
       const questionsList = result.data;
       questionsList.forEach((question) => {
         dispatch(addQuestionToList(question.id, Question.fromJS(question.data)));
       });
     },
-  );
+  ); */
 }
 
 export function saveScore(questionId, score) {

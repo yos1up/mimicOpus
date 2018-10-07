@@ -18,9 +18,16 @@ class Question extends Immutable.Record({
     notes = Immutable.List(notes);
     newObj.notes = notes;
     // TODO fix lint
-    const uploadedAt = new firebase.firestore.Timestamp(
-      obj.uploadedAt._seconds, obj.uploadedAt._nanoseconds,
-    );
+    let uploadedAt;
+    if (obj.uploadedAt.seconds !== null && obj.uploadedAt.seconds !== undefined) {
+      uploadedAt = new firebase.firestore.Timestamp(
+        obj.uploadedAt.seconds, obj.uploadedAt.nanoseconds,
+      );
+    } else {
+      uploadedAt = new firebase.firestore.Timestamp(
+        obj.uploadedAt._seconds, obj.uploadedAt._nanoseconds,
+      );
+    }
     newObj.uploadedAt = uploadedAt;
     return new Question(newObj);
   }
