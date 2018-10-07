@@ -15,6 +15,9 @@ export default function (state = new MusicState(), action) {
     case actionTypes.DEL_NOTE:
       return state.update('notes', notes => notes.delete(action.idx));
 
+    case actionTypes.SET_NOTES:
+      return state.set('notes', action.notes);
+
     case actionTypes.SHIFT_PITCH_RANGE: {
       let newPitchRange = [state.pitchRange[0] + action.delta,
         state.pitchRange[1] + action.delta];

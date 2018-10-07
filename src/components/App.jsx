@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import SignIn from '../containers/SignIn';
 import Header from '../containers/Header';
 
+import EditQuestion from '../containers/EditQuestion';
 import MakeQuestion from '../containers/MakeQuestion';
 import PlayQuestion from '../containers/PlayQuestion';
 import Search from '../containers/Search';
@@ -47,6 +48,7 @@ class App extends React.Component {
         >
           {(mode === displayModes.MAKE_QUESTION) ? (<MakeQuestion />) : null}
           {(mode === displayModes.PLAY_QUESTION) ? (<PlayQuestion />) : null}
+          {(mode === displayModes.EDIT_QUESTION) ? (<EditQuestion />) : null}
           {(mode === displayModes.SEARCH) ? (<Search />) : null}
           {(mode === displayModes.USER) ? (<Profile />) : null}
         </div>

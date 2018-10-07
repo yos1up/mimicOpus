@@ -81,7 +81,7 @@ class Search extends React.Component {
   render() {
     const {
       questionsList, lowBPM, highBPM, setQuestion, changeDisplayMode, setBPM, setLowBPM, setHighBPM,
-      loadQuestionsList, setQuestionId,
+      loadQuestionsList, setQuestionId, setNotes, setTitle, deleteUploadedQuestion,
     } = this.props;
     return (
       <div id="Search">
@@ -170,8 +170,8 @@ class Search extends React.Component {
                       if (!bMine) {
                         setQuestion(v);
                         setBPM(v.bpm);
-                        changeDisplayMode(displayModes.PLAY_QUESTION);
                         setQuestionId(k);
+                        changeDisplayMode(displayModes.PLAY_QUESTION);
                       }
                     }}
                     style={{ cursor: (bMine) ? 'default' : 'pointer' }}
@@ -189,6 +189,14 @@ class Search extends React.Component {
                       {(bMine) ? (
                         <IconButton
                           aria-label="Edit"
+                          onClick={(e) => {
+                            setNotes(v.notes);
+                            setBPM(v.bpm);
+                            setQuestionId(k);
+                            setTitle(v.title);
+                            changeDisplayMode(displayModes.EDIT_QUESTION);
+                            e.stopPropagation();
+                          }}
                         >
                           <EditIcon />
                         </IconButton>
@@ -197,6 +205,10 @@ class Search extends React.Component {
                       {(bMine) ? (
                         <IconButton
                           aria-label="Delete"
+                          onClick={(e) => {
+                            deleteUploadedQuestion(k);
+                            e.stopPropagation();
+                          }}
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -227,10 +239,13 @@ Search.propTypes = {
   setQuestion: PropTypes.func.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
   setBPM: PropTypes.func.isRequired,
+  setNotes: PropTypes.func.isRequired,
+  setTitle: PropTypes.func.isRequired,
   setLowBPM: PropTypes.func.isRequired,
   setHighBPM: PropTypes.func.isRequired,
   loadQuestionsList: PropTypes.func.isRequired,
   setQuestionId: PropTypes.func.isRequired,
+  deleteUploadedQuestion: PropTypes.func.isRequired,
 };
 
 export default Search;

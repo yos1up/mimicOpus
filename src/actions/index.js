@@ -5,6 +5,7 @@ import { db, functions } from '../firebase';
 import Question from '../data/question';
 
 const scoresRef = db.collection('scores');
+const questionsRef = db.collection('questions');
 
 // auth
 export function openSignInDialog() {
@@ -55,6 +56,13 @@ export function delNote(idx) {
   };
 }
 
+export function setNotes(notes) {
+  return {
+    type: actionTypes.SET_NOTES,
+    notes,
+  };
+}
+
 export function shiftPitchRange(delta) {
   return {
     type: actionTypes.SHIFT_PITCH_RANGE,
@@ -102,6 +110,21 @@ export function clearQuestionsList() {
   return {
     type: actionTypes.CLEAR_QUESTIONS_LIST,
   };
+}
+
+export function changeUploadedQuestion(questionId, question) {
+  const data = question.toJS();
+  data.uploadedAt = firebase.firestore.Timestamp.now();
+  data.uid = firebase.auth().currentUser.uid;
+  questionsRef
+    .doc(questionId)
+    .set(data);
+}
+
+export function deleteUploadedQuestion(questionId) {
+  questionsRef
+    .doc(questionId)
+    .delete();
 }
 
 export function uploadQuestion(question) {
