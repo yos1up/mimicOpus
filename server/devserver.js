@@ -1,5 +1,7 @@
 'use strict';
 
+var server_cmn = require('./server_cmn');
+
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
@@ -90,6 +92,8 @@ app.use(webpackHotMiddleware(compiler));
 app.use(webpackDevMiddleware(compiler, serverConfig));
 
 app.use(express.static('public'));
+
+server_cmn.server_cmn(app);
 
 app.listen(port, HOST, err => {
   if (err) {
