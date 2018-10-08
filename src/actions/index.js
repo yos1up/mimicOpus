@@ -136,10 +136,14 @@ export function deleteUploadedQuestion(questionId) {
 }
 
 export function uploadQuestion(question) {
-  /* functions.httpsCallable('uploadQuestion')(question.toJS()).then(
-    () => {
-    },
-  ); */
+  const obj = question.toJS();
+  const method = 'POST';
+  const body = JSON.stringify(obj);
+  const headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
+  fetch('./uploadQuestion', { method, headers, body });
 }
 
 export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000) {
