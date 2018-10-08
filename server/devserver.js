@@ -77,7 +77,6 @@ const urls = prepareUrls(protocol, HOST, port);
 const compiler = createCompiler(webpack, config, appName, urls, useYarn);
 
 const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
 
 // Load proxy config
 const proxySetting = require(paths.appPackageJson).proxy;
@@ -88,7 +87,6 @@ const serverConfig = createDevServerConfig(
   urls.lanUrlForConfig
 );
 
-app.use(webpackHotMiddleware(compiler));
 app.use(webpackDevMiddleware(compiler, serverConfig));
 
 app.use(express.static('public'));
