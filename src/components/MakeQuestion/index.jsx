@@ -94,6 +94,7 @@ class MakeQuestion extends React.Component {
         </Button>
         <Typography
           style={{ position: 'absolute', top: 10, left: 300 }}
+          variant="body1"
         >
           BPM
           {bpm}
@@ -106,9 +107,10 @@ class MakeQuestion extends React.Component {
           onChange={(e, v) => setBPM(v)}
           style={{
             position: 'absolute',
-            top: 25,
+            top: 40,
             left: 300,
             width: 200,
+            height: 30,
           }}
         />
         <Button

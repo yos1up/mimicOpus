@@ -14,9 +14,10 @@ const uploadQuestion = (req, res) => {
     text: 'INSERT INTO questions(notes, bpm, uid, userName, title, uploadedAt) VALUES($1, $2, $3, $4, $5, $6)',
     values: [JSON.stringify(data.notes), data.bpm, data.uid, data.userName, data.title, new Date()],
   }
-  console.log(query);
 
-  client.query(query);
+  client.query(query)
+    .then(result => res.send({ errState: 0 }))
+    .catch(e => res.send({ errState: 1 }));
 }
 
 exports.server_cmn = (app) => {
