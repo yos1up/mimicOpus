@@ -1,11 +1,11 @@
-import firebase from 'firebase';
+// import firebase from 'firebase';
 
 import actionTypes from './actionTypes';
-import { db, functions } from '../firebase';
-import Question from '../data/question';
+// import { db, functions } from '../firebase';
+// import Question from '../data/question';
 
-const scoresRef = db.collection('scores');
-const questionsRef = db.collection('questions');
+// const scoresRef = db.collection('scores');
+// const questionsRef = db.collection('questions');
 
 // auth
 export function openSignInDialog() {
@@ -28,11 +28,11 @@ export function setUser(user) {
 }
 
 export function changeDisplayName(dispatch, name) {
-  firebase.auth().currentUser.updateProfile({
+  /* firebase.auth().currentUser.updateProfile({
     displayName: name,
   }).then(() => {
     dispatch(setUser(firebase.auth().currentUser));
-  });
+  }); */
 }
 
 // display
@@ -121,25 +121,25 @@ export function clearQuestionsList() {
 }
 
 export function changeUploadedQuestion(questionId, question) {
-  const data = question.toJS();
+  /* const data = question.toJS();
   data.uploadedAt = firebase.firestore.Timestamp.now();
   data.uid = firebase.auth().currentUser.uid;
   questionsRef
     .doc(questionId)
-    .set(data);
+    .set(data); */
 }
 
 export function deleteUploadedQuestion(questionId) {
-  questionsRef
+  /* questionsRef
     .doc(questionId)
-    .delete();
+    .delete(); */
 }
 
 export function uploadQuestion(question) {
-  functions.httpsCallable('uploadQuestion')(question.toJS()).then(
+  /* functions.httpsCallable('uploadQuestion')(question.toJS()).then(
     () => {
     },
-  );
+  ); */
 }
 
 export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000) {
@@ -149,7 +149,7 @@ export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000) {
   // TODO: オンライン的なフィルタ（一気に全部読むのはまずい）
   //       繰り替えしコールバック処理をすることになるけど、どうやってやるのか要調査
   // FIY: ユーザーネームはadminないと今の所読めない
-  questionsRef
+  /* questionsRef
     .orderBy('uploadedAt', 'desc')
     .get()
     .then(
@@ -166,7 +166,7 @@ export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000) {
           dispatch(addQuestionToList(question.id, Question.fromJS(question.data)));
         });
       },
-    );
+    ); */
   /* functions.httpsCallable('questionsList')({ lowBPM, highBPM }).then(
     (result) => {
       const questionsList = result.data;
@@ -178,11 +178,11 @@ export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000) {
 }
 
 export function saveScore(questionId, score) {
-  scoresRef.add({
+  /* scoresRef.add({
     questionId,
     uid: firebase.auth().currentUser.uid,
     score,
-  });
+  }); */
 }
 
 // search

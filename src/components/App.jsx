@@ -1,5 +1,5 @@
 import React from 'react';
-import firebase from 'firebase';
+// import firebase from 'firebase';
 import PropTypes from 'prop-types';
 
 import SignIn from '../containers/SignIn';
@@ -16,7 +16,7 @@ import displayModes from '../data/displayModes';
 
 class App extends React.Component {
   componentDidMount() {
-    const { setUser } = this.props;
+    /* const { setUser } = this.props;
     // TODO: action creatorに移動した方が良い？？
     firebase.auth().onAuthStateChanged((user) => {
       if (user !== null && user !== undefined) {
@@ -25,7 +25,7 @@ class App extends React.Component {
         // TODO: エラー処理
         firebase.auth().signInAnonymously();
       }
-    });
+    }); */
   }
 
   render() {

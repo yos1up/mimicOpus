@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+// import firebase from 'firebase';
 import AppBar from '@material-ui/core/AppBar';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -125,7 +125,7 @@ class Header extends React.Component {
                         <MenuItem onClick={() => {
                           this.handleCloseUserMenu();
                           // エラー処理
-                          firebase.auth().signOut();
+                          // firebase.auth().signOut();
                         }}
                         >
                           Logout

@@ -1,7 +1,7 @@
-import firebase from 'firebase';
+// import firebase from 'firebase';
 import React from 'react';
 import PropTypes from 'prop-types';
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+// import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -9,7 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 function SignIn({ open, closeSignInDialog }) {
   // TODO: エラー処理
-  const uiConfig = {
+  /* const uiConfig = {
     signInFlow: 'popup',
     signInSuccessUrl: '/signedIn',
     signInOptions: [
@@ -20,12 +20,12 @@ function SignIn({ open, closeSignInDialog }) {
         closeSignInDialog();
       },
     },
-  };
+  }; */
   return (
     <Dialog open={open} onClose={() => closeSignInDialog()}>
       <DialogTitle id="simple-dialog-title">Sign In</DialogTitle>
       <DialogContent>
-        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+        {/* <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} /> */}
       </DialogContent>
     </Dialog>
   );
