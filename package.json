@@ -23,6 +23,10 @@
     "dotenv-expand": "4.2.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.0.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-react": "^7.4.0",
     "eslint-config-react-app": "^2.1.0",
     "eslint-loader": "1.9.0",
     "eslint-plugin-flowtype": "2.39.1",
@@ -64,11 +68,6 @@
     "test": "node scripts/test.js --env=jsdom"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-react": "^7.4.0",
     "webpack-dev-middleware": "^2.0.6",
     "webpack-hot-middleware": "^2.24.2"
   },
