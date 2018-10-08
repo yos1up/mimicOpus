@@ -5,5 +5,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-### `npm dev-start`
-### `npm start`
+### develop server
+`npm run dev-start`
+
+### deploy
+`npm run build`
+and push to heroku repository.
