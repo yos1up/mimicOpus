@@ -17,7 +17,10 @@ const uploadQuestion = (req, res) => {
 
   client.query(query)
     .then(result => res.send({ errState: 0 }))
-    .catch(e => res.send({ errState: 1 }));
+    .catch(e => {
+      console.log(e);
+      res.send({ errState: 1 });
+    });
 }
 
 exports.server_cmn = (app) => {

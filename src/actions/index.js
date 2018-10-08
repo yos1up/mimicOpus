@@ -143,7 +143,14 @@ export function uploadQuestion(question) {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   };
-  fetch('./uploadQuestion', { method, headers, body });
+  fetch('./uploadQuestion', { method, headers, body })
+    .then(res => res.json())
+    .then(console.log)
+    .catch(console.error);
+  /* functions.httpsCallable('uploadQuestion')(question.toJS()).then(
+    () => {
+    },
+  ); */
 }
 
 export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000) {
