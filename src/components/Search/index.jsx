@@ -159,8 +159,7 @@ class Search extends React.Component {
               [...questionsList.entries()].map((tmpV) => {
                 const k = tmpV[0];
                 const v = tmpV[1];
-                let date = v.uploadedAt.toDate();
-                date = `${date.getFullYear()}/${date.getMonth()}/${date.getDate()}`;
+                const date = `${v.uploadedAt.getFullYear()}/${v.uploadedAt.getMonth()}/${v.uploadedAt.getDate()}`;
                 const bMine = false; // firebase.auth().currentUser.uid === v.uid;
                 return (
                   <TableRow

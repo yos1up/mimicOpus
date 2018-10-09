@@ -2,7 +2,7 @@
 
 import actionTypes from './actionTypes';
 // import { db, functions } from '../firebase';
-// import Question from '../data/question';
+import Question from '../data/question';
 
 // const scoresRef = db.collection('scores');
 // const questionsRef = db.collection('questions');
@@ -155,6 +155,20 @@ export function uploadQuestion(question) {
 
 export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000) {
   dispatch(clearQuestionsList());
+
+  const method = 'GET';
+  const params = new URLSearchParams();
+  params.set('lowBPM', lowBPM);
+  params.set('highBPM', highBPM);
+  fetch(`./loadQuestionsList?${params.toString()}`, { method })
+    .then(res => res.json())
+    .then((results) => {
+      Object.keys(results).forEach((key) => {
+        dispatch(addQuestionToList(key, Question.fromJS(results[key])));
+      });
+    })
+    .catch(console.error);
+
   // O(n)フィルター
   // TODO: functions移植
   // TODO: オンライン的なフィルタ（一気に全部読むのはまずい）
