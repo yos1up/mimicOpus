@@ -2,7 +2,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## PostgreSQL Setup
 
-create user
+create user (dev)
 ```
 postgres=> CREATE ROLE mimicopus WITH LOGIN PASSWORD 'mimicopus';
 ```
@@ -16,14 +16,15 @@ create table
 ```
 $ psql -d mimicopus
 postgres=> CREATE TABLE questions (id SERIAL, notes JSON, bpm REAL, uid TEXT, userName TEXT, title TEXT, uploadedAt TIMESTAMP);
+postgres=> CREATE TABLE scores (id SERIAL, qid INTEGER, uid INTEGER, score REAL);
 ```
 
-grant
+grant (dev)
 ```
-postgres=> GRANT SELECT ON questions TO mimicopus;
-postgres=> GRANT INSERT ON questions TO mimicopus;
-postgres=> GRANT DELETE ON questions TO mimicopus;
+postgres=> GRANT SELECT, INSERT, DELETE ON questions TO mimicopus;
 postgres=> GRANT USAGE, SELECT ON SEQUENCE questions_id_seq TO mimicopus;
+postgres=> GRANT SELECT, INSERT, DELETE ON scores TO mimicopus;
+postgres=> GRANT USAGE, SELECT ON SEQUENCE scores_id_seq TO mimicopus;
 ```
 
 ## Available Scripts

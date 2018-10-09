@@ -160,12 +160,17 @@ export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000) {
     .catch(console.error);
 }
 
-export function saveScore(questionId, score) {
-  /* scoresRef.add({
-    questionId,
-    uid: firebase.auth().currentUser.uid,
-    score,
-  }); */
+export function saveScore(qid, score) {
+  const method = 'POST';
+  const body = JSON.stringify({ qid, uid: 0, score });
+  const headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
+  fetch('./saveScore', { method, headers, body })
+    .then(res => res.json())
+    .then(console.log)
+    .catch(console.error);
 }
 
 // search

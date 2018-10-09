@@ -58,10 +58,26 @@ const loadQuestionsList = (req, res) => {
     });
 }
 
+const saveScore = (req, res) => {
+  const data = req.body;
+  const query = {
+    text: 'INSERT INTO scores(qid, uid, score) VALUES($1, $2, $3)',
+    values: [data.qid, data.uid, data.score],
+  }
+
+  client.query(query)
+    .then(result => res.send({ errState: 0 }))
+    .catch(e => {
+      console.log(e);
+      res.send({ errState: 1 });
+    });
+}
+
 exports.server_cmn = (app) => {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
 
   app.post('/uploadQuestion', uploadQuestion);
   app.get('/loadQuestionsList', loadQuestionsList);
+  app.post('/saveScore', saveScore);
 }
