@@ -2,6 +2,7 @@ const bodyParser = require('body-parser') // body-parser
 const { Client } = require('pg')
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const session = require("express-session");
 
 const databaseURL = process.env.DATABASE_URL || 'postgresql://mimicopus:mimicopus@127.0.0.1:5432/mimicopus';
 
@@ -26,6 +27,9 @@ const uploadQuestion = (req, res) => {
 }
 
 const loadQuestionsList = (req, res) => {
+  if(req.isAuthenticated()){
+    console.log(req.user.displayName);
+  }
   const urlQuery = req.query;
   if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
     urlQuery.lowBPM = 60;
@@ -76,7 +80,6 @@ const saveScore = (req, res) => {
 }
 
 exports.server_cmn = (app) => {
-  app.use(passport.initialize());
   passport.use(new GoogleStrategy({
         clientID: process.env.MIMICOPUS_GOOGLE_CLIENT_ID,
         clientSecret: process.env.MIMICOPUS_GOOGLE_CLIENT_SECRET,
@@ -90,11 +93,22 @@ exports.server_cmn = (app) => {
       }
     })
   ));
+  passport.serializeUser((id, done) => {
+      done(null, id);
+  });
+
+  passport.deserializeUser((id, done) => {
+      done(null, id);
+  });
+
+  app.use(session({ secret: "some salt", resave: true, saveUninitialized: true }));
+  app.use(passport.initialize());
+  app.use(passport.session());
   app.get('/auth/google', passport.authenticate('google', {
     scope: ['https://www.googleapis.com/auth/plus.login']
   }));
   app.get('/auth/google/callback',
-    passport.authenticate('google', { session: false }),
+    passport.authenticate('google'),
     (req, res) => {
       res.redirect("/");
     }
