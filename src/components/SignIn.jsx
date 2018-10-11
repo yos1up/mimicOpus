@@ -25,7 +25,7 @@ function SignIn({ open, closeSignInDialog }) {
     <Dialog open={open} onClose={() => closeSignInDialog()}>
       <DialogTitle id="simple-dialog-title">Sign In</DialogTitle>
       <DialogContent>
-        {/* <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} /> */}
+        <a href="/auth/google">Google でログインする</a>
       </DialogContent>
     </Dialog>
   );

@@ -1,5 +1,7 @@
 const bodyParser = require('body-parser') // body-parser
 const { Client } = require('pg')
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const databaseURL = process.env.DATABASE_URL || 'postgresql://mimicopus:mimicopus@127.0.0.1:5432/mimicopus';
 
@@ -74,6 +76,37 @@ const saveScore = (req, res) => {
 }
 
 exports.server_cmn = (app) => {
+  app.use(passport.initialize());
+  passport.use(new GoogleStrategy({
+        clientID: process.env.MIMICOPUS_GOOGLE_CLIENT_ID,
+        clientSecret: process.env.MIMICOPUS_GOOGLE_CLIENT_SECRET,
+        callbackURL: "http://localhost:5000/auth/google/callback"
+    }, ((accessToken, refreshToken, profile, done) => {
+      if (profile) {
+          return done(null, profile);
+      }
+      else {
+          return done(null, false);
+      }
+    })
+  ));
+  app.get('/auth/google', passport.authenticate('google', {
+    scope: ['https://www.googleapis.com/auth/plus.login']
+  }));
+  app.get('/auth/google/callback',
+    passport.authenticate('google'),
+    (req, res) => {
+      res.redirect("/");
+    }
+  );
+  passport.serializeUser((user, done) => {
+    done(null, user);
+  });
+
+  passport.deserializeUser((user, done) => {
+    done(null, user);
+  });
+
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
 
