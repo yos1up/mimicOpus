@@ -94,18 +94,11 @@ exports.server_cmn = (app) => {
     scope: ['https://www.googleapis.com/auth/plus.login']
   }));
   app.get('/auth/google/callback',
-    passport.authenticate('google'),
+    passport.authenticate('google', { session: false }),
     (req, res) => {
       res.redirect("/");
     }
   );
-  passport.serializeUser((user, done) => {
-    done(null, user);
-  });
-
-  passport.deserializeUser((user, done) => {
-    done(null, user);
-  });
 
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
