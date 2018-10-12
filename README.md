@@ -32,8 +32,7 @@ postgres=> GRANT USAGE, SELECT ON SEQUENCE scores_id_seq TO mimicopus;
 In the project directory, you can run:
 
 ### develop server
-`npm run dev-start`
+`npm run dev`
 
 ### deploy
-`npm run build`
-and push to heroku repository.
+push to heroku repository.
