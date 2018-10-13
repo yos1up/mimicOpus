@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { setUser } from '../actions';
+import { setUser, loadMe } from '../actions';
 import App from '../components/App';
 
 const mapStateToProps = state => ({
@@ -8,6 +8,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  loadMe: () => loadMe(dispatch),
   setUser: user => dispatch(setUser(user)),
 });
 

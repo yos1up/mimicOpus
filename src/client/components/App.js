@@ -1,5 +1,4 @@
 import React from 'react';
-// import firebase from 'firebase';
 import PropTypes from 'prop-types';
 
 import SignIn from '../containers/SignIn';
@@ -16,22 +15,8 @@ import displayModes from '../data/displayModes';
 
 class App extends React.Component {
   componentDidMount() {
-    const method = 'GET';
-    fetch('./api/getMe', { method })
-      .then(res => res.json())
-      .then((results) => {
-        console.log(results);
-      });
-    /* const { setUser } = this.props;
-    // TODO: action creatorに移動した方が良い？？
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user !== null && user !== undefined) {
-        setUser(user);
-      } else {
-        // TODO: エラー処理
-        firebase.auth().signInAnonymously();
-      }
-    }); */
+    const { loadMe } = this.props;
+    loadMe();
   }
 
   render() {
@@ -66,7 +51,7 @@ class App extends React.Component {
 
 App.propTypes = {
   mode: PropTypes.string.isRequired,
-  setUser: PropTypes.func.isRequired,
+  loadMe: PropTypes.func.isRequired,
 };
 
 export default App;

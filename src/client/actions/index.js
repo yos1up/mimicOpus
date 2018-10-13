@@ -14,13 +14,6 @@ export function closeSignInDialog() {
   };
 }
 
-export function setUser(user) {
-  return {
-    type: actionTypes.SET_USER,
-    user,
-  };
-}
-
 export function changeUsername(dispatch, name) {
   /* firebase.auth().currentUser.updateProfile({
     username: name,
@@ -171,6 +164,32 @@ export function saveScore(qid, score) {
     .then(res => res.json())
     .then(console.log)
     .catch(console.error);
+}
+
+export function setUsername(username) {
+  return {
+    type: actionTypes.SET_USERNAME,
+    username,
+  };
+}
+
+export function setPhotoURL(photoURL) {
+  return {
+    type: actionTypes.SET_PHOTO_URL,
+    photoURL,
+  };
+}
+
+export function loadMe(dispatch) {
+  const method = 'GET';
+  fetch('./api/getMe', { method })
+    .then(res => res.json())
+    .then((results) => {
+      console.log(results.username);
+      console.log(results.photoURL);
+      dispatch(setUsername(results.username));
+      dispatch(setPhotoURL(results.photoURL));
+    });
 }
 
 // search
