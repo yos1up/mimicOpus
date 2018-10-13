@@ -3,6 +3,8 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
 
+const client = require('./pgClient');
+
 const authRouter = express.Router();
 
 
@@ -13,6 +15,20 @@ passport.use(new GoogleStrategy({
 }, ((accessToken, refreshToken, profile, done) => {
   if (profile) {
     console.log(profile);
+    let query = {
+      text: 'SELECT * FROM users where provider = $1 and idByProvider = $2',
+      values: [profile.provider, profile.id],
+    };
+    client.query(query)
+      .then((result) => {
+        if (result.rows.length === 0) {
+          query = {
+            text: 'INSERT INTO users(provider, idByProvider, username, photoURL) VALUES($1, $2, $3, $4)',
+            values: [profile.provider, profile.id, profile.displayName, profile.photos[0].value],
+          };
+          client.query(query);
+        }
+      });
     return done(null, profile);
   }
   return done(null, false);
