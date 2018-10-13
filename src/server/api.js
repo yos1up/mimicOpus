@@ -16,9 +16,8 @@ const uploadQuestion = (req, res) => {
     client.query(query)
       .then((result) => {
         query = {
-          text: 'INSERT INTO questions(notes, bpm, uid, userName, title, uploadedAt) VALUES($1, $2, $3, $4, $5, $6)',
-          values: [JSON.stringify(data.notes), data.bpm, result.rows[0].id,
-            data.userName, data.title, new Date()],
+          text: 'INSERT INTO questions(notes, bpm, uid, title, uploadedAt) VALUES($1, $2, $3, $4, $5)',
+          values: [JSON.stringify(data.notes), data.bpm, result.rows[0].id, data.title, new Date()],
         };
         client.query(query)
           .then(() => res.send({ errState: 0 }))
@@ -45,7 +44,7 @@ const loadQuestionsList = (req, res) => {
     urlQuery.highBPM = 200;
   }
   const query = {
-    text: 'SELECT * FROM questions where BPM >= $1 and BPM <= $2 ORDER BY uploadedAt',
+    text: 'SELECT * FROM questions LEFT JOIN users ON questions.uid = users.id where BPM >= $1 and BPM <= $2 ORDER BY uploadedAt',
     values: [urlQuery.lowBPM, urlQuery.highBPM],
   };
 

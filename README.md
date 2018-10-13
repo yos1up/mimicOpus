@@ -15,7 +15,7 @@ postgres=> CREATE DATABASE mimicopus;
 create table
 ```
 $ psql -d mimicopus
-mimicopus=> CREATE TABLE questions (id SERIAL, notes JSON, bpm REAL, uid INTEGER, userName TEXT, title TEXT, uploadedAt TIMESTAMP);
+mimicopus=> CREATE TABLE questions (id SERIAL, notes JSON, bpm REAL, uid INTEGER, title TEXT, uploadedAt TIMESTAMP);
 mimicopus=> CREATE TABLE scores (id SERIAL, qid INTEGER, uid INTEGER, score REAL);
 mimicopus=> CREATE TABLE users (id SERIAL, provider TEXT, idByProvider TEXT, username TEXT, photoURL TEXT);
 ```
