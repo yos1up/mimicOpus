@@ -12,7 +12,7 @@ export default function (state = new AuthState(), action) {
 
     case actionTypes.SET_USER:
       return state
-        .set('displayName', action.user.displayName)
+        .set('username', action.user.username)
         .set('photoURL', action.user.photoURL);
 
     default:

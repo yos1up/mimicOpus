@@ -12,7 +12,7 @@ class Profile extends React.Component {
   }
 
   render() {
-    const { photoURL, displayName, changeDisplayName } = this.props;
+    const { photoURL, username, changeUsername } = this.props;
     const { editUserName } = this.state;
     const avatarStyle = {
       position: 'absolute',
@@ -40,7 +40,7 @@ class Profile extends React.Component {
         }
         {(editUserName) ? (
           <Input
-            defaultValue={displayName}
+            defaultValue={username}
             inputProps={{
               'aria-label': 'Description',
             }}
@@ -48,7 +48,7 @@ class Profile extends React.Component {
               position: 'absolute', top: 210, left: 10, height: 40, width: 180,
             }}
             onBlur={(e) => {
-              changeDisplayName(e.target.value);
+              changeUsername(e.target.value);
               this.setState({ editUserName: false });
             }}
           />
@@ -62,7 +62,7 @@ class Profile extends React.Component {
               this.setState({ editUserName: true });
             }}
           >
-            {displayName}
+            {username}
           </Typography>
         )}
       </div>
@@ -72,8 +72,8 @@ class Profile extends React.Component {
 
 Profile.propTypes = {
   photoURL: PropTypes.string.isRequired,
-  displayName: PropTypes.string.isRequired,
-  changeDisplayName: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+  changeUsername: PropTypes.func.isRequired,
 };
 
 export default Profile;
