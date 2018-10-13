@@ -15,16 +15,19 @@ postgres=> CREATE DATABASE mimicopus;
 create table
 ```
 $ psql -d mimicopus
-postgres=> CREATE TABLE questions (id SERIAL, notes JSON, bpm REAL, uid TEXT, userName TEXT, title TEXT, uploadedAt TIMESTAMP);
-postgres=> CREATE TABLE scores (id SERIAL, qid INTEGER, uid INTEGER, score REAL);
+mimicopus=> CREATE TABLE questions (id SERIAL, notes JSON, bpm REAL, uid TEXT, userName TEXT, title TEXT, uploadedAt TIMESTAMP);
+mimicopus=> CREATE TABLE scores (id SERIAL, qid INTEGER, uid INTEGER, score REAL);
+mimicopus=> CREATE TABLE users (id SERIAL, provider TEXT, idByProvider TEXT, username TEXT, photoURL TEXT);
 ```
 
 grant (dev)
 ```
-postgres=> GRANT SELECT, INSERT, DELETE ON questions TO mimicopus;
-postgres=> GRANT USAGE, SELECT ON SEQUENCE questions_id_seq TO mimicopus;
-postgres=> GRANT SELECT, INSERT, DELETE ON scores TO mimicopus;
-postgres=> GRANT USAGE, SELECT ON SEQUENCE scores_id_seq TO mimicopus;
+mimicopus=> GRANT SELECT, INSERT, DELETE ON questions TO mimicopus;
+mimicopus=> GRANT USAGE, SELECT ON SEQUENCE questions_id_seq TO mimicopus;
+mimicopus=> GRANT SELECT, INSERT, DELETE ON scores TO mimicopus;
+mimicopus=> GRANT USAGE, SELECT ON SEQUENCE scores_id_seq TO mimicopus;
+mimicopus=> GRANT SELECT, INSERT, DELETE ON users TO mimicopus;
+mimicopus=> GRANT USAGE, SELECT ON SEQUENCE users_id_seq TO mimicopus;
 ```
 
 ## Available Scripts
