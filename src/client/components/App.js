@@ -16,6 +16,12 @@ import displayModes from '../data/displayModes';
 
 class App extends React.Component {
   componentDidMount() {
+    const method = 'GET';
+    fetch('./api/getMe', { method })
+      .then(res => res.json())
+      .then((results) => {
+        console.log(results);
+      });
     /* const { setUser } = this.props;
     // TODO: action creatorに移動した方が良い？？
     firebase.auth().onAuthStateChanged((user) => {

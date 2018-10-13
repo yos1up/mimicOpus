@@ -20,9 +20,6 @@ const uploadQuestion = (req, res) => {
 };
 
 const loadQuestionsList = (req, res) => {
-  if (req.isAuthenticated()) {
-    console.log(req.user);
-  }
   const urlQuery = req.query;
   if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
     urlQuery.lowBPM = 60;
@@ -71,8 +68,33 @@ const saveScore = (req, res) => {
     });
 };
 
+const getMe = (req, res) => {
+  if (req.isAuthenticated()) {
+    console.log(req.user);
+    const query = {
+      text: 'SELECT * FROM users where provider = $1 and idByProvider = $2',
+      values: [req.user.provider, req.user.id],
+    };
+    client.query(query)
+      .then((result) => {
+        const returnData = {};
+        returnData.id = result.rows[0].id;
+        returnData.username = result.rows[0].username;
+        returnData.photoURL = result.rows[0].photourl;
+        res.send(returnData);
+      })
+      .catch((e) => {
+        console.log(e);
+        res.send({ errState: 1 });
+      });
+  } else {
+    res.send({});
+  }
+};
+
 apiRouter.post('/api/uploadQuestion', uploadQuestion);
 apiRouter.get('/api/loadQuestionsList', loadQuestionsList);
 apiRouter.post('/api/saveScore', saveScore);
+apiRouter.get('/api/getMe', getMe);
 
 module.exports = apiRouter;

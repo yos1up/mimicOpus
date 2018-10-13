@@ -14,7 +14,6 @@ passport.use(new GoogleStrategy({
   callbackURL: 'http://localhost:5000/auth/google/callback'
 }, ((accessToken, refreshToken, profile, done) => {
   if (profile) {
-    console.log(profile);
     let query = {
       text: 'SELECT * FROM users where provider = $1 and idByProvider = $2',
       values: [profile.provider, profile.id],
