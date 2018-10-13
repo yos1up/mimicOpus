@@ -5,18 +5,35 @@ const client = require('./pgClient');
 const apiRouter = express.Router();
 
 const uploadQuestion = (req, res) => {
-  const data = req.body;
-  const query = {
-    text: 'INSERT INTO questions(notes, bpm, uid, userName, title, uploadedAt) VALUES($1, $2, $3, $4, $5, $6)',
-    values: [JSON.stringify(data.notes), data.bpm, data.uid, data.userName, data.title, new Date()],
-  };
+  if (req.isAuthenticated()) {
+    const data = req.body;
 
-  client.query(query)
-    .then(() => res.send({ errState: 0 }))
-    .catch((e) => {
-      console.log(e);
-      res.send({ errState: 1 });
-    });
+    let query = {
+      text: 'SELECT * FROM users where provider = $1 and idByProvider = $2',
+      values: [req.user.provider, req.user.id],
+    };
+
+    client.query(query)
+      .then((result) => {
+        query = {
+          text: 'INSERT INTO questions(notes, bpm, uid, userName, title, uploadedAt) VALUES($1, $2, $3, $4, $5, $6)',
+          values: [JSON.stringify(data.notes), data.bpm, result.rows[0].id,
+            data.userName, data.title, new Date()],
+        };
+        client.query(query)
+          .then(() => res.send({ errState: 0 }))
+          .catch((e) => {
+            console.log(e);
+            res.send({ errState: 1 });
+          });
+      })
+      .catch((e) => {
+        console.log(e);
+        res.send({ errState: 1 });
+      });
+  } else {
+    res.send({ errState: 1 });
+  }
 };
 
 const loadQuestionsList = (req, res) => {
@@ -70,7 +87,6 @@ const saveScore = (req, res) => {
 
 const getMe = (req, res) => {
   if (req.isAuthenticated()) {
-    console.log(req.user);
     const query = {
       text: 'SELECT * FROM users where provider = $1 and idByProvider = $2',
       values: [req.user.provider, req.user.id],
