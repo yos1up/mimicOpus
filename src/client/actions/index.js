@@ -181,14 +181,17 @@ export function setPhotoURL(photoURL) {
 }
 
 export function loadMe(dispatch) {
-  const method = 'GET';
-  fetch('./api/getMe', { method })
+  fetch('./api/getMe', { method: 'GET' })
     .then(res => res.json())
     .then((results) => {
-      console.log(results.username);
-      console.log(results.photoURL);
-      dispatch(setUsername(results.username));
-      dispatch(setPhotoURL(results.photoURL));
+      if (results.id !== -1) {
+        dispatch(setUsername(results.username));
+        dispatch(setPhotoURL(results.photoURL));
+      } else {
+        fetch('./auth/anonymous', { method: 'GET' });
+        dispatch(setUsername('anonymous'));
+        dispatch(setPhotoURL(''));
+      }
     });
 }
 
