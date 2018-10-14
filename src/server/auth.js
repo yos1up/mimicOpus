@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const DummyStrategy = require('passport-dummy').Strategy;
 const session = require('express-session');
 
 const client = require('./pgClient');
@@ -32,6 +33,22 @@ passport.use(new GoogleStrategy({
   }
   return done(null, false);
 })));
+passport.use(new DummyStrategy(
+  (done) => {
+    const profile = {};
+    profile.displayName = 'anonymous';
+    profile.photos = [{ value: '' }];
+    profile.id = '';
+    profile.provider = 'anonymous';
+    const query = {
+      text: 'INSERT INTO users(provider, idByProvider, username, photoURL) VALUES($1, $2, $3, $4)',
+      values: [profile.provider, profile.id, profile.displayName, profile.photos[0].value],
+    };
+    client.query(query);
+    done(null, profile);
+  }
+));
+
 passport.serializeUser((user, done) => {
   done(null, user);
 });
@@ -49,6 +66,11 @@ authRouter.get('/auth/google/callback',
   passport.authenticate('google'),
   (req, res) => {
     res.redirect('/');
+  });
+authRouter.get('/auth/anonymous',
+  passport.authenticate('dummy'),
+  (req, res) => {
+    res.send({});
   });
 
 module.exports = authRouter;

@@ -36,6 +36,9 @@ const uploadQuestion = (req, res) => {
 };
 
 const loadQuestionsList = (req, res) => {
+  if (req.isAuthenticated()) {
+    console.log(req.user);
+  }
   const urlQuery = req.query;
   if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
     urlQuery.lowBPM = 60;

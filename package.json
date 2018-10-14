@@ -21,6 +21,7 @@
     "express-session": "^1.15.6",
     "immutable": "^3.8.2",
     "passport": "^0.4.0",
+    "passport-dummy": "0.0.1",
     "passport-google-oauth20": "^1.0.0",
     "pg": "^7.5.0",
     "prop-types": "^15.6.2",
