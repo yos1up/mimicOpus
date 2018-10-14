@@ -15,45 +15,59 @@ passport.use(new GoogleStrategy({
   callbackURL: 'http://localhost:5000/auth/google/callback'
 }, ((accessToken, refreshToken, profile, done) => {
   if (profile) {
-    let query = {
-      text: 'SELECT * FROM users where provider = $1 and idByProvider = $2',
-      values: [profile.provider, profile.id],
-    };
-    client.query(query)
-      .then((result) => {
-        if (result.rows.length === 0) {
-          query = {
-            text: 'INSERT INTO users(provider, idByProvider, username, photoURL) VALUES($1, $2, $3, $4)',
-            values: [profile.provider, profile.id, profile.displayName, profile.photos[0].value],
-          };
-          client.query(query);
-        }
-      });
     return done(null, profile);
   }
   return done(null, false);
 })));
 passport.use(new DummyStrategy(
   (done) => {
-    const profile = {};
-    profile.displayName = 'anonymous';
-    profile.photos = [{ value: '' }];
-    profile.id = '';
-    profile.provider = 'anonymous';
-    const query = {
-      text: 'INSERT INTO users(provider, idByProvider, username, photoURL) VALUES($1, $2, $3, $4)',
-      values: [profile.provider, profile.id, profile.displayName, profile.photos[0].value],
-    };
-    client.query(query);
-    done(null, profile);
+    done(null, 'anonymous');
   }
 ));
 
 passport.serializeUser((user, done) => {
-  done(null, user);
+  let query;
+  if (user === 'anonymous') {
+    query = {
+      text: 'INSERT INTO users(provider, idByProvider, username, photoURL) VALUES($1, $2, $3, $4) RETURNING *',
+      values: ['anonymous', '', 'anonymous', ''],
+    };
+    client.query(query)
+      .then((result2) => {
+        done(null, result2.rows[0].id);
+      });
+  } else {
+    query = {
+      text: 'SELECT * FROM users where provider = $1 and idByProvider = $2',
+      values: [user.provider, user.id],
+    };
+    client.query(query)
+      .then((result) => {
+        if (result.rows.length === 0) {
+          query = {
+            text: 'INSERT INTO users(provider, idByProvider, username, photoURL) VALUES($1, $2, $3, $4) RETURNING *',
+            values: [user.provider, user.id, user.displayName, user.photos[0].value],
+          };
+          client.query(query)
+            .then((result2) => {
+              done(null, result2.rows[0].id);
+            });
+        } else {
+          done(null, result.rows[0].id);
+        }
+      });
+  }
 });
-passport.deserializeUser((user, done) => {
-  done(null, user);
+passport.deserializeUser((id, done) => {
+  const query = {
+    text: 'SELECT * FROM users where id = $1 ',
+    values: [id],
+  };
+  client.query(query)
+    .then((result) => {
+      const row = result.rows[0];
+      done(null, { id: row.id, username: row.username, photoURL: row.photourl });
+    });
 });
 
 authRouter.use(session({ secret: 'some salt', resave: true, saveUninitialized: true }));

@@ -7,25 +7,12 @@ const apiRouter = express.Router();
 const uploadQuestion = (req, res) => {
   if (req.isAuthenticated()) {
     const data = req.body;
-
-    let query = {
-      text: 'SELECT * FROM users where provider = $1 and idByProvider = $2',
-      values: [req.user.provider, req.user.id],
+    const query = {
+      text: 'INSERT INTO questions(notes, bpm, uid, title, uploadedAt) VALUES($1, $2, $3, $4, $5)',
+      values: [JSON.stringify(data.notes), data.bpm, req.user.id, data.title, new Date()],
     };
-
     client.query(query)
-      .then((result) => {
-        query = {
-          text: 'INSERT INTO questions(notes, bpm, uid, title, uploadedAt) VALUES($1, $2, $3, $4, $5)',
-          values: [JSON.stringify(data.notes), data.bpm, result.rows[0].id, data.title, new Date()],
-        };
-        client.query(query)
-          .then(() => res.send({ errState: 0 }))
-          .catch((e) => {
-            console.log(e);
-            res.send({ errState: 1 });
-          });
-      })
+      .then(() => res.send({ errState: 0 }))
       .catch((e) => {
         console.log(e);
         res.send({ errState: 1 });
@@ -36,9 +23,6 @@ const uploadQuestion = (req, res) => {
 };
 
 const loadQuestionsList = (req, res) => {
-  if (req.isAuthenticated()) {
-    console.log(req.user);
-  }
   const urlQuery = req.query;
   if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
     urlQuery.lowBPM = 60;
@@ -73,40 +57,29 @@ const loadQuestionsList = (req, res) => {
 };
 
 const saveScore = (req, res) => {
-  const data = req.body;
-  const query = {
-    text: 'INSERT INTO scores(qid, uid, score) VALUES($1, $2, $3)',
-    values: [data.qid, data.uid, data.score],
-  };
-
-  client.query(query)
-    .then(() => res.send({ errState: 0 }))
-    .catch((e) => {
-      console.log(e);
-      res.send({ errState: 1 });
-    });
-};
-
-const getMe = (req, res) => {
   if (req.isAuthenticated()) {
+    const data = req.body;
     const query = {
-      text: 'SELECT * FROM users where provider = $1 and idByProvider = $2',
-      values: [req.user.provider, req.user.id],
+      text: 'INSERT INTO scores(qid, uid, score) VALUES($1, $2, $3)',
+      values: [data.qid, req.user.id, data.score],
     };
+
     client.query(query)
-      .then((result) => {
-        const returnData = {};
-        returnData.id = result.rows[0].id;
-        returnData.username = result.rows[0].username;
-        returnData.photoURL = result.rows[0].photourl;
-        res.send(returnData);
-      })
+      .then(() => res.send({ errState: 0 }))
       .catch((e) => {
         console.log(e);
         res.send({ errState: 1 });
       });
   } else {
-    res.send({});
+    res.send({ errState: 1 });
+  }
+};
+
+const getMe = (req, res) => {
+  if (req.isAuthenticated()) {
+    res.send({ id: req.user.id, username: req.user.username, photoURL: req.user.photoURL });
+  } else {
+    res.send({ id: -1 });
   }
 };
 
