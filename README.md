@@ -2,6 +2,12 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## PostgreSQL Setup
 
+```
+brew install postgresql
+brew services start postgresql
+psql -d postgres
+```
+
 create user (dev)
 ```
 postgres=> CREATE ROLE mimicopus WITH LOGIN PASSWORD 'mimicopus';
