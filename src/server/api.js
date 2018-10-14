@@ -90,6 +90,26 @@ const loadQuestionsList = (req, res) => {
     });
 };
 
+const changeUsername = (req, res) => {
+  if (req.isAuthenticated()) {
+    const uid = req.user.id;
+    const data = req.body;
+    const { name } = data;
+    const query = {
+      text: 'UPDATE users SET username = ($1) WHERE id=($2)',
+      values: [name, uid],
+    };
+    client.query(query)
+      .then(() => res.send({ errState: 0 }))
+      .catch((e) => {
+        console.log(e);
+        res.send({ errState: 1 });
+      });
+  } else {
+    res.send({ errState: 1 });
+  }
+};
+
 const saveScore = (req, res) => {
   if (req.isAuthenticated()) {
     const data = req.body;
@@ -122,6 +142,7 @@ apiRouter.get('/api/loadQuestionsList', loadQuestionsList);
 apiRouter.post('/api/changeQuestion', changeQuestion);
 apiRouter.post('/api/deleteQuestion', deleteQuestion);
 apiRouter.post('/api/saveScore', saveScore);
+apiRouter.post('/api/changeUsername', changeUsername);
 apiRouter.get('/api/getMe', getMe);
 
 module.exports = apiRouter;

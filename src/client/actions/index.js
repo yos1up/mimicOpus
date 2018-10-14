@@ -1,7 +1,6 @@
 import actionTypes from './actionTypes';
 import Question from '../data/question';
 
-// auth
 export function openSignInDialog() {
   return {
     type: actionTypes.OPEN_SIGN_IN_DIALOG,
@@ -14,15 +13,6 @@ export function closeSignInDialog() {
   };
 }
 
-export function changeUsername(dispatch, name) {
-  /* firebase.auth().currentUser.updateProfile({
-    username: name,
-  }).then(() => {
-    dispatch(setUser(firebase.auth().currentUser));
-  }); */
-}
-
-// display
 export function changeDisplayMode(mode) {
   return {
     type: actionTypes.CHANGE_DISPLAY_MODE,
@@ -30,7 +20,6 @@ export function changeDisplayMode(mode) {
   };
 }
 
-// music
 export function clearNotes() {
   return {
     type: actionTypes.CLEAR_NOTES,
@@ -120,12 +109,6 @@ export function changeUploadedQuestion(questionId, question) {
     .then(res => res.json())
     .then(console.log)
     .catch(console.error);
-  /* const data = question.toJS();
-  data.uploadedAt = firebase.firestore.Timestamp.now();
-  data.uid = firebase.auth().currentUser.uid;
-  questionsRef
-    .doc(questionId)
-    .set(data); */
 }
 
 export function deleteUploadedQuestion(questionId) {
@@ -223,7 +206,22 @@ export function loadMe(dispatch) {
     });
 }
 
-// search
+export function changeUsername(dispatch, name) {
+  const method = 'POST';
+  const body = JSON.stringify({ name });
+  const headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
+  fetch('./api/changeUsername', { method, headers, body })
+    .then(res => res.json())
+    .then((res) => {
+      loadMe(dispatch);
+      console.log(res);
+    })
+    .catch(console.error);
+}
+
 export function setLowBPM(bpm) {
   return {
     type: actionTypes.SET_LOW_BPM,

@@ -2,18 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
+import Button from '@material-ui/core/Button';
+
 
 class Profile extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { editUserName: false };
+    this.state = {
+      tempUsername: props.username,
+    };
   }
 
   render() {
-    const { photoURL, username, changeUsername } = this.props;
-    const { editUserName } = this.state;
+    const { photoURL, changeUsername } = this.props;
+    const { tempUsername } = this.state;
     const avatarStyle = {
       position: 'absolute',
       left: 0,
@@ -38,33 +41,28 @@ class Profile extends React.Component {
             </Avatar>
           )
         }
-        {(editUserName) ? (
-          <Input
-            defaultValue={username}
-            inputProps={{
-              'aria-label': 'Description',
-            }}
-            style={{
-              position: 'absolute', top: 210, left: 10, height: 40, width: 180,
-            }}
-            onBlur={(e) => {
-              changeUsername(e.target.value);
-              this.setState({ editUserName: false });
-            }}
-          />
-        ) : (
-          <Typography
-            variant="display1"
-            style={{
-              position: 'absolute', top: 210, left: 10, width: 180,
-            }}
-            onClick={() => {
-              this.setState({ editUserName: true });
-            }}
-          >
-            {username}
-          </Typography>
-        )}
+        <Input
+          value={tempUsername}
+          inputProps={{
+            'aria-label': 'Description',
+          }}
+          style={{
+            position: 'absolute', top: 210, left: 10, height: 40, width: 180,
+          }}
+          onChange={e => this.setState({ tempUsername: e.target.value })}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          style={{
+            position: 'absolute', top: 10, left: 810, height: 40, width: 120,
+          }}
+          onClick={() => {
+            changeUsername(tempUsername);
+          }}
+        >
+          Change
+        </Button>
       </div>
     );
   }
