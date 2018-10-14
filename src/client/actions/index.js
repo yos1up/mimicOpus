@@ -180,6 +180,13 @@ export function setPhotoURL(photoURL) {
   };
 }
 
+export function setUid(uid) {
+  return {
+    type: actionTypes.SET_UID,
+    uid,
+  };
+}
+
 export function loadMe(dispatch) {
   fetch('./api/getMe', { method: 'GET' })
     .then(res => res.json())
@@ -187,10 +194,12 @@ export function loadMe(dispatch) {
       if (results.id !== -1) {
         dispatch(setUsername(results.username));
         dispatch(setPhotoURL(results.photoURL));
+        dispatch(setUid(results.id));
       } else {
         fetch('./auth/anonymous', { method: 'GET' });
         dispatch(setUsername('anonymous'));
         dispatch(setPhotoURL(''));
+        dispatch(setUid(-1));
       }
     });
 }

@@ -16,6 +16,9 @@ export default function (state = new AuthState(), action) {
     case actionTypes.SET_PHOTO_URL:
       return state.set('photoURL', action.photoURL);
 
+    case actionTypes.SET_UID:
+      return state.set('uid', action.uid);
+
     default:
       return state;
   }

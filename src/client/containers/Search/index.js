@@ -16,6 +16,7 @@ import Search from '../../components/Search';
 
 const mapStateToProps = state => ({
   questionsList: state.music.questionsList,
+  uid: state.auth.uid,
   lowBPM: state.search.lowBPM,
   highBPM: state.search.highBPM,
 });

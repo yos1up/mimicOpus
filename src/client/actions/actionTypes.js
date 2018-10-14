@@ -17,6 +17,7 @@ const actionTypes = {
   SET_QUESTION_ID: 'SET_QUESTION_ID',
   SET_USERNAME: 'SET_USERNAME',
   SET_PHOTO_URL: 'SET_PHOTO_URL',
+  SET_UID: 'SET_UID',
 };
 
 export default actionTypes;

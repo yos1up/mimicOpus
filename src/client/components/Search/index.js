@@ -81,7 +81,7 @@ class Search extends React.Component {
   render() {
     const {
       questionsList, lowBPM, highBPM, setQuestion, changeDisplayMode, setBPM, setLowBPM, setHighBPM,
-      loadQuestionsList, setQuestionId, setNotes, setTitle, deleteUploadedQuestion,
+      loadQuestionsList, setQuestionId, setNotes, setTitle, deleteUploadedQuestion, uid,
     } = this.props;
     return (
       <div id="Search">
@@ -160,7 +160,7 @@ class Search extends React.Component {
                 const k = tmpV[0];
                 const v = tmpV[1];
                 const date = `${v.uploadedAt.getFullYear()}/${v.uploadedAt.getMonth()}/${v.uploadedAt.getDate()}`;
-                const bMine = false; // firebase.auth().currentUser.uid === v.uid;
+                const bMine = (uid === v.uid);
                 return (
                   <TableRow
                     key={k}
@@ -233,6 +233,7 @@ class Search extends React.Component {
 
 Search.propTypes = {
   questionsList: PropTypes.instanceOf(Immutable.Map).isRequired,
+  uid: PropTypes.number.isRequired,
   lowBPM: PropTypes.number.isRequired,
   highBPM: PropTypes.number.isRequired,
   setQuestion: PropTypes.func.isRequired,
