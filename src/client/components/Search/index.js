@@ -233,25 +233,31 @@ class Search extends React.Component {
               })
             }
           </TableBody>
-          <IconButton
-            aria-label="Back"
-            onClick={() => {
-              this.setState({ page: page - 1 });
-              loadQuestionsList(lowBPM, highBPM, 10 * (page - 1) + 1, 10 * page);
-            }}
-          >
-            <ArrowBackIcon />
-          </IconButton>
-          <IconButton
-            aria-label="Forward"
-            onClick={() => {
-              this.setState({ page: page + 1 });
-              loadQuestionsList(lowBPM, highBPM, 10 * (page + 1) + 1, 10 * (page + 2));
-            }}
-          >
-            <ArrowForwardIcon />
-          </IconButton>
         </Table>
+        <IconButton
+          aria-label="Back"
+          onClick={() => {
+            this.setState({ page: page - 1 });
+            loadQuestionsList(lowBPM, highBPM, 10 * (page - 1) + 1, 10 * page);
+          }}
+          style={{
+            position: 'absolute', top: 10, left: 800,
+          }}
+        >
+          <ArrowBackIcon />
+        </IconButton>
+        <IconButton
+          aria-label="Forward"
+          onClick={() => {
+            this.setState({ page: page + 1 });
+            loadQuestionsList(lowBPM, highBPM, 10 * (page + 1) + 1, 10 * (page + 2));
+          }}
+          style={{
+            position: 'absolute', top: 10, left: 850,
+          }}
+        >
+          <ArrowForwardIcon />
+        </IconButton>
       </div>
     );
   }
