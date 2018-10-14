@@ -117,9 +117,16 @@ export function changeUploadedQuestion(questionId, question) {
 }
 
 export function deleteUploadedQuestion(questionId) {
-  /* questionsRef
-    .doc(questionId)
-    .delete(); */
+  const method = 'POST';
+  const body = JSON.stringify({ id: questionId });
+  const headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
+  fetch('./api/deleteQuestion', { method, headers, body })
+    .then(res => res.json())
+    .then(console.log)
+    .catch(console.error);
 }
 
 export function uploadQuestion(question) {

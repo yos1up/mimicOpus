@@ -22,6 +22,23 @@ const uploadQuestion = (req, res) => {
   }
 };
 
+const deleteQuestion = (req, res) => {
+  if (req.isAuthenticated()) {
+    const { id } = req.body;
+    console.log(req.body);
+    const query = {
+      text: 'DELETE FROM questions WHERE id = $1',
+      values: [id],
+    };
+    client.query(query)
+      .then(() => res.send({ errState: 0 }))
+      .catch((e) => {
+        console.log(e);
+        res.send({ errState: 1 });
+      });
+  }
+};
+
 const loadQuestionsList = (req, res) => {
   const urlQuery = req.query;
   if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
@@ -31,7 +48,7 @@ const loadQuestionsList = (req, res) => {
     urlQuery.highBPM = 200;
   }
   const query = {
-    text: 'SELECT * FROM questions LEFT JOIN users ON questions.uid = users.id where BPM >= $1 and BPM <= $2 ORDER BY uploadedAt',
+    text: 'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat FROM questions q LEFT JOIN users u ON q.uid = u.id where BPM >= $1 and BPM <= $2 ORDER BY uploadedAt',
     values: [urlQuery.lowBPM, urlQuery.highBPM],
   };
 
@@ -39,6 +56,7 @@ const loadQuestionsList = (req, res) => {
     .then((result) => {
       const returnData = {};
       result.rows.forEach((item) => {
+        console.log(item);
         returnData[item.id] = {
           notes: item.notes,
           bpm: item.bpm,
@@ -85,6 +103,7 @@ const getMe = (req, res) => {
 
 apiRouter.post('/api/uploadQuestion', uploadQuestion);
 apiRouter.get('/api/loadQuestionsList', loadQuestionsList);
+apiRouter.post('/api/deleteQuestion', deleteQuestion);
 apiRouter.post('/api/saveScore', saveScore);
 apiRouter.get('/api/getMe', getMe);
 
