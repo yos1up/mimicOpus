@@ -42,10 +42,10 @@ export default function (state = new MusicState(), action) {
       return state.set('questionId', action.questionId);
 
     case actionTypes.ADD_QUESTION_TO_LIST:
-      return state.update('questionsList', ql => ql.set(action.id, action.question));
+      return state.update('questionsList', ql => ql.push({ id: action.id, question: action.question }));
 
     case actionTypes.CLEAR_QUESTIONS_LIST:
-      return state.set('questionsList', Immutable.Map());
+      return state.set('questionsList', Immutable.List());
 
     default:
       return state;

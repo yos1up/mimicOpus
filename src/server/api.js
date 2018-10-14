@@ -64,23 +64,35 @@ const loadQuestionsList = (req, res) => {
   if (urlQuery.highBPM === null || urlQuery.highBPM === undefined) {
     urlQuery.highBPM = 200;
   }
+  if (urlQuery.start === null || urlQuery.start === undefined) {
+    urlQuery.start = 1;
+  }
+  if (urlQuery.stop === null || urlQuery.stop === undefined) {
+    urlQuery.stop = 10;
+  }
   const query = {
-    text: 'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat FROM questions q LEFT JOIN users u ON q.uid = u.id where BPM >= $1 and BPM <= $2 ORDER BY uploadedAt',
-    values: [urlQuery.lowBPM, urlQuery.highBPM],
+    text: 'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat '
+      + 'FROM questions q LEFT JOIN users u ON q.uid = u.id '
+      + 'WHERE BPM >= $1 and BPM <= $2 ORDER BY uploadedAt DESC LIMIT $3 OFFSET $4',
+    values: [urlQuery.lowBPM, urlQuery.highBPM,
+      urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
   };
 
   client.query(query)
     .then((result) => {
-      const returnData = {};
+      const returnData = [];
       result.rows.forEach((item) => {
-        returnData[item.id] = {
-          notes: item.notes,
-          bpm: item.bpm,
-          uid: item.uid,
-          userName: item.username,
-          title: item.title,
-          uploadedAt: item.uploadedat,
-        };
+        returnData.push({
+          id: item.id,
+          question: {
+            notes: item.notes,
+            bpm: item.bpm,
+            uid: item.uid,
+            userName: item.username,
+            title: item.title,
+            uploadedAt: item.uploadedat,
+          }
+        });
       });
       res.send(returnData);
     })

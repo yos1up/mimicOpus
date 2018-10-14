@@ -148,8 +148,8 @@ export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000) {
   fetch(`./api/loadQuestionsList?${params.toString()}`, { method })
     .then(res => res.json())
     .then((results) => {
-      Object.keys(results).forEach((key) => {
-        dispatch(addQuestionToList(key, Question.fromJS(results[key])));
+      results.forEach((item) => {
+        dispatch(addQuestionToList(item.id, Question.fromJS(item.question)));
       });
     })
     .catch(console.error);

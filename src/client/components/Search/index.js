@@ -156,20 +156,19 @@ class Search extends React.Component {
           </TableHead>
           <TableBody>
             {// TODO do not use array index
-              [...questionsList.entries()].map((tmpV) => {
-                const k = tmpV[0];
-                const v = tmpV[1];
-                const date = `${v.uploadedAt.getFullYear()}/${v.uploadedAt.getMonth()}/${v.uploadedAt.getDate()}`;
-                const bMine = (uid === v.uid);
+              [...questionsList].map((item) => {
+                const { qid, question } = item;
+                const date = `${question.uploadedAt.getFullYear()}/${question.uploadedAt.getMonth()}/${question.uploadedAt.getDate()}`;
+                const bMine = (uid === question.uid);
                 return (
                   <TableRow
-                    key={k}
+                    key={qid}
                     hover={!bMine}
                     onClick={() => {
                       if (!bMine) {
-                        setQuestion(v);
-                        setBPM(v.bpm);
-                        setQuestionId(k);
+                        setQuestion(question);
+                        setBPM(question.bpm);
+                        setQuestionId(qid);
                         changeDisplayMode(displayModes.PLAY_QUESTION);
                       }
                     }}
@@ -179,7 +178,7 @@ class Search extends React.Component {
                       <IconButton
                         aria-label="Play"
                         onClick={(e) => {
-                          Search.play(v.notes, v.bpm);
+                          Search.play(question.notes, question.bpm);
                           e.stopPropagation();
                         }}
                       >
@@ -189,10 +188,10 @@ class Search extends React.Component {
                         <IconButton
                           aria-label="Edit"
                           onClick={(e) => {
-                            setNotes(v.notes);
-                            setBPM(v.bpm);
-                            setQuestionId(k);
-                            setTitle(v.title);
+                            setNotes(question.notes);
+                            setBPM(question.bpm);
+                            setQuestionId(qid);
+                            setTitle(question.title);
                             changeDisplayMode(displayModes.EDIT_QUESTION);
                             e.stopPropagation();
                           }}
@@ -205,7 +204,7 @@ class Search extends React.Component {
                         <IconButton
                           aria-label="Delete"
                           onClick={(e) => {
-                            deleteUploadedQuestion(k);
+                            deleteUploadedQuestion(qid);
                             e.stopPropagation();
                           }}
                         >
@@ -215,10 +214,10 @@ class Search extends React.Component {
                       }
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {v.title}
+                      {question.title}
                     </TableCell>
-                    <TableCell>{v.bpm}</TableCell>
-                    <TableCell>{v.userName}</TableCell>
+                    <TableCell>{question.bpm}</TableCell>
+                    <TableCell>{question.userName}</TableCell>
                     <TableCell>{date}</TableCell>
                   </TableRow>
                 );
@@ -232,7 +231,7 @@ class Search extends React.Component {
 }
 
 Search.propTypes = {
-  questionsList: PropTypes.instanceOf(Immutable.Map).isRequired,
+  questionsList: PropTypes.instanceOf(Immutable.List).isRequired,
   uid: PropTypes.number.isRequired,
   lowBPM: PropTypes.number.isRequired,
   highBPM: PropTypes.number.isRequired,
