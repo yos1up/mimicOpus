@@ -22,10 +22,27 @@ const uploadQuestion = (req, res) => {
   }
 };
 
+const changeQuestion = (req, res) => {
+  if (req.isAuthenticated()) {
+    const data = req.body;
+    const query = {
+      text: 'UPDATE questions SET notes = ($1), bpm = ($2), title = ($3) WHERE id=($4)',
+      values: [JSON.stringify(data.notes), data.bpm, data.title, data.id],
+    };
+    client.query(query)
+      .then(() => res.send({ errState: 0 }))
+      .catch((e) => {
+        console.log(e);
+        res.send({ errState: 1 });
+      });
+  } else {
+    res.send({ errState: 1 });
+  }
+};
+
 const deleteQuestion = (req, res) => {
   if (req.isAuthenticated()) {
     const { id } = req.body;
-    console.log(req.body);
     const query = {
       text: 'DELETE FROM questions WHERE id = $1',
       values: [id],
@@ -56,7 +73,6 @@ const loadQuestionsList = (req, res) => {
     .then((result) => {
       const returnData = {};
       result.rows.forEach((item) => {
-        console.log(item);
         returnData[item.id] = {
           notes: item.notes,
           bpm: item.bpm,
@@ -103,6 +119,7 @@ const getMe = (req, res) => {
 
 apiRouter.post('/api/uploadQuestion', uploadQuestion);
 apiRouter.get('/api/loadQuestionsList', loadQuestionsList);
+apiRouter.post('/api/changeQuestion', changeQuestion);
 apiRouter.post('/api/deleteQuestion', deleteQuestion);
 apiRouter.post('/api/saveScore', saveScore);
 apiRouter.get('/api/getMe', getMe);

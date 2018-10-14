@@ -22,7 +22,7 @@ mimicopus=> CREATE TABLE users (id SERIAL, provider TEXT, idByProvider TEXT, use
 
 grant (dev)
 ```
-mimicopus=> GRANT SELECT, INSERT, DELETE ON questions TO mimicopus;
+mimicopus=> GRANT SELECT, INSERT, DELETE, UPDATE ON questions TO mimicopus;
 mimicopus=> GRANT USAGE, SELECT ON SEQUENCE questions_id_seq TO mimicopus;
 mimicopus=> GRANT SELECT, INSERT, DELETE ON scores TO mimicopus;
 mimicopus=> GRANT USAGE, SELECT ON SEQUENCE scores_id_seq TO mimicopus;

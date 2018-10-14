@@ -108,6 +108,18 @@ export function clearQuestionsList() {
 }
 
 export function changeUploadedQuestion(questionId, question) {
+  const obj = question.toJS();
+  obj.id = questionId;
+  const method = 'POST';
+  const body = JSON.stringify(obj);
+  const headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
+  fetch('./api/changeQuestion', { method, headers, body })
+    .then(res => res.json())
+    .then(console.log)
+    .catch(console.error);
   /* const data = question.toJS();
   data.uploadedAt = firebase.firestore.Timestamp.now();
   data.uid = firebase.auth().currentUser.uid;
