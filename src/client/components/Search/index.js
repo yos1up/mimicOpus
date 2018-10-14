@@ -10,6 +10,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
@@ -73,9 +75,15 @@ class Search extends React.Component {
     melody.start(Tone.now()); // 先に Tone.Transport.start() してある必要がある．
   }
 
+  constructor(props) {
+    super(props);
+    this.state = { page: 0 };
+  }
+
   componentDidMount() {
     const { lowBPM, highBPM, loadQuestionsList } = this.props;
-    loadQuestionsList(lowBPM, highBPM);
+    const { page } = this.state;
+    loadQuestionsList(lowBPM, highBPM, 10 * page + 1, 10 * (page + 1));
   }
 
   render() {
@@ -83,6 +91,7 @@ class Search extends React.Component {
       questionsList, lowBPM, highBPM, setQuestion, changeDisplayMode, setBPM, setLowBPM, setHighBPM,
       loadQuestionsList, setQuestionId, setNotes, setTitle, deleteUploadedQuestion, uid,
     } = this.props;
+    const { page } = this.state;
     return (
       <div id="Search">
         <div id="bpm picker">
@@ -102,7 +111,7 @@ class Search extends React.Component {
               value={lowBPM}
               onChange={(e) => {
                 setLowBPM(e.target.value);
-                loadQuestionsList(e.target.value, highBPM);
+                loadQuestionsList(e.target.value, highBPM, 10 * page + 1, 10 * (page + 1));
               }}
               displayEmpty
             >
@@ -127,7 +136,7 @@ class Search extends React.Component {
               value={highBPM}
               onChange={(e) => {
                 setHighBPM(e.target.value);
-                loadQuestionsList(lowBPM, e.target.value);
+                loadQuestionsList(lowBPM, e.target.value, 10 * page + 1, 10 * (page + 1));
               }}
               displayEmpty
             >
@@ -224,6 +233,24 @@ class Search extends React.Component {
               })
             }
           </TableBody>
+          <IconButton
+            aria-label="Back"
+            onClick={() => {
+              this.setState({ page: page - 1 });
+              loadQuestionsList(lowBPM, highBPM, 10 * (page - 1) + 1, 10 * page);
+            }}
+          >
+            <ArrowBackIcon />
+          </IconButton>
+          <IconButton
+            aria-label="Forward"
+            onClick={() => {
+              this.setState({ page: page + 1 });
+              loadQuestionsList(lowBPM, highBPM, 10 * (page + 1) + 1, 10 * (page + 2));
+            }}
+          >
+            <ArrowForwardIcon />
+          </IconButton>
         </Table>
       </div>
     );

@@ -138,13 +138,15 @@ export function uploadQuestion(question) {
     .catch(console.error);
 }
 
-export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000) {
+export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000, start = 1, stop = 10) {
   dispatch(clearQuestionsList());
 
   const method = 'GET';
   const params = new URLSearchParams();
   params.set('lowBPM', lowBPM);
   params.set('highBPM', highBPM);
+  params.set('start', start);
+  params.set('stop', stop);
   fetch(`./api/loadQuestionsList?${params.toString()}`, { method })
     .then(res => res.json())
     .then((results) => {

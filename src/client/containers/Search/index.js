@@ -29,7 +29,7 @@ const mapDispatchToProps = dispatch => ({
   setTitle: title => dispatch(setTitle(title)),
   setLowBPM: bpm => dispatch(setLowBPM(bpm)),
   setHighBPM: bpm => dispatch(setHighBPM(bpm)),
-  loadQuestionsList: (lowBPM, highBPM) => loadQuestionsList(dispatch, lowBPM, highBPM),
+  loadQuestionsList: (lowBPM, highBPM, start, stop) => loadQuestionsList(dispatch, lowBPM, highBPM, start, stop),
   setQuestionId: questionId => dispatch(setQuestionId(questionId)),
   deleteUploadedQuestion,
 });
