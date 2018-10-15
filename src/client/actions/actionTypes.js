@@ -18,6 +18,7 @@ const actionTypes = {
   SET_USERNAME: 'SET_USERNAME',
   SET_PHOTO_URL: 'SET_PHOTO_URL',
   SET_UID: 'SET_UID',
+  SET_PROVIDER: 'SET_PROVIDER',
 };
 
 export default actionTypes;

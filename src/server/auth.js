@@ -66,7 +66,9 @@ passport.deserializeUser((id, done) => {
   client.query(query)
     .then((result) => {
       const row = result.rows[0];
-      done(null, { id: row.id, username: row.username, photoURL: row.photourl });
+      done(null, {
+        id: row.id, username: row.username, photoURL: row.photourl, provider: row.provider,
+      });
     });
 });
 

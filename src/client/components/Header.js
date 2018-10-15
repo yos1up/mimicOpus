@@ -36,7 +36,7 @@ class Header extends React.Component {
 
   render() {
     const {
-      mode, photoURL, changeDisplayMode, openSignInDialog,
+      mode, photoURL, changeDisplayMode, openSignInDialog, provider,
     } = this.props;
     const { openUserMenu } = this.state;
     return (
@@ -70,7 +70,7 @@ class Header extends React.Component {
             >
               <Tab label="ホーム" value={displayModes.HOME} />
               <Tab label="検索" value={displayModes.SEARCH} />
-              <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} />
+              <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} disabled={provider === 'anonymous'} />
             </Tabs>
             {(photoURL !== null && photoURL !== undefined && photoURL !== '')
               ? (
@@ -146,6 +146,7 @@ class Header extends React.Component {
 Header.propTypes = {
   mode: PropTypes.string.isRequired,
   photoURL: PropTypes.string.isRequired,
+  provider: PropTypes.string.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
   openSignInDialog: PropTypes.func.isRequired,
 };

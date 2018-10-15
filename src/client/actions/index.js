@@ -191,6 +191,13 @@ export function setUid(uid) {
   };
 }
 
+export function setProvider(provider) {
+  return {
+    type: actionTypes.SET_PROVIDER,
+    provider,
+  };
+}
+
 export function loadMe(dispatch) {
   fetch('./api/getMe', { method: 'GET' })
     .then(res => res.json())
@@ -199,11 +206,13 @@ export function loadMe(dispatch) {
         dispatch(setUsername(results.username));
         dispatch(setPhotoURL(results.photoURL));
         dispatch(setUid(results.id));
+        dispatch(setProvider(results.provider));
       } else {
         fetch('./auth/anonymous', { method: 'GET' });
         dispatch(setUsername('anonymous'));
         dispatch(setPhotoURL(''));
         dispatch(setUid(-1));
+        dispatch(setProvider('anonymous'));
       }
     });
 }

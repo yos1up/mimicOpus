@@ -19,6 +19,9 @@ export default function (state = new AuthState(), action) {
     case actionTypes.SET_UID:
       return state.set('uid', action.uid);
 
+    case actionTypes.SET_PROVIDER:
+      return state.set('provider', action.provider);
+
     default:
       return state;
   }
