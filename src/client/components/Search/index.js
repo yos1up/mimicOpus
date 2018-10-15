@@ -199,7 +199,7 @@ class Search extends React.Component {
                           onClick={(e) => {
                             setNotes(question.notes);
                             setBPM(question.bpm);
-                            setQuestionId(qid);
+                            setQuestionId(id);
                             setTitle(question.title);
                             changeDisplayMode(displayModes.EDIT_QUESTION);
                             e.stopPropagation();
@@ -213,7 +213,7 @@ class Search extends React.Component {
                         <IconButton
                           aria-label="Delete"
                           onClick={(e) => {
-                            deleteUploadedQuestion(qid);
+                            deleteUploadedQuestion(id);
                             e.stopPropagation();
                           }}
                         >
