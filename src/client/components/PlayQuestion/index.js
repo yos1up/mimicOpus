@@ -151,6 +151,7 @@ class PlayQuestion extends React.Component {
 
   evaluateAndReport(qNotes, aNotes) {
     const { questionId, saveScore } = this.props;
+    console.log(questionId);
     const score = PlayQuestion.evaluateAnswer(qNotes, aNotes);
     let message = '';
     message += `YOUR SCORE: ${score}\n`;

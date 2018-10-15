@@ -166,18 +166,18 @@ class Search extends React.Component {
           <TableBody>
             {// TODO do not use array index
               [...questionsList].map((item) => {
-                const { qid, question } = item;
+                const { id, question } = item;
                 const date = `${question.uploadedAt.getFullYear()}/${question.uploadedAt.getMonth()}/${question.uploadedAt.getDate()}`;
                 const bMine = (uid === question.uid);
                 return (
                   <TableRow
-                    key={qid}
+                    key={id}
                     hover={!bMine}
                     onClick={() => {
                       if (!bMine) {
                         setQuestion(question);
                         setBPM(question.bpm);
-                        setQuestionId(qid);
+                        setQuestionId(id);
                         changeDisplayMode(displayModes.PLAY_QUESTION);
                       }
                     }}
