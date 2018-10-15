@@ -8,8 +8,8 @@ const uploadQuestion = (req, res) => {
   if (req.isAuthenticated()) {
     const data = req.body;
     const query = {
-      text: 'INSERT INTO questions(notes, bpm, uid, title, uploadedAt) VALUES($1, $2, $3, $4, $5)',
-      values: [JSON.stringify(data.notes), data.bpm, req.user.id, data.title, new Date()],
+      text: 'INSERT INTO questions(notes, bpm, uid, title, uploadedAt, rating) VALUES($1, $2, $3, $4, $5, $6)',
+      values: [JSON.stringify(data.notes), data.bpm, req.user.id, data.title, new Date(), null],
     };
     client.query(query)
       .then(() => res.send({ errState: 0 }))

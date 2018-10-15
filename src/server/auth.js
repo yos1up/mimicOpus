@@ -29,8 +29,8 @@ passport.serializeUser((user, done) => {
   let query;
   if (user === 'anonymous') {
     query = {
-      text: 'INSERT INTO users(provider, idByProvider, username, photoURL) VALUES($1, $2, $3, $4) RETURNING *',
-      values: ['anonymous', '', 'anonymous', ''],
+      text: 'INSERT INTO users(provider, idByProvider, username, photoURL, totalscore, rating) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
+      values: ['anonymous', '', 'anonymous', '', 0, null],
     };
     client.query(query)
       .then((result2) => {
@@ -45,8 +45,8 @@ passport.serializeUser((user, done) => {
       .then((result) => {
         if (result.rows.length === 0) {
           query = {
-            text: 'INSERT INTO users(provider, idByProvider, username, photoURL) VALUES($1, $2, $3, $4) RETURNING *',
-            values: [user.provider, user.id, user.displayName, user.photos[0].value],
+            text: 'INSERT INTO users(provider, idByProvider, username, photoURL, totalscore, rating) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
+            values: [user.provider, user.id, user.displayName, user.photos[0].value, 0, null],
           };
           client.query(query)
             .then((result2) => {
