@@ -88,5 +88,10 @@ authRouter.get('/auth/anonymous',
   (req, res) => {
     res.send({});
   });
+authRouter.get('/auth/logout',
+  (req, res) => {
+    req.logout();
+    res.redirect('/');
+  });
 
 module.exports = authRouter;

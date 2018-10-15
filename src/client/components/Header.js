@@ -124,8 +124,7 @@ class Header extends React.Component {
                         </MenuItem>
                         <MenuItem onClick={() => {
                           this.handleCloseUserMenu();
-                          // エラー処理
-                          // firebase.auth().signOut();
+                          location.href = '/auth/logout';
                         }}
                         >
                           Logout
