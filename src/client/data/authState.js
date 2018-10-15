@@ -6,6 +6,7 @@ const AuthState = Immutable.Record({
   photoURL: '',
   provider: 'anonymous',
   uid: '',
+  bInvalidUsername: false,
 });
 
 export default AuthState;

@@ -4,6 +4,7 @@ import Avatar from '@material-ui/core/Avatar';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 
 class Profile extends React.Component {
@@ -15,7 +16,7 @@ class Profile extends React.Component {
   }
 
   render() {
-    const { photoURL, changeUsername } = this.props;
+    const { photoURL, changeUsername, bInvalidUsername } = this.props;
     const { tempUsername } = this.state;
     const avatarStyle = {
       position: 'absolute',
@@ -63,6 +64,16 @@ class Profile extends React.Component {
         >
           Change
         </Button>
+        {(bInvalidUsername) ? (
+          <Typography
+            color="error"
+            style={{
+              position: 'absolute', top: 0, left: 300, width: 180,
+            }}
+          >
+            duplicated user name!
+          </Typography>
+        ) : null}
       </div>
     );
   }
@@ -71,6 +82,7 @@ class Profile extends React.Component {
 Profile.propTypes = {
   photoURL: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
+  bInvalidUsername: PropTypes.bool.isRequired,
   changeUsername: PropTypes.func.isRequired,
 };
 

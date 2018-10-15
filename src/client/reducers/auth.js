@@ -22,6 +22,9 @@ export default function (state = new AuthState(), action) {
     case actionTypes.SET_PROVIDER:
       return state.set('provider', action.provider);
 
+    case actionTypes.SET_B_INVALID_USERNAME:
+      return state.set('bInvalidUsername', action.bInvalidUsername);
+
     default:
       return state;
   }

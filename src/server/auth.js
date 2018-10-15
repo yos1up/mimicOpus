@@ -46,7 +46,7 @@ passport.serializeUser((user, done) => {
         if (result.rows.length === 0) {
           query = {
             text: 'INSERT INTO users(provider, idByProvider, username, photoURL, totalscore, rating) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
-            values: [user.provider, user.id, user.displayName, user.photos[0].value, 0, null],
+            values: [user.provider, user.id, 'anonymous', user.photos[0].value, 0, null],
           };
           client.query(query)
             .then((result2) => {

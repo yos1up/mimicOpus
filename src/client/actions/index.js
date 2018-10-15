@@ -198,6 +198,13 @@ export function setProvider(provider) {
   };
 }
 
+export function setBInvalidUsername(bInvalidUsername) {
+  return {
+    type: actionTypes.SET_B_INVALID_USERNAME,
+    bInvalidUsername,
+  };
+}
+
 export function loadMe(dispatch) {
   fetch('./api/getMe', { method: 'GET' })
     .then(res => res.json())
@@ -227,8 +234,12 @@ export function changeUsername(dispatch, name) {
   fetch('./api/changeUsername', { method, headers, body })
     .then(res => res.json())
     .then((res) => {
-      loadMe(dispatch);
-      console.log(res);
+      if (res.errState === 2) {
+        dispatch(setBInvalidUsername(true));
+      } else {
+        dispatch(setBInvalidUsername(false));
+        loadMe(dispatch);
+      }
     })
     .catch(console.error);
 }
