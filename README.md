@@ -26,11 +26,6 @@ postgres=> CREATE DATABASE mimicopus;
 $ psql mimicopus < mimicopus_dev.sql
 ```
 
-create database
-```
-postgres=> CREATE DATABASE mimicopus;
-```
-
 ## Available Scripts
 
 In the project directory, you can run:
