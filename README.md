@@ -13,27 +13,22 @@ create user (dev)
 postgres=> CREATE ROLE mimicopus WITH LOGIN PASSWORD 'mimicopus';
 ```
 
+setup for dev
+```
+postgres=> CREATE DATABASE mimicopus;
+$ psql mimicopus < mimicopus_dev.sql
+```
+
+reset setup for dev
+```
+postgres=> DROP DATABASE mimicopus;
+postgres=> CREATE DATABASE mimicopus;
+$ psql mimicopus < mimicopus_dev.sql
+```
+
 create database
 ```
 postgres=> CREATE DATABASE mimicopus;
-```
-
-create table
-```
-$ psql -d mimicopus
-mimicopus=> CREATE TABLE questions (id SERIAL, notes JSON, bpm REAL, uid INTEGER, title TEXT, uploadedAt TIMESTAMP, rating REAL);
-mimicopus=> CREATE TABLE scores (id SERIAL, qid INTEGER, uid INTEGER, score REAL);
-mimicopus=> CREATE TABLE users (id SERIAL, provider TEXT, idByProvider TEXT, username TEXT, photoURL TEXT, totalscore INTEGER, rating REAL);
-```
-
-grant (dev)
-```
-mimicopus=> GRANT SELECT, INSERT, DELETE, UPDATE ON questions TO mimicopus;
-mimicopus=> GRANT USAGE, SELECT ON SEQUENCE questions_id_seq TO mimicopus;
-mimicopus=> GRANT SELECT, INSERT, DELETE ON scores TO mimicopus;
-mimicopus=> GRANT USAGE, SELECT ON SEQUENCE scores_id_seq TO mimicopus;
-mimicopus=> GRANT SELECT, INSERT, DELETE, UPDATE ON users TO mimicopus;
-mimicopus=> GRANT USAGE, SELECT ON SEQUENCE users_id_seq TO mimicopus;
 ```
 
 ## Available Scripts
