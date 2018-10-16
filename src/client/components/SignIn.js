@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
+import GoogleButton from 'react-google-button';
 
 
 function SignIn({ open, closeSignInDialog }) {
@@ -10,7 +11,12 @@ function SignIn({ open, closeSignInDialog }) {
     <Dialog open={open} onClose={() => closeSignInDialog()}>
       <DialogTitle id="simple-dialog-title">Sign In</DialogTitle>
       <DialogContent>
-        <a href="/auth/google">Google でログインする</a>
+        <GoogleButton
+          type="light"
+          onClick={() => {
+            location.href = '/auth/google';
+          }}
+        />
       </DialogContent>
     </Dialog>
   );
