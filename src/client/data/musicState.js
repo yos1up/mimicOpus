@@ -7,6 +7,7 @@ const MusicState = Immutable.Record({
   pitchRange: [60, 72],
   question: new Question({}),
   questionsList: Immutable.List(),
+  newQuestionsList: Immutable.List(),
   bpm: 120,
   title: '',
   questionId: '',

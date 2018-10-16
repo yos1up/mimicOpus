@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import SignIn from '../containers/SignIn';
 import Header from '../containers/Header';
 
+import Home from '../containers/Home';
 import EditQuestion from '../containers/EditQuestion';
 import MakeQuestion from '../containers/MakeQuestion';
 import PlayQuestion from '../containers/PlayQuestion';
@@ -37,6 +38,7 @@ class App extends React.Component {
             top: 50,
           }}
         >
+          {(mode === displayModes.HOME) ? (<Home />) : null}
           {(mode === displayModes.MAKE_QUESTION) ? (<MakeQuestion />) : null}
           {(mode === displayModes.PLAY_QUESTION) ? (<PlayQuestion />) : null}
           {(mode === displayModes.EDIT_QUESTION) ? (<EditQuestion />) : null}

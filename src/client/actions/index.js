@@ -157,6 +157,36 @@ export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000, start = 
     .catch(console.error);
 }
 
+export function addQuestionToNewList(id, question) {
+  return {
+    type: actionTypes.ADD_QUESTION_TO_NEW_LIST,
+    id,
+    question,
+  };
+}
+
+export function clearNewQuestionsList() {
+  return {
+    type: actionTypes.CLEAR_NEW_QUESTIONS_LIST,
+  };
+}
+
+export function loadNewQuestionsList(dispatch) {
+  dispatch(clearNewQuestionsList());
+  const method = 'GET';
+  const params = new URLSearchParams();
+  params.set('start', 1);
+  params.set('stop', 4);
+  fetch(`./api/loadQuestionsList?${params.toString()}`, { method })
+    .then(res => res.json())
+    .then((results) => {
+      results.forEach((item) => {
+        dispatch(addQuestionToNewList(item.id, Question.fromJS(item.question)));
+      });
+    })
+    .catch(console.error);
+}
+
 export function saveScore(qid, score) {
   const method = 'POST';
   const body = JSON.stringify({ qid, uid: 0, score });
