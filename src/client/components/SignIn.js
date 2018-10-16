@@ -13,6 +13,7 @@ function SignIn({ open, closeSignInDialog }) {
       <DialogContent>
         <GoogleButton
           type="light"
+          label="Googleでサインイン"
           onClick={() => {
             location.href = '/auth/google';
           }}
