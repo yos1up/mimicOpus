@@ -13,6 +13,18 @@ export function closeSignInDialog() {
   };
 }
 
+export function openLisenceDialog() {
+  return {
+    type: actionTypes.OPEN_LISENCE_DIALOG,
+  };
+}
+
+export function closeLisenceDialog() {
+  return {
+    type: actionTypes.CLOSE_LISENCE_DIALOG,
+  };
+}
+
 export function changeDisplayMode(mode) {
   return {
     type: actionTypes.CHANGE_DISPLAY_MODE,

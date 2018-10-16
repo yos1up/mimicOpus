@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import SignIn from '../containers/SignIn';
+import Lisence from '../containers/Lisence';
 import Header from '../containers/Header';
 
 import Home from '../containers/Home';
@@ -46,6 +47,7 @@ class App extends React.Component {
           {(mode === displayModes.USER) ? (<Profile />) : null}
         </div>
         <SignIn />
+        <Lisence />
       </div>
     );
   }
