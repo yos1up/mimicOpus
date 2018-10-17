@@ -81,7 +81,7 @@ class Home extends React.Component {
             position: 'absolute', top: 20, left: 10, width: 500,
           }}
         >
-          New Questions
+          新しい質問
         </Typography>
         {
           [...newQuestionsList].map((item, i) => {

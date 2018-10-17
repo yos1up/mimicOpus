@@ -9,7 +9,7 @@ import GoogleButton from 'react-google-button';
 function SignIn({ open, closeSignInDialog }) {
   return (
     <Dialog open={open} onClose={() => closeSignInDialog()}>
-      <DialogTitle id="simple-dialog-title">Sign In</DialogTitle>
+      <DialogTitle id="simple-dialog-title">サインイン</DialogTitle>
       <DialogContent>
         <GoogleButton
           type="light"

@@ -13,8 +13,6 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import IconButton from '@material-ui/core/IconButton';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
@@ -117,7 +115,7 @@ class Search extends React.Component {
                 position: 'absolute', top: 0, left: 0, width: 180,
               }}
             >
-              Title
+              タイトル
             </Typography>
             <Input
               value={searchTitle}
@@ -196,7 +194,7 @@ class Search extends React.Component {
                 position: 'absolute', top: 0, left: 0, width: 180,
               }}
             >
-              User
+              ユーザー
             </Typography>
             <Input
               value={searchUser}
@@ -222,7 +220,7 @@ class Search extends React.Component {
               );
             }}
           >
-            Search
+            検索
           </Button>
         </Paper>
         <Table
@@ -236,10 +234,10 @@ class Search extends React.Component {
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell>Questions</TableCell>
+              <TableCell>タイトル</TableCell>
               <TableCell>BPM</TableCell>
-              <TableCell>User</TableCell>
-              <TableCell>uploadedAt</TableCell>
+              <TableCell>ユーザー</TableCell>
+              <TableCell>作成日</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

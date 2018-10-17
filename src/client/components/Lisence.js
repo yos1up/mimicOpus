@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 function Lisence({ open, closeLisenceDialog }) {
   return (
     <Dialog open={open} onClose={() => closeLisenceDialog()}>
-      <DialogTitle id="simple-dialog-title">Lisence & Credit</DialogTitle>
+      <DialogTitle id="simple-dialog-title">ライセンス&クレジット</DialogTitle>
       <DialogContent>
         <Typography>
           yos1upとmarshiが頑張って開発したよ。

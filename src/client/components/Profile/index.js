@@ -62,7 +62,7 @@ class Profile extends React.Component {
             changeUsername(tempUsername);
           }}
         >
-          Change
+          変更
         </Button>
         {(bInvalidUsername) ? (
           <Typography
@@ -71,7 +71,7 @@ class Profile extends React.Component {
               position: 'absolute', top: 0, left: 300, width: 180,
             }}
           >
-            duplicated user name!
+            ユーザーネームが重複しています
           </Typography>
         ) : null}
       </div>

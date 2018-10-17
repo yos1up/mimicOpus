@@ -113,28 +113,28 @@ class Header extends React.Component {
                           changeDisplayMode(displayModes.USER);
                         }}
                         >
-                          Profile
+                          プロフィール
                         </MenuItem>
                         <MenuItem onClick={() => {
                           this.handleCloseUserMenu();
                           openSignInDialog();
                         }}
                         >
-                          Signin
+                          サインイン
                         </MenuItem>
                         <MenuItem onClick={() => {
                           this.handleCloseUserMenu();
                           openLisenceDialog();
                         }}
                         >
-                          Lisence & Credit
+                          ライセンス&クレジット
                         </MenuItem>
                         <MenuItem onClick={() => {
                           this.handleCloseUserMenu();
                           location.href = '/auth/logout';
                         }}
                         >
-                          Logout
+                          ログアウト
                         </MenuItem>
                       </MenuList>
                     </ClickAwayListener>
