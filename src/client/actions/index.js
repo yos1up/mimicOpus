@@ -150,7 +150,7 @@ export function uploadQuestion(question) {
     .catch(console.error);
 }
 
-export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000, start = 1, stop = 10) {
+export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000, start = 1, stop = 10, title = '') {
   dispatch(clearQuestionsList());
 
   const method = 'GET';
@@ -159,6 +159,7 @@ export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000, start = 
   params.set('highBPM', highBPM);
   params.set('start', start);
   params.set('stop', stop);
+  params.set('title', title);
   fetch(`./api/loadQuestionsList?${params.toString()}`, { method })
     .then(res => res.json())
     .then((results) => {

@@ -33,8 +33,8 @@ const mapDispatchToProps = dispatch => ({
   setTitle: title => dispatch(setTitle(title)),
   setLowBPM: bpm => dispatch(setLowBPM(bpm)),
   setHighBPM: bpm => dispatch(setHighBPM(bpm)),
-  loadQuestionsList: (lowBPM, highBPM, start, stop) => loadQuestionsList(
-    dispatch, lowBPM, highBPM, start, stop
+  loadQuestionsList: (lowBPM, highBPM, start, stop, title) => loadQuestionsList(
+    dispatch, lowBPM, highBPM, start, stop, title,
   ),
   setSearchTitle: searchTitle => dispatch(setSearchTitle(searchTitle)),
   setSearchUser: searchUser => dispatch(setSearchUser(searchUser)),

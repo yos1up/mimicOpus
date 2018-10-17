@@ -70,10 +70,15 @@ const loadQuestionsList = (req, res) => {
   if (urlQuery.stop === null || urlQuery.stop === undefined) {
     urlQuery.stop = 10;
   }
+  if (urlQuery.title === null || urlQuery.title === undefined) {
+    urlQuery.title = '';
+  }
   const query = {
-    text: 'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat '
+    text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat '
       + 'FROM questions q LEFT JOIN users u ON q.uid = u.id '
-      + 'WHERE BPM >= $1 and BPM <= $2 ORDER BY uploadedAt DESC LIMIT $3 OFFSET $4',
+      + 'WHERE BPM >= $1 and BPM <= $2 and title LIKE \'%'}${
+      urlQuery.title
+    }%' ORDER BY uploadedAt DESC LIMIT $3 OFFSET $4`,
     values: [urlQuery.lowBPM, urlQuery.highBPM,
       urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
   };

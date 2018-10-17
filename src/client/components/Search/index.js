@@ -212,7 +212,7 @@ class Search extends React.Component {
               position: 'absolute', top: 50, left: 810, height: 40, width: 120,
             }}
             onClick={() => {
-              loadQuestionsList(lowBPM, highBPM, 10 * page + 1, 10 * (page + 1));
+              loadQuestionsList(lowBPM, highBPM, 10 * page + 1, 10 * (page + 1), searchTitle);
             }}
           >
             Search
@@ -310,7 +310,7 @@ class Search extends React.Component {
               aria-label="Back"
               onClick={() => {
                 this.setState({ page: page - 1 });
-                loadQuestionsList(lowBPM, highBPM, 10 * (page - 1) + 1, 10 * page);
+                loadQuestionsList(lowBPM, highBPM, 10 * (page - 1) + 1, 10 * page, searchTitle);
               }}
               style={{
                 top: 10, left: 800,
@@ -322,7 +322,9 @@ class Search extends React.Component {
               aria-label="Forward"
               onClick={() => {
                 this.setState({ page: page + 1 });
-                loadQuestionsList(lowBPM, highBPM, 10 * (page + 1) + 1, 10 * (page + 2));
+                loadQuestionsList(
+                  lowBPM, highBPM, 10 * (page + 1) + 1, 10 * (page + 2), searchTitle,
+                );
               }}
               style={{
                 top: 10, left: 850,
