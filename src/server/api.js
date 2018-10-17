@@ -73,12 +73,20 @@ const loadQuestionsList = (req, res) => {
   if (urlQuery.title === null || urlQuery.title === undefined) {
     urlQuery.title = '';
   }
+  if (urlQuery.user === null || urlQuery.user === undefined) {
+    urlQuery.user = '';
+  }
+  if (urlQuery.user === '') {
+    urlQuery.user = '%';
+  }
   const query = {
     text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat '
       + 'FROM questions q LEFT JOIN users u ON q.uid = u.id '
-      + 'WHERE BPM >= $1 and BPM <= $2 and title LIKE \'%'}${
+      + 'WHERE q.bpm >= $1 and q.bpm <= $2 and q.title LIKE \'%'}${
       urlQuery.title
-    }%' ORDER BY uploadedAt DESC LIMIT $3 OFFSET $4`,
+    }${'%\' and u.username LIKE \''
+    }${urlQuery.user
+    }${'\' ORDER BY q.uploadedat DESC LIMIT $3 OFFSET $4'}`,
     values: [urlQuery.lowBPM, urlQuery.highBPM,
       urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
   };
