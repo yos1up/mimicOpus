@@ -299,3 +299,17 @@ export function setHighBPM(bpm) {
     bpm,
   };
 }
+
+export function setSearchTitle(searchTitle) {
+  return {
+    type: actionTypes.SET_SEARCH_TITLE,
+    searchTitle,
+  };
+}
+
+export function setSearchUser(searchUser) {
+  return {
+    type: actionTypes.SET_SEARCH_USER,
+    searchUser,
+  };
+}

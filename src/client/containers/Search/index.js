@@ -11,6 +11,8 @@ import {
   loadQuestionsList,
   setQuestionId,
   deleteUploadedQuestion,
+  setSearchTitle,
+  setSearchUser,
 } from '../../actions';
 import Search from '../../components/Search';
 
@@ -19,6 +21,8 @@ const mapStateToProps = state => ({
   uid: state.auth.uid,
   lowBPM: state.search.lowBPM,
   highBPM: state.search.highBPM,
+  searchTitle: state.search.searchTitle,
+  searchUser: state.search.searchUser,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -29,7 +33,11 @@ const mapDispatchToProps = dispatch => ({
   setTitle: title => dispatch(setTitle(title)),
   setLowBPM: bpm => dispatch(setLowBPM(bpm)),
   setHighBPM: bpm => dispatch(setHighBPM(bpm)),
-  loadQuestionsList: (lowBPM, highBPM, start, stop) => loadQuestionsList(dispatch, lowBPM, highBPM, start, stop),
+  loadQuestionsList: (lowBPM, highBPM, start, stop) => loadQuestionsList(
+    dispatch, lowBPM, highBPM, start, stop
+  ),
+  setSearchTitle: searchTitle => dispatch(setSearchTitle(searchTitle)),
+  setSearchUser: searchUser => dispatch(setSearchUser(searchUser)),
   setQuestionId: questionId => dispatch(setQuestionId(questionId)),
   deleteUploadedQuestion,
 });

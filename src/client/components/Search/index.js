@@ -3,11 +3,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Tone from 'tone';
 
+import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
 import IconButton from '@material-ui/core/IconButton';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -18,6 +20,8 @@ import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Input from '@material-ui/core/Input';
+import Button from '@material-ui/core/Button';
 
 import displayModes from '../../data/displayModes';
 
@@ -88,66 +92,136 @@ class Search extends React.Component {
     const {
       questionsList, lowBPM, highBPM, setQuestion, changeDisplayMode, setBPM, setLowBPM, setHighBPM,
       loadQuestionsList, setQuestionId, setNotes, setTitle, deleteUploadedQuestion, uid,
+      searchTitle, setSearchTitle, searchUser, setSearchUser,
     } = this.props;
     const { page } = this.state;
     return (
       <div id="Search">
-        <div id="bpm picker">
-          <Typography
+        <Paper
+          style={{
+            position: 'absolute', top: 0, left: 0, width: 1000, height: 100,
+          }}
+        >
+          <div
+            id="search title input"
             style={{
-              position: 'absolute', top: 0, left: 10, width: 180,
+              position: 'absolute', top: 20, left: 10,
             }}
           >
-            BPM
-          </Typography>
-          <FormControl
-            style={{
-              position: 'absolute', top: 20, left: 10, width: 100,
-            }}
-          >
-            <Select
-              value={lowBPM}
-              onChange={(e) => {
-                setLowBPM(e.target.value);
-                loadQuestionsList(e.target.value, highBPM, 10 * page + 1, 10 * (page + 1));
+            <Typography
+              style={{
+                position: 'absolute', top: 0, left: 0, width: 180,
               }}
-              displayEmpty
             >
-              <MenuItem value={60}>60</MenuItem>
-              <MenuItem value={70}>70</MenuItem>
-              <MenuItem value={80}>80</MenuItem>
-            </Select>
-          </FormControl>
-          <Typography
-            style={{
-              position: 'absolute', top: 30, left: 120, width: 20,
-            }}
-          >
-            ~
-          </Typography>
-          <FormControl
-            style={{
-              position: 'absolute', top: 20, left: 140, width: 100,
-            }}
-          >
-            <Select
-              value={highBPM}
-              onChange={(e) => {
-                setHighBPM(e.target.value);
-                loadQuestionsList(lowBPM, e.target.value, 10 * page + 1, 10 * (page + 1));
+              Title
+            </Typography>
+            <Input
+              value={searchTitle}
+              inputProps={{
+                'aria-label': 'Description',
               }}
-              displayEmpty
+              style={{
+                position: 'absolute', top: 10, left: 0, height: 40, width: 180,
+              }}
+              onChange={e => setSearchTitle(e.target.value)}
+            />
+          </div>
+          <div
+            id="bpm picker"
+            style={{
+              position: 'absolute', top: 20, left: 250,
+            }}
+          >
+            <Typography
+              style={{
+                position: 'absolute', top: 0, left: 0, width: 180,
+              }}
             >
-              <MenuItem value={180}>180</MenuItem>
-              <MenuItem value={190}>190</MenuItem>
-              <MenuItem value={200}>200</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
+              BPM
+            </Typography>
+            <FormControl
+              style={{
+                position: 'absolute', top: 20, left: 0, width: 100,
+              }}
+            >
+              <Select
+                value={lowBPM}
+                onChange={(e) => {
+                  setLowBPM(e.target.value);
+                }}
+                displayEmpty
+              >
+                <MenuItem value={60}>60</MenuItem>
+                <MenuItem value={70}>70</MenuItem>
+                <MenuItem value={80}>80</MenuItem>
+              </Select>
+            </FormControl>
+            <Typography
+              style={{
+                position: 'absolute', top: 30, left: 110, width: 20,
+              }}
+            >
+              ~
+            </Typography>
+            <FormControl
+              style={{
+                position: 'absolute', top: 20, left: 130, width: 100,
+              }}
+            >
+              <Select
+                value={highBPM}
+                onChange={(e) => {
+                  setHighBPM(e.target.value);
+                }}
+                displayEmpty
+              >
+                <MenuItem value={180}>180</MenuItem>
+                <MenuItem value={190}>190</MenuItem>
+                <MenuItem value={200}>200</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <div
+            id="search title user"
+            style={{
+              position: 'absolute', top: 20, left: 520,
+            }}
+          >
+            <Typography
+              style={{
+                position: 'absolute', top: 0, left: 0, width: 180,
+              }}
+            >
+              User
+            </Typography>
+            <Input
+              value={searchUser}
+              inputProps={{
+                'aria-label': 'Description',
+              }}
+              style={{
+                position: 'absolute', top: 10, left: 0, height: 40, width: 180,
+              }}
+              onChange={e => setSearchUser(e.target.value)}
+            />
+          </div>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{
+              position: 'absolute', top: 50, left: 810, height: 40, width: 120,
+            }}
+            onClick={() => {
+              loadQuestionsList(lowBPM, highBPM, 10 * page + 1, 10 * (page + 1));
+            }}
+          >
+            Search
+          </Button>
+        </Paper>
         <Table
           style={{
             position: 'absolute',
-            top: 60,
+            top: 110,
             left: 0,
             width: 1000,
           }}
@@ -231,31 +305,33 @@ class Search extends React.Component {
               })
             }
           </TableBody>
+          <TableFooter>
+            <IconButton
+              aria-label="Back"
+              onClick={() => {
+                this.setState({ page: page - 1 });
+                loadQuestionsList(lowBPM, highBPM, 10 * (page - 1) + 1, 10 * page);
+              }}
+              style={{
+                top: 10, left: 800,
+              }}
+            >
+              <ArrowBackIcon />
+            </IconButton>
+            <IconButton
+              aria-label="Forward"
+              onClick={() => {
+                this.setState({ page: page + 1 });
+                loadQuestionsList(lowBPM, highBPM, 10 * (page + 1) + 1, 10 * (page + 2));
+              }}
+              style={{
+                top: 10, left: 850,
+              }}
+            >
+              <ArrowForwardIcon />
+            </IconButton>
+          </TableFooter>
         </Table>
-        <IconButton
-          aria-label="Back"
-          onClick={() => {
-            this.setState({ page: page - 1 });
-            loadQuestionsList(lowBPM, highBPM, 10 * (page - 1) + 1, 10 * page);
-          }}
-          style={{
-            position: 'absolute', top: 10, left: 800,
-          }}
-        >
-          <ArrowBackIcon />
-        </IconButton>
-        <IconButton
-          aria-label="Forward"
-          onClick={() => {
-            this.setState({ page: page + 1 });
-            loadQuestionsList(lowBPM, highBPM, 10 * (page + 1) + 1, 10 * (page + 2));
-          }}
-          style={{
-            position: 'absolute', top: 10, left: 850,
-          }}
-        >
-          <ArrowForwardIcon />
-        </IconButton>
       </div>
     );
   }
@@ -266,6 +342,8 @@ Search.propTypes = {
   uid: PropTypes.number.isRequired,
   lowBPM: PropTypes.number.isRequired,
   highBPM: PropTypes.number.isRequired,
+  searchTitle: PropTypes.string.isRequired,
+  searchUser: PropTypes.string.isRequired,
   setQuestion: PropTypes.func.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
   setBPM: PropTypes.func.isRequired,
@@ -276,6 +354,8 @@ Search.propTypes = {
   loadQuestionsList: PropTypes.func.isRequired,
   setQuestionId: PropTypes.func.isRequired,
   deleteUploadedQuestion: PropTypes.func.isRequired,
+  setSearchTitle: PropTypes.func.isRequired,
+  setSearchUser: PropTypes.func.isRequired,
 };
 
 export default Search;
