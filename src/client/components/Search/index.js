@@ -123,7 +123,7 @@ class Search extends React.Component {
                 'aria-label': 'Description',
               }}
               style={{
-                position: 'absolute', top: 10, left: 0, height: 40, width: 180,
+                position: 'absolute', top: 20, left: 0, width: 180,
               }}
               onChange={e => setSearchTitle(e.target.value)}
             />
@@ -202,7 +202,7 @@ class Search extends React.Component {
                 'aria-label': 'Description',
               }}
               style={{
-                position: 'absolute', top: 10, left: 0, height: 40, width: 180,
+                position: 'absolute', top: 20, left: 0, width: 180,
               }}
               onChange={e => setSearchUser(e.target.value)}
             />
@@ -211,7 +211,7 @@ class Search extends React.Component {
             variant="contained"
             color="primary"
             style={{
-              position: 'absolute', top: 50, left: 810, height: 40, width: 120,
+              position: 'absolute', top: 30, left: 880, width: 100,
             }}
             onClick={() => {
               loadCountQuestions(lowBPM, highBPM, searchTitle, searchUser);
