@@ -6,6 +6,7 @@ const SearchState = Immutable.Record({
   highBPM: 200,
   searchTitle: '',
   searchUser: '',
+  countQuestions: 0,
 });
 
 export default SearchState;

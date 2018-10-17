@@ -83,16 +83,19 @@ class Search extends React.Component {
   }
 
   componentDidMount() {
-    const { lowBPM, highBPM, loadQuestionsList } = this.props;
+    const {
+      lowBPM, highBPM, searchTitle, searchUser, loadQuestionsList, loadCountQuestions,
+    } = this.props;
     const { page } = this.state;
-    loadQuestionsList(lowBPM, highBPM, 10 * page + 1, 10 * (page + 1));
+    loadCountQuestions(lowBPM, highBPM, searchTitle, searchUser);
+    loadQuestionsList(lowBPM, highBPM, 10 * page + 1, 10 * (page + 1), searchTitle, searchUser);
   }
 
   render() {
     const {
       questionsList, lowBPM, highBPM, setQuestion, changeDisplayMode, setBPM, setLowBPM, setHighBPM,
       loadQuestionsList, setQuestionId, setNotes, setTitle, deleteUploadedQuestion, uid,
-      searchTitle, setSearchTitle, searchUser, setSearchUser,
+      searchTitle, setSearchTitle, searchUser, setSearchUser, countQuestions, loadCountQuestions,
     } = this.props;
     const { page } = this.state;
     return (
@@ -212,6 +215,7 @@ class Search extends React.Component {
               position: 'absolute', top: 50, left: 810, height: 40, width: 120,
             }}
             onClick={() => {
+              loadCountQuestions(lowBPM, highBPM, searchTitle, searchUser);
               loadQuestionsList(
                 lowBPM, highBPM, 10 * page + 1, 10 * (page + 1), searchTitle, searchUser,
               );
@@ -312,6 +316,7 @@ class Search extends React.Component {
               aria-label="Back"
               onClick={() => {
                 this.setState({ page: page - 1 });
+                loadCountQuestions(lowBPM, highBPM, searchTitle, searchUser);
                 loadQuestionsList(
                   lowBPM, highBPM, 10 * (page - 1) + 1, 10 * page, searchTitle, searchUser,
                 );
@@ -319,6 +324,7 @@ class Search extends React.Component {
               style={{
                 top: 10, left: 800,
               }}
+              disabled={page <= 0}
             >
               <ArrowBackIcon />
             </IconButton>
@@ -326,6 +332,7 @@ class Search extends React.Component {
               aria-label="Forward"
               onClick={() => {
                 this.setState({ page: page + 1 });
+                loadCountQuestions(lowBPM, highBPM, searchTitle, searchUser);
                 loadQuestionsList(
                   lowBPM, highBPM, 10 * (page + 1) + 1, 10 * (page + 2), searchTitle, searchUser,
                 );
@@ -333,6 +340,7 @@ class Search extends React.Component {
               style={{
                 top: 10, left: 850,
               }}
+              disabled={page > ((countQuestions / 10) - 1)}
             >
               <ArrowForwardIcon />
             </IconButton>
@@ -348,6 +356,7 @@ Search.propTypes = {
   uid: PropTypes.number.isRequired,
   lowBPM: PropTypes.number.isRequired,
   highBPM: PropTypes.number.isRequired,
+  countQuestions: PropTypes.number.isRequired,
   searchTitle: PropTypes.string.isRequired,
   searchUser: PropTypes.string.isRequired,
   setQuestion: PropTypes.func.isRequired,
@@ -362,6 +371,7 @@ Search.propTypes = {
   deleteUploadedQuestion: PropTypes.func.isRequired,
   setSearchTitle: PropTypes.func.isRequired,
   setSearchUser: PropTypes.func.isRequired,
+  loadCountQuestions: PropTypes.func.isRequired,
 };
 
 export default Search;

@@ -16,6 +16,9 @@ const search = (state = new SearchState(), action) => {
     case actionTypes.SET_SEARCH_USER:
       return state.set('searchUser', action.searchUser);
 
+    case actionTypes.SET_COUNT_QUESTIONS:
+      return state.set('countQuestions', action.count);
+
     default:
       return state;
   }

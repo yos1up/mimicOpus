@@ -115,6 +115,44 @@ const loadQuestionsList = (req, res) => {
     });
 };
 
+const countQuestions = (req, res) => {
+  const urlQuery = req.query;
+  if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
+    urlQuery.lowBPM = 60;
+  }
+  if (urlQuery.highBPM === null || urlQuery.highBPM === undefined) {
+    urlQuery.highBPM = 200;
+  }
+  if (urlQuery.title === null || urlQuery.title === undefined) {
+    urlQuery.title = '';
+  }
+  if (urlQuery.user === null || urlQuery.user === undefined) {
+    urlQuery.user = '';
+  }
+  if (urlQuery.user === '') {
+    urlQuery.user = '%';
+  }
+  const query = {
+    text: `${'SELECT COUNT(*) '
+      + 'FROM questions q LEFT JOIN users u ON q.uid = u.id '
+      + 'WHERE q.bpm >= $1 and q.bpm <= $2 and q.title LIKE \'%'}${
+      urlQuery.title
+    }${'%\' and u.username LIKE \''
+    }${urlQuery.user
+    }${'\''}`,
+    values: [urlQuery.lowBPM, urlQuery.highBPM],
+  };
+
+  client.query(query)
+    .then((result) => {
+      res.send({ errState: 0, count: parseInt(result.rows[0].count, 10) });
+    })
+    .catch((e) => {
+      console.log(e);
+      res.send({ errState: 1 });
+    });
+};
+
 const changeUsername = (req, res) => {
   if (req.isAuthenticated()) {
     const uid = req.user.id;
@@ -184,6 +222,7 @@ const getMe = (req, res) => {
 
 apiRouter.post('/api/uploadQuestion', uploadQuestion);
 apiRouter.get('/api/loadQuestionsList', loadQuestionsList);
+apiRouter.get('/api/countQuestions', countQuestions);
 apiRouter.post('/api/changeQuestion', changeQuestion);
 apiRouter.post('/api/deleteQuestion', deleteQuestion);
 apiRouter.post('/api/saveScore', saveScore);

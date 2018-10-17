@@ -13,6 +13,7 @@ import {
   deleteUploadedQuestion,
   setSearchTitle,
   setSearchUser,
+  loadCountQuestions,
 } from '../../actions';
 import Search from '../../components/Search';
 
@@ -23,6 +24,7 @@ const mapStateToProps = state => ({
   highBPM: state.search.highBPM,
   searchTitle: state.search.searchTitle,
   searchUser: state.search.searchUser,
+  countQuestions: state.search.countQuestions,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -40,6 +42,9 @@ const mapDispatchToProps = dispatch => ({
   setSearchUser: searchUser => dispatch(setSearchUser(searchUser)),
   setQuestionId: questionId => dispatch(setQuestionId(questionId)),
   deleteUploadedQuestion,
+  loadCountQuestions: (lowBPM, highBPM, title, user) => loadCountQuestions(
+    dispatch, lowBPM, highBPM, title, user,
+  ),
 });
 
 export default connect(

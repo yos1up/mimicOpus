@@ -315,3 +315,25 @@ export function setSearchUser(searchUser) {
     searchUser,
   };
 }
+
+export function setCountQuestions(count) {
+  return {
+    type: actionTypes.SET_COUNT_QUESTIONS,
+    count,
+  };
+}
+
+export function loadCountQuestions(dispatch, lowBPM = 0, highBPM = 1000, title = '', user = '') {
+  const method = 'GET';
+  const params = new URLSearchParams();
+  params.set('lowBPM', lowBPM);
+  params.set('highBPM', highBPM);
+  params.set('title', title);
+  params.set('user', user);
+  fetch(`./api/countQuestions?${params.toString()}`, { method })
+    .then(res => res.json())
+    .then((results) => {
+      dispatch(setCountQuestions(results.count));
+    })
+    .catch(console.error);
+}
