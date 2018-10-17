@@ -10,6 +10,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
 import IconButton from '@material-ui/core/IconButton';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -312,38 +313,19 @@ class Search extends React.Component {
             }
           </TableBody>
           <TableFooter>
-            <IconButton
-              aria-label="Back"
-              onClick={() => {
-                this.setState({ page: page - 1 });
-                loadCountQuestions(lowBPM, highBPM, searchTitle, searchUser);
+            <TablePagination
+              colSpan={3}
+              count={countQuestions}
+              rowsPerPage={10}
+              page={page}
+              rowsPerPageOptions={[10]}
+              onChangePage={(event, page_) => {
+                this.setState({ page: page_ });
                 loadQuestionsList(
-                  lowBPM, highBPM, 10 * (page - 1) + 1, 10 * page, searchTitle, searchUser,
+                  lowBPM, highBPM, 10 * page_ + 1, 10 * (page_ + 1), searchTitle, searchUser,
                 );
               }}
-              style={{
-                top: 10, left: 800,
-              }}
-              disabled={page <= 0}
-            >
-              <ArrowBackIcon />
-            </IconButton>
-            <IconButton
-              aria-label="Forward"
-              onClick={() => {
-                this.setState({ page: page + 1 });
-                loadCountQuestions(lowBPM, highBPM, searchTitle, searchUser);
-                loadQuestionsList(
-                  lowBPM, highBPM, 10 * (page + 1) + 1, 10 * (page + 2), searchTitle, searchUser,
-                );
-              }}
-              style={{
-                top: 10, left: 850,
-              }}
-              disabled={page > ((countQuestions / 10) - 1)}
-            >
-              <ArrowForwardIcon />
-            </IconButton>
+            />
           </TableFooter>
         </Table>
       </div>
