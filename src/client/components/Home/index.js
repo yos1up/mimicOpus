@@ -74,63 +74,89 @@ class Home extends React.Component {
     } = this.props;
     return (
       <div id="Home">
-        <Typography
-          variant="h5"
-          color="textPrimary"
+        <div>
+          <Typography
+            variant="h6"
+            color="textPrimary"
+            style={{
+              position: 'absolute', top: 0, left: 10, width: 500,
+            }}
+          >
+            mimicopus
+          </Typography>
+          <Typography
+            color="textPrimary"
+            style={{
+              position: 'absolute', top: 30, left: 10, width: 500,
+            }}
+          >
+            mimicopusは耳コピのスキルアップのための、オンラインサービスです。
+          </Typography>
+        </div>
+        <div
+          id="New Questions"
           style={{
-            position: 'absolute', top: 20, left: 10, width: 500,
+            position: 'absolute', top: 200,
           }}
         >
-          新しい質問
-        </Typography>
-        {
-          [...newQuestionsList].map((item, i) => {
-            const { id, question } = item;
-            return (
-              <Card
-                style={{
-                  position: 'absolute',
-                  width: 240,
-                  left: 250 * i,
-                  height: 150,
-                  top: 80,
-                }}
-                onClick={() => {
-                  setQuestion(question);
-                  setBPM(question.bpm);
-                  setQuestionId(id);
-                  changeDisplayMode(displayModes.PLAY_QUESTION);
-                }}
-              >
-                <CardActionArea style={{ width: '100%', height: '100%' }}>
-                  <CardContent>
-                    <Typography
-                      variant="h5"
-                      color="textSecondary"
-                      style={{
-                        position: 'absolute', top: 20, left: 30, width: 200,
-                      }}
-                    >
-                      {question.title}
-                    </Typography>
-                    <IconButton
-                      aria-label="Play"
-                      style={{
-                        position: 'absolute', left: 90, top: 70, width: 50, height: 50,
-                      }}
-                      onClick={(e) => {
-                        play(question.notes, question.bpm);
-                        e.stopPropagation();
-                      }}
-                    >
-                      <PlayArrowIcon />
-                    </IconButton>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            );
-          })
-        }
+          <Typography
+            variant="h5"
+            color="textPrimary"
+            style={{
+              position: 'absolute', top: 0, left: 10, width: 500,
+            }}
+          >
+            新しい問題
+          </Typography>
+          {
+            [...newQuestionsList].map((item, i) => {
+              const { id, question } = item;
+              return (
+                <Card
+                  style={{
+                    position: 'absolute',
+                    width: 240,
+                    left: 250 * i,
+                    height: 150,
+                    top: 50,
+                  }}
+                  onClick={() => {
+                    setQuestion(question);
+                    setBPM(question.bpm);
+                    setQuestionId(id);
+                    changeDisplayMode(displayModes.PLAY_QUESTION);
+                  }}
+                >
+                  <CardActionArea style={{ width: '100%', height: '100%' }}>
+                    <CardContent>
+                      <Typography
+                        variant="h5"
+                        color="textSecondary"
+                        style={{
+                          position: 'absolute', top: 20, left: 30, width: 200,
+                        }}
+                      >
+                        {question.title}
+                      </Typography>
+                      <IconButton
+                        aria-label="Play"
+                        style={{
+                          position: 'absolute', left: 90, top: 70, width: 50, height: 50,
+                        }}
+                        onClick={(e) => {
+                          play(question.notes, question.bpm);
+                          e.stopPropagation();
+                        }}
+                      >
+                        <PlayArrowIcon />
+                      </IconButton>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              );
+            })
+          }
+        </div>
       </div>
     );
   }
