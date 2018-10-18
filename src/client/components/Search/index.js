@@ -78,7 +78,16 @@ class Search extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { page: 0 };
+    const {
+      lowBPM, highBPM, searchTitle, searchUser,
+    } = props;
+    this.state = {
+      page: 0,
+      tempLowBPM: lowBPM,
+      tempHighBPM: highBPM,
+      tempSearchTitle: searchTitle,
+      tempSearchUser: searchUser,
+    };
   }
 
   componentDidMount() {
@@ -88,15 +97,24 @@ class Search extends React.Component {
     const { page } = this.state;
     loadCountQuestions(lowBPM, highBPM, searchTitle, searchUser);
     loadQuestionsList(lowBPM, highBPM, 10 * page + 1, 10 * (page + 1), searchTitle, searchUser);
+    this.setState({
+      tempLowBPM: lowBPM,
+      tempHighBPM: highBPM,
+      tempSearchTitle: searchTitle,
+      tempSearchUser: searchUser,
+    });
   }
 
   render() {
     const {
-      questionsList, lowBPM, highBPM, setQuestion, changeDisplayMode, setBPM, setLowBPM, setHighBPM,
+      questionsList, setQuestion, changeDisplayMode, setBPM, setLowBPM, setHighBPM,
       loadQuestionsList, setQuestionId, setNotes, setTitle, deleteUploadedQuestion, uid,
-      searchTitle, setSearchTitle, searchUser, setSearchUser, countQuestions, loadCountQuestions,
+      setSearchTitle, setSearchUser, countQuestions, loadCountQuestions,
+      lowBPM, highBPM, searchUser, searchTitle,
     } = this.props;
-    const { page } = this.state;
+    const {
+      page, tempLowBPM, tempHighBPM, tempSearchTitle, tempSearchUser,
+    } = this.state;
     return (
       <div id="Search">
         <Paper
@@ -118,14 +136,18 @@ class Search extends React.Component {
               タイトル
             </Typography>
             <Input
-              value={searchTitle}
+              value={tempSearchTitle}
               inputProps={{
                 'aria-label': 'Description',
               }}
               style={{
                 position: 'absolute', top: 20, left: 0, width: 180,
               }}
-              onChange={e => setSearchTitle(e.target.value)}
+              onChange={(e) => {
+                this.setState({
+                  tempSearchTitle: e.target.value,
+                });
+              }}
             />
           </div>
           <div
@@ -147,9 +169,9 @@ class Search extends React.Component {
               }}
             >
               <Select
-                value={lowBPM}
+                value={tempLowBPM}
                 onChange={(e) => {
-                  setLowBPM(e.target.value);
+                  this.setState({ tempLowBPM: e.target.value });
                 }}
                 displayEmpty
               >
@@ -171,9 +193,9 @@ class Search extends React.Component {
               }}
             >
               <Select
-                value={highBPM}
+                value={tempHighBPM}
                 onChange={(e) => {
-                  setHighBPM(e.target.value);
+                  this.setState({ tempHighBPM: e.target.value });
                 }}
                 displayEmpty
               >
@@ -197,14 +219,18 @@ class Search extends React.Component {
               ユーザー
             </Typography>
             <Input
-              value={searchUser}
+              value={tempSearchUser}
               inputProps={{
                 'aria-label': 'Description',
               }}
               style={{
                 position: 'absolute', top: 20, left: 0, width: 180,
               }}
-              onChange={e => setSearchUser(e.target.value)}
+              onChange={(e) => {
+                this.setState({
+                  tempSearchUser: e.target.value,
+                });
+              }}
             />
           </div>
           <Button
@@ -214,10 +240,17 @@ class Search extends React.Component {
               position: 'absolute', top: 30, left: 880, width: 100,
             }}
             onClick={() => {
-              loadCountQuestions(lowBPM, highBPM, searchTitle, searchUser);
+              loadCountQuestions(tempLowBPM, tempHighBPM, tempSearchTitle, tempSearchUser);
               loadQuestionsList(
-                lowBPM, highBPM, 10 * page + 1, 10 * (page + 1), searchTitle, searchUser,
+                tempLowBPM, tempHighBPM, 1, 10, tempSearchTitle, tempSearchUser,
               );
+              this.setState({
+                page: 0,
+              });
+              setLowBPM(tempLowBPM);
+              setHighBPM(tempHighBPM);
+              setSearchTitle(tempSearchTitle);
+              setSearchUser(tempSearchUser);
             }}
           >
             検索
