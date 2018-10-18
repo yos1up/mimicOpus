@@ -13,6 +13,8 @@ import Input from '@material-ui/core/Input';
 import PianoRollGrid from '../ui/PianoRollGrid';
 import Question from '../../data/question';
 
+import displayModes from '../../data/displayModes';
+
 // サンプラー
 const sampler = new Tone.Sampler({
   C2: 'C2.wav',
@@ -68,7 +70,7 @@ class MakeQuestion extends React.Component {
   render() {
     const {
       notes, pitchRange, bpm, title, addNote, delNote, shiftPitchRange, setBPM,
-      uploadQuestion, setTitle,
+      uploadQuestion, setTitle, clearNotes, changeDisplayMode,
     } = this.props;
     return (
       <div id="MakeQuestion">
@@ -124,6 +126,8 @@ class MakeQuestion extends React.Component {
               bpm,
               title: (title !== '') ? title : 'Untitled',
             }));
+            clearNotes();
+            changeDisplayMode(displayModes.HOME);
           }}
         >
           <SaveIcon />
@@ -152,6 +156,8 @@ MakeQuestion.propTypes = {
   setBPM: PropTypes.func.isRequired,
   uploadQuestion: PropTypes.func.isRequired,
   setTitle: PropTypes.func.isRequired,
+  clearNotes: PropTypes.func.isRequired,
+  changeDisplayMode: PropTypes.func.isRequired,
 };
 
 export default MakeQuestion;

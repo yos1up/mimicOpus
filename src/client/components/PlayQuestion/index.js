@@ -16,6 +16,8 @@ import PianoRollGrid from '../ui/PianoRollGrid';
 
 import Question from '../../data/question';
 
+import displayModes from '../../data/displayModes';
+
 // サンプラー
 const sampler = new Tone.Sampler({
   C2: 'C2.wav',
@@ -175,7 +177,8 @@ class PlayQuestion extends React.Component {
 
   render() {
     const {
-      notes, question, pitchRange, bpm, addNote, delNote, shiftPitchRange,
+      notes, question, pitchRange, bpm, addNote, delNote,
+      shiftPitchRange, clearNotes, changeDisplayMode,
     } = this.props;
     const {
       dialogOpened,
@@ -222,7 +225,14 @@ class PlayQuestion extends React.Component {
           pitchRange={pitchRange}
         />
 
-        <Dialog open={dialogOpened} onClose={() => this.handleCloseDialog()}>
+        <Dialog
+          open={dialogOpened}
+          onClose={() => {
+            this.handleCloseDialog();
+            clearNotes();
+            changeDisplayMode(displayModes.HOME);
+          }}
+        >
           <DialogTitle id="simple-dialog-title">RESULT</DialogTitle>
           <DialogContent>
             <Typography>
@@ -245,6 +255,8 @@ PlayQuestion.propTypes = {
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
   saveScore: PropTypes.func.isRequired,
+  clearNotes: PropTypes.func.isRequired,
+  changeDisplayMode: PropTypes.func.isRequired,
 };
 
 export default PlayQuestion;
