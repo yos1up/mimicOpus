@@ -53,104 +53,114 @@ const deleteQuestion = (req, res) => {
         console.log(e);
         res.send({ errState: 1 });
       });
+  } else {
+    res.send({ errState: 1 });
   }
 };
 
 const loadQuestionsList = (req, res) => {
-  const urlQuery = req.query;
-  if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
-    urlQuery.lowBPM = 60;
-  }
-  if (urlQuery.highBPM === null || urlQuery.highBPM === undefined) {
-    urlQuery.highBPM = 200;
-  }
-  if (urlQuery.start === null || urlQuery.start === undefined) {
-    urlQuery.start = 1;
-  }
-  if (urlQuery.stop === null || urlQuery.stop === undefined) {
-    urlQuery.stop = 10;
-  }
-  if (urlQuery.title === null || urlQuery.title === undefined) {
-    urlQuery.title = '';
-  }
-  if (urlQuery.user === null || urlQuery.user === undefined) {
-    urlQuery.user = '';
-  }
-  if (urlQuery.user === '') {
-    urlQuery.user = '%';
-  }
-  const query = {
-    text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat '
-      + 'FROM questions q LEFT JOIN users u ON q.uid = u.id '
-      + 'WHERE q.bpm >= $1 and q.bpm <= $2 and q.title LIKE \'%'}${
-      urlQuery.title
-    }${'%\' and u.username LIKE \''
-    }${urlQuery.user
-    }${'\' ORDER BY q.uploadedat DESC LIMIT $3 OFFSET $4'}`,
-    values: [urlQuery.lowBPM, urlQuery.highBPM,
-      urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
-  };
+  if (req.isAuthenticated()) {
+    const urlQuery = req.query;
+    if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
+      urlQuery.lowBPM = 60;
+    }
+    if (urlQuery.highBPM === null || urlQuery.highBPM === undefined) {
+      urlQuery.highBPM = 200;
+    }
+    if (urlQuery.start === null || urlQuery.start === undefined) {
+      urlQuery.start = 1;
+    }
+    if (urlQuery.stop === null || urlQuery.stop === undefined) {
+      urlQuery.stop = 10;
+    }
+    if (urlQuery.title === null || urlQuery.title === undefined) {
+      urlQuery.title = '';
+    }
+    if (urlQuery.user === null || urlQuery.user === undefined) {
+      urlQuery.user = '';
+    }
+    if (urlQuery.user === '') {
+      urlQuery.user = '%';
+    }
+    const query = {
+      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat '
+        + 'FROM questions q LEFT JOIN users u ON q.uid = u.id '
+        + 'WHERE q.bpm >= $1 and q.bpm <= $2 and q.title LIKE \'%'}${
+        urlQuery.title
+      }${'%\' and u.username LIKE \''
+      }${urlQuery.user
+      }${'\' ORDER BY q.uploadedat DESC LIMIT $3 OFFSET $4'}`,
+      values: [urlQuery.lowBPM, urlQuery.highBPM,
+        urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
+    };
 
-  client.query(query)
-    .then((result) => {
-      const returnData = [];
-      result.rows.forEach((item) => {
-        returnData.push({
-          id: item.id,
-          question: {
-            notes: item.notes,
-            bpm: item.bpm,
-            uid: item.uid,
-            userName: item.username,
-            title: item.title,
-            uploadedAt: item.uploadedat,
-          }
+    client.query(query)
+      .then((result) => {
+        const returnData = [];
+        result.rows.forEach((item) => {
+          returnData.push({
+            id: item.id,
+            question: {
+              notes: item.notes,
+              bpm: item.bpm,
+              uid: item.uid,
+              userName: item.username,
+              title: item.title,
+              uploadedAt: item.uploadedat,
+            }
+          });
         });
+        res.send(returnData);
+      })
+      .catch((e) => {
+        console.log(e);
+        res.send({ errState: 1 });
       });
-      res.send(returnData);
-    })
-    .catch((e) => {
-      console.log(e);
-      res.send({ errState: 1 });
-    });
+  } else {
+    res.send({ errState: 1 });
+  }
 };
 
 const countQuestions = (req, res) => {
-  const urlQuery = req.query;
-  if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
-    urlQuery.lowBPM = 60;
-  }
-  if (urlQuery.highBPM === null || urlQuery.highBPM === undefined) {
-    urlQuery.highBPM = 200;
-  }
-  if (urlQuery.title === null || urlQuery.title === undefined) {
-    urlQuery.title = '';
-  }
-  if (urlQuery.user === null || urlQuery.user === undefined) {
-    urlQuery.user = '';
-  }
-  if (urlQuery.user === '') {
-    urlQuery.user = '%';
-  }
-  const query = {
-    text: `${'SELECT COUNT(*) '
-      + 'FROM questions q LEFT JOIN users u ON q.uid = u.id '
-      + 'WHERE q.bpm >= $1 and q.bpm <= $2 and q.title LIKE \'%'}${
-      urlQuery.title
-    }${'%\' and u.username LIKE \''
-    }${urlQuery.user
-    }${'\''}`,
-    values: [urlQuery.lowBPM, urlQuery.highBPM],
-  };
+  if (req.isAuthenticated()) {
+    const urlQuery = req.query;
+    if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
+      urlQuery.lowBPM = 60;
+    }
+    if (urlQuery.highBPM === null || urlQuery.highBPM === undefined) {
+      urlQuery.highBPM = 200;
+    }
+    if (urlQuery.title === null || urlQuery.title === undefined) {
+      urlQuery.title = '';
+    }
+    if (urlQuery.user === null || urlQuery.user === undefined) {
+      urlQuery.user = '';
+    }
+    if (urlQuery.user === '') {
+      urlQuery.user = '%';
+    }
+    const query = {
+      text: `${'SELECT COUNT(*) '
+        + 'FROM questions q LEFT JOIN users u ON q.uid = u.id '
+        + 'WHERE q.bpm >= $1 and q.bpm <= $2 and q.title LIKE \'%'}${
+        urlQuery.title
+      }${'%\' and u.username LIKE \''
+      }${urlQuery.user
+      }${'\''}`,
+      values: [urlQuery.lowBPM, urlQuery.highBPM],
+    };
 
-  client.query(query)
-    .then((result) => {
-      res.send({ errState: 0, count: parseInt(result.rows[0].count, 10) });
-    })
-    .catch((e) => {
-      console.log(e);
-      res.send({ errState: 1 });
-    });
+    client.query(query)
+      .then((result) => {
+        res.send({ errState: 0, count: parseInt(result.rows[0].count, 10) });
+      })
+      .catch((e) => {
+        console.log(e);
+        res.send({ errState: 1 });
+      });
+  } else {
+    res.send({ errState: 1 });
+  }
 };
 
 const changeUsername = (req, res) => {
