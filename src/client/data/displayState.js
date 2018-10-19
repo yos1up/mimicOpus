@@ -4,7 +4,7 @@ import displayModes from './displayModes';
 
 const DisplayState = Immutable.Record({
   mode: displayModes.HOME,
-  showLisence: false,
+  showLicense: false,
 });
 
 export default DisplayState;

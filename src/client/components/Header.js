@@ -36,7 +36,7 @@ class Header extends React.Component {
 
   render() {
     const {
-      mode, photoURL, changeDisplayMode, openSignInDialog, provider, openLisenceDialog,
+      mode, photoURL, changeDisplayMode, openSignInDialog, provider, openLicenseDialog,
     } = this.props;
     const { openUserMenu } = this.state;
     return (
@@ -126,7 +126,7 @@ class Header extends React.Component {
                         </MenuItem>
                         <MenuItem onClick={() => {
                           this.handleCloseUserMenu();
-                          openLisenceDialog();
+                          openLicenseDialog();
                         }}
                         >
                           ライセンス&クレジット

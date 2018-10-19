@@ -6,9 +6,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 
 
-function Lisence({ open, closeLisenceDialog }) {
+function License({ open, closeLicenseDialog }) {
   return (
-    <Dialog open={open} onClose={() => closeLisenceDialog()}>
+    <Dialog open={open} onClose={() => closeLicenseDialog()}>
       <DialogTitle id="simple-dialog-title">ライセンス&クレジット</DialogTitle>
       <DialogContent>
         <Typography>
@@ -19,9 +19,9 @@ function Lisence({ open, closeLisenceDialog }) {
   );
 }
 
-Lisence.propTypes = {
+License.propTypes = {
   open: PropTypes.bool.isRequired,
-  closeLisenceDialog: PropTypes.func.isRequired,
+  closeLicenseDialog: PropTypes.func.isRequired,
 };
 
-export default Lisence;
+export default License;

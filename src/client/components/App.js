@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import SignIn from '../containers/SignIn';
-import Lisence from '../containers/Lisence';
+import License from '../containers/License';
 import Header from '../containers/Header';
 
 import Home from '../containers/Home';
@@ -49,7 +49,7 @@ class App extends React.Component {
           {(mode === displayModes.RANKING) ? (<Ranking />) : null}
         </div>
         <SignIn />
-        <Lisence />
+        <License />
       </div>
     );
   }

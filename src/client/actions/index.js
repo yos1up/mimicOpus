@@ -13,15 +13,15 @@ export function closeSignInDialog() {
   };
 }
 
-export function openLisenceDialog() {
+export function openLicenseDialog() {
   return {
-    type: actionTypes.OPEN_LISENCE_DIALOG,
+    type: actionTypes.OPEN_LICENSE_DIALOG,
   };
 }
 
-export function closeLisenceDialog() {
+export function closeLicenseDialog() {
   return {
-    type: actionTypes.CLOSE_LISENCE_DIALOG,
+    type: actionTypes.CLOSE_LICENSE_DIALOG,
   };
 }
 

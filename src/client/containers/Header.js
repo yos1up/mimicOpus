@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import {
-  changeDisplayMode, openSignInDialog, openLisenceDialog,
+  changeDisplayMode, openSignInDialog, openLicenseDialog,
 } from '../actions';
 import Header from '../components/Header';
 
@@ -14,7 +14,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   changeDisplayMode: mode => dispatch(changeDisplayMode(mode)),
   openSignInDialog: () => dispatch(openSignInDialog()),
-  openLisenceDialog: () => dispatch(openLisenceDialog()),
+  openLicenseDialog: () => dispatch(openLicenseDialog()),
 });
 
 export default connect(
