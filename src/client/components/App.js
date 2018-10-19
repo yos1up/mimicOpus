@@ -11,6 +11,7 @@ import MakeQuestion from '../containers/MakeQuestion';
 import PlayQuestion from '../containers/PlayQuestion';
 import Search from '../containers/Search';
 import Profile from '../containers/Profile';
+import Ranking from '../containers/Ranking';
 
 import displayModes from '../data/displayModes';
 
@@ -45,6 +46,7 @@ class App extends React.Component {
           {(mode === displayModes.EDIT_QUESTION) ? (<EditQuestion />) : null}
           {(mode === displayModes.SEARCH) ? (<Search />) : null}
           {(mode === displayModes.USER) ? (<Profile />) : null}
+          {(mode === displayModes.RANKING) ? (<Ranking />) : null}
         </div>
         <SignIn />
         <Lisence />

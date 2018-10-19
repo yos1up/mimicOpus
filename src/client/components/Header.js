@@ -62,7 +62,8 @@ class Header extends React.Component {
           >
             <Tabs
               value={(mode === displayModes.HOME || mode === displayModes.SEARCH
-                || mode === displayModes.MAKE_QUESTION) ? mode : false}
+                || mode === displayModes.MAKE_QUESTION || mode === displayModes.RANKING
+              ) ? mode : false}
               onChange={(e, v) => changeDisplayMode(v)}
               indicatorColor="primary"
               textColor="primary"
@@ -71,6 +72,7 @@ class Header extends React.Component {
               <Tab label="ホーム" value={displayModes.HOME} />
               <Tab label="検索" value={displayModes.SEARCH} />
               <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} disabled={provider === 'anonymous'} />
+              <Tab label="ランキング" value={displayModes.RANKING} />
             </Tabs>
             {(photoURL !== null && photoURL !== undefined && photoURL !== '')
               ? (
