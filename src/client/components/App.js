@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import SignIn from '../containers/SignIn';
-import Lisence from '../containers/Lisence';
+import License from '../containers/License';
 import Header from '../containers/Header';
 
 import Home from '../containers/Home';
@@ -11,6 +11,7 @@ import MakeQuestion from '../containers/MakeQuestion';
 import PlayQuestion from '../containers/PlayQuestion';
 import Search from '../containers/Search';
 import Profile from '../containers/Profile';
+import Ranking from '../containers/Ranking';
 
 import displayModes from '../data/displayModes';
 
@@ -45,9 +46,10 @@ class App extends React.Component {
           {(mode === displayModes.EDIT_QUESTION) ? (<EditQuestion />) : null}
           {(mode === displayModes.SEARCH) ? (<Search />) : null}
           {(mode === displayModes.USER) ? (<Profile />) : null}
+          {(mode === displayModes.RANKING) ? (<Ranking />) : null}
         </div>
         <SignIn />
-        <Lisence />
+        <License />
       </div>
     );
   }

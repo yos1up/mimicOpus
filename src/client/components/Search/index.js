@@ -176,8 +176,10 @@ class Search extends React.Component {
                 displayEmpty
               >
                 <MenuItem value={60}>60</MenuItem>
-                <MenuItem value={70}>70</MenuItem>
-                <MenuItem value={80}>80</MenuItem>
+                <MenuItem value={90}>90</MenuItem>
+                <MenuItem value={120}>120</MenuItem>
+                <MenuItem value={150}>150</MenuItem>
+                <MenuItem value={180}>180</MenuItem>
               </Select>
             </FormControl>
             <Typography
@@ -199,9 +201,11 @@ class Search extends React.Component {
                 }}
                 displayEmpty
               >
-                <MenuItem value={180}>180</MenuItem>
-                <MenuItem value={190}>190</MenuItem>
                 <MenuItem value={200}>200</MenuItem>
+                <MenuItem value={180}>180</MenuItem>
+                <MenuItem value={150}>150</MenuItem>
+                <MenuItem value={120}>120</MenuItem>
+                <MenuItem value={90}>90</MenuItem>
               </Select>
             </FormControl>
           </div>

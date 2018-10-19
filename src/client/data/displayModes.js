@@ -5,6 +5,7 @@ const displayModes = {
   EDIT_QUESTION: 'EDIT_QUESTION',
   SEARCH: 'SEARCH',
   USER: 'USER',
+  RANKING: 'RANKING',
 };
 
 export default displayModes;
