@@ -1,5 +1,6 @@
 import actionTypes from './actionTypes';
 import Question from '../data/question';
+import User from '../data/user';
 
 export function openSignInDialog() {
   return {
@@ -334,6 +335,37 @@ export function loadCountQuestions(dispatch, lowBPM = 0, highBPM = 1000, title =
     .then(res => res.json())
     .then((results) => {
       dispatch(setCountQuestions(results.count));
+    })
+    .catch(console.error);
+}
+
+export function addRankedUser(rank, user) {
+  return {
+    type: actionTypes.ADD_RANKED_USER,
+    rank,
+    user,
+  };
+}
+
+export function clearRankingUsers() {
+  return {
+    type: actionTypes.CLEAR_RANKING_USERS,
+  };
+}
+
+export function loadRanking(dispatch, start = 1, stop = 10) {
+  dispatch(clearRankingUsers());
+
+  const method = 'GET';
+  const params = new URLSearchParams();
+  params.set('start', start);
+  params.set('stop', stop);
+  fetch(`./api/getRanking?${params.toString()}`, { method })
+    .then(res => res.json())
+    .then((results) => {
+      results.ranking.forEach((item, idx) => {
+        dispatch(addRankedUser(start + idx, new User(item)));
+      });
     })
     .catch(console.error);
 }
