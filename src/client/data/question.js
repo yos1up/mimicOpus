@@ -8,6 +8,7 @@ class Question extends Immutable.Record({
   uid: '',
   userName: '',
   title: '',
+  rating: 0,
   uploadedAt: null,
   score: null,
 }) {

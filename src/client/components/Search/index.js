@@ -272,6 +272,7 @@ class Search extends React.Component {
             <TableRow>
               <TableCell />
               <TableCell>タイトル</TableCell>
+              <TableCell>難易度</TableCell>
               <TableCell>BPM</TableCell>
               <TableCell>作成者</TableCell>
               <TableCell>得点</TableCell>
@@ -284,6 +285,7 @@ class Search extends React.Component {
                 const { id, question } = item;
                 const date = `${question.uploadedAt.getFullYear()}/${question.uploadedAt.getMonth()}/${question.uploadedAt.getDate()}`;
                 const bMine = (uid === question.uid);
+                console.log(question.rating);
                 return (
                   <TableRow
                     key={id}
@@ -340,6 +342,7 @@ class Search extends React.Component {
                     <TableCell component="th" scope="row">
                       {question.title}
                     </TableCell>
+                    <TableCell>{question.rating}</TableCell>
                     <TableCell>{question.bpm}</TableCell>
                     <TableCell>{question.userName}</TableCell>
                     <TableCell>{question.score}</TableCell>

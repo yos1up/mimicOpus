@@ -83,7 +83,7 @@ const loadQuestionsList = (req, res) => {
       urlQuery.user = '%';
     }
     const query = {
-      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat, s.score FROM questions q '
+      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat, q.rating, s.score FROM questions q '
         + 'LEFT JOIN users u ON q.uid = u.id '
         + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
         + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
@@ -109,6 +109,7 @@ const loadQuestionsList = (req, res) => {
               title: item.title,
               uploadedAt: item.uploadedat,
               score: item.score,
+              rating: item.rating,
             }
           });
         });
