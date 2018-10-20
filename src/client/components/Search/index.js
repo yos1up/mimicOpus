@@ -274,6 +274,7 @@ class Search extends React.Component {
               <TableCell>タイトル</TableCell>
               <TableCell>BPM</TableCell>
               <TableCell>ユーザー</TableCell>
+              <TableCell>得点</TableCell>
               <TableCell>作成日</TableCell>
             </TableRow>
           </TableHead>
@@ -341,6 +342,7 @@ class Search extends React.Component {
                     </TableCell>
                     <TableCell>{question.bpm}</TableCell>
                     <TableCell>{question.userName}</TableCell>
+                    <TableCell>{question.score}</TableCell>
                     <TableCell>{date}</TableCell>
                   </TableRow>
                 );

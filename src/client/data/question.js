@@ -9,6 +9,7 @@ class Question extends Immutable.Record({
   userName: '',
   title: '',
   uploadedAt: null,
+  score: null,
 }) {
   static fromJS(obj) {
     let { notes } = obj;
