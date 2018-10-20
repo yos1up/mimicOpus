@@ -220,7 +220,7 @@ class Search extends React.Component {
                 position: 'absolute', top: 0, left: 0, width: 180,
               }}
             >
-              ユーザー
+              作成者
             </Typography>
             <Input
               value={tempSearchUser}
@@ -273,7 +273,7 @@ class Search extends React.Component {
               <TableCell />
               <TableCell>タイトル</TableCell>
               <TableCell>BPM</TableCell>
-              <TableCell>ユーザー</TableCell>
+              <TableCell>作成者</TableCell>
               <TableCell>得点</TableCell>
               <TableCell>作成日</TableCell>
             </TableRow>
