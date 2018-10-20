@@ -87,10 +87,20 @@ class Home extends React.Component {
           <Typography
             color="textPrimary"
             style={{
-              position: 'absolute', top: 30, left: 10, width: 500,
+              position: 'absolute', top: 30, left: 10, width: 1000,
             }}
           >
-            mimicopusは耳コピのスキルアップのための、オンラインサービスです。
+            mimicopus は「耳コピ」のスキルアップのためのオンラインサービスです。
+            <br />
+            他のユーザーが作ったピアノの曲を耳コピして，高スコアを目指しましょう（その場で自動採点されます）。
+            <br />
+            また、サインインをすることで、自分で作曲した曲を他のユーザーに耳コピしてもらったり，
+            <br />
+            耳コピのスキルを数値化したレーティングを表示することができます．
+            <br />
+            <br />
+
+            このWebサービスはオープンソースで開発されていて、デベロッパーを歓迎します。
           </Typography>
         </div>
         <div
