@@ -235,7 +235,6 @@ const getRanking = (req, res) => {
     };
     client.query(query)
       .then((result) => {
-        console.log(result);
         res.send({ errState: 0, ranking: result.rows });
       })
       .catch((e) => {
