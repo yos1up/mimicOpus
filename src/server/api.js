@@ -219,6 +219,33 @@ const saveScore = (req, res) => {
   }
 };
 
+const getRanking = (req, res) => {
+  if (req.isAuthenticated()) {
+    const urlQuery = req.query;
+    if (urlQuery.start === null || urlQuery.start === undefined) {
+      urlQuery.start = 1;
+    }
+    if (urlQuery.stop === null || urlQuery.stop === undefined) {
+      urlQuery.stop = 10;
+    }
+    const query = {
+      text: 'SELECT username, rating from users where rating is not null ORDER BY rating DESC LIMIT $1 OFFSET $2',
+      values: [urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
+    };
+    client.query(query)
+      .then((result) => {
+        console.log(result);
+        res.send({ errState: 0, ranking: result.rows });
+      })
+      .catch((e) => {
+        console.log(e);
+        res.send({ errState: 1 });
+      });
+  } else {
+    res.send({ errState: 1 });
+  }
+};
+
 const getMe = (req, res) => {
   if (req.isAuthenticated()) {
     res.send({
@@ -239,6 +266,7 @@ apiRouter.post('/api/changeQuestion', changeQuestion);
 apiRouter.post('/api/deleteQuestion', deleteQuestion);
 apiRouter.post('/api/saveScore', saveScore);
 apiRouter.post('/api/changeUsername', changeUsername);
+apiRouter.get('/api/getRanking', getRanking);
 apiRouter.get('/api/getMe', getMe);
 
 module.exports = apiRouter;
