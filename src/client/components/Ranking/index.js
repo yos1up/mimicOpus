@@ -7,16 +7,27 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
 
 
 class Ranking extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      page: 0,
+    };
+  }
+
   componentDidMount() {
     const { loadRanking } = this.props;
-    loadRanking();
+    const { page } = this.state;
+    loadRanking(10 * page + 1, 10 * (page + 1));
   }
 
   render() {
-    const { rankedUsers } = this.props;
+    const { rankedUsers, loadRanking } = this.props;
+    const { page } = this.state;
     return (
       <div id="Ranking">
         <Table
@@ -50,6 +61,19 @@ class Ranking extends React.Component {
               })
             }
           </TableBody>
+          <TableFooter>
+            <TablePagination
+              colSpan={3}
+              count={100}
+              rowsPerPage={10}
+              page={page}
+              rowsPerPageOptions={[10]}
+              onChangePage={(event, page_) => {
+                this.setState({ page: page_ });
+                loadRanking(10 * page_ + 1, 10 * (page_ + 1));
+              }}
+            />
+          </TableFooter>
         </Table>
       </div>
     );
