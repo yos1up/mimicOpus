@@ -83,14 +83,15 @@ const loadQuestionsList = (req, res) => {
       urlQuery.user = '%';
     }
     const query = {
-      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat '
-        + 'FROM questions q LEFT JOIN users u ON q.uid = u.id '
-        + 'WHERE q.bpm >= $1 and q.bpm <= $2 and q.title LIKE \'%'}${
+      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat, s.score FROM questions q '
+        + 'LEFT JOIN users u ON q.uid = u.id '
+        + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
+        + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
         urlQuery.title
       }${'%\' and u.username LIKE \''
       }${urlQuery.user
-      }${'\' ORDER BY q.uploadedat DESC LIMIT $3 OFFSET $4'}`,
-      values: [urlQuery.lowBPM, urlQuery.highBPM,
+      }${'\' ORDER BY q.uploadedat DESC LIMIT $4 OFFSET $5'}`,
+      values: [req.user.id, urlQuery.lowBPM, urlQuery.highBPM,
         urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
     };
 
@@ -107,6 +108,7 @@ const loadQuestionsList = (req, res) => {
               userName: item.username,
               title: item.title,
               uploadedAt: item.uploadedat,
+              score: item.score,
             }
           });
         });
