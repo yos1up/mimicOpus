@@ -162,6 +162,7 @@ client.query(query)
     // scoreList: [[uid<int>, qid<int>, score<0--1>], ... ]
     const scoreList = Object.values(scoreSet);
 
+    console.log('scoreList:');
     console.log(scoreList);
 
     // calclate IRT
@@ -183,13 +184,13 @@ client.query(query)
     for (let i = 0; i < uRating.length; i += 1) {
       uRating[i] = (uRating[i] - mu) / sigma * 500 + 1500;
     }
-    console.log('uRating:');
+    console.log('user Rating:');
     console.log(uRating);
 
     for (let i = 0; i < qRating.length; i += 1) {
       qRating[i] = (qRating[i] - mu) / sigma * 500 + 1500;
     } // TODO: should we use qRating together to determine mu and sigma?
-    console.log('qRating:');
+    console.log('question Rating:');
     console.log(qRating);
 
     // update users table (uRating)
@@ -202,6 +203,7 @@ client.query(query)
     // console.log(queryText);
     client.query({ text: queryText })
       .then(() => {
+        console.log('DB updated successfully. (users)');
         // update questions table (qRating)
         queryText = 'UPDATE questions u SET rating = s.rating FROM UNNEST(ARRAY[';
         for (let i = 0; i < qRating.length; i += 1) {
@@ -211,7 +213,7 @@ client.query(query)
         queryText += ']) s (rating NUMERIC, id INT) WHERE u.id = s.id';
         // console.log(queryText);
         client.query({ text: queryText })
-          .then(() => { client.end(); })
+          .then(() => { console.log('DB updated successfully. (questions)'); client.end(); })
           .catch((e) => { console.log(e); client.end(); });
       })
       .catch((e) => { console.log(e); client.end(); });
