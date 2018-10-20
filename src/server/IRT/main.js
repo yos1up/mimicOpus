@@ -143,7 +143,7 @@ function calculateIRT(scoreList) {
 }
 
 const query = {
-  text: 'SELECT * from scores ORDER BY id',
+  text: 'SELECT DISTINCT on (uid, qid) * FROM scores ORDER BY uid, qid, score DESC',
 };
 client.query(query)
   .then((result) => {
