@@ -23,21 +23,37 @@ function randUniform(a, b) {
 }
 */
 
+function toSqlNumericString(x) {
+  if (Number.isNaN(x)) return '0.0';
+  const ret = '' + Number(x);
+  // to avoid "error: rows returned by function are not all of the same row type"
+  if (ret.indexOf('.') === -1) return ret + '.';
+  return ret;
+}
+
 function mean(xs) { // of Array
   let sum = 0;
+  let cnt = 0;
   for (let i = 0; i < xs.length; i += 1) {
-    sum += xs[i];
+    if (!Number.isNaN(xs[i])) {
+      sum += xs[i];
+      cnt += 1;
+    }
   }
-  return sum / xs.length;
+  return sum / cnt;
 }
 
 function std(xs) { // of Array
   const mu = mean(xs);
   let sum = 0;
+  let cnt = 0;
   for (let i = 0; i < xs.length; i += 1) {
-    sum += (xs[i] - mu) ** 2;
+    if (!Number.isNaN(xs[i])) {
+      sum += (xs[i] - mu) ** 2;
+      cnt += 1;
+    }
   }
-  return sum / xs.length;
+  return Math.sqrt(sum / cnt);
 }
 
 function sigmoid(x) {
@@ -73,6 +89,12 @@ function IRTderivative(scoreList, r, theta, a) {
     derTheta[q] += theta[q];
   }
 
+  /*
+  console.log(derR);
+  console.log(derTheta);
+  console.log(derA);
+  */
+
   return { derR, derTheta, derA };
 }
 
@@ -97,9 +119,16 @@ function calculateIRT(scoreList) {
   nu += 1;
   nq += 1;
 
-  const r = new Array(nu).fill(0);
-  const theta = new Array(nq).fill(0);
-  const a = new Array(nq).fill(1.0);
+  const r = new Array(nu);
+  const theta = new Array(nq);
+  const a = new Array(nq);
+  // fill initial values (otherwise undefined remains)
+  for (let i = 0; i < scoreList.length; i += 1) {
+    r[scoreList[i][0]] = 0;
+    theta[scoreList[i][1]] = 0;
+    a[scoreList[i][1]] = 1;
+  }
+
 
   const numIter = 100000;
   for (let i = 0; i < numIter; i += 1) {
@@ -133,6 +162,8 @@ client.query(query)
     // scoreList: [[uid<int>, qid<int>, score<0--1>], ... ]
     const scoreList = Object.values(scoreSet);
 
+    console.log(scoreList);
+
     // calclate IRT
     const rslt = calculateIRT(scoreList);
 
@@ -152,30 +183,37 @@ client.query(query)
     for (let i = 0; i < uRating.length; i += 1) {
       uRating[i] = (uRating[i] - mu) / sigma * 500 + 1500;
     }
+    console.log('uRating:');
     console.log(uRating);
+
     for (let i = 0; i < qRating.length; i += 1) {
       qRating[i] = (qRating[i] - mu) / sigma * 500 + 1500;
     } // TODO: should we use qRating together to determine mu and sigma?
+    console.log('qRating:');
+    console.log(qRating);
 
-    // update DB
+    // update users table (uRating)
     let queryText = 'UPDATE users u SET rating = s.rating FROM UNNEST(ARRAY[';
     for (let i = 0; i < uRating.length; i += 1) {
       if (i > 0) queryText += ', ';
-      queryText += '(' + Number(uRating[i]) + ', ' + Number(i) + ')';
+      queryText += '(' + toSqlNumericString(uRating[i]) + ', ' + Number(i) + ')';
     }
     queryText += ']) s (rating NUMERIC, id INT) WHERE u.id = s.id';
+    // console.log(queryText);
     client.query({ text: queryText })
-      .then((result2) => {
+      .then(() => {
+        // update questions table (qRating)
         queryText = 'UPDATE questions u SET rating = s.rating FROM UNNEST(ARRAY[';
         for (let i = 0; i < qRating.length; i += 1) {
           if (i > 0) queryText += ', ';
-          queryText += '(' + Number(qRating[i]) + ', ' + Number(i) + ')';
+          queryText += '(' + toSqlNumericString(qRating[i]) + ', ' + Number(i) + ')';
         }
         queryText += ']) s (rating NUMERIC, id INT) WHERE u.id = s.id';
+        // console.log(queryText);
         client.query({ text: queryText })
-          .then((result3) => { client.end(); })
-          .catch((e) => { console.log(e); });
+          .then(() => { client.end(); })
+          .catch((e) => { console.log(e); client.end(); });
       })
-      .catch((e) => { console.log(e); });
+      .catch((e) => { console.log(e); client.end(); });
   })
-  .catch((e) => { console.log(e); });
+  .catch((e) => { console.log(e); client.end(); });
