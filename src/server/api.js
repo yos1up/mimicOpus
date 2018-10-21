@@ -317,7 +317,7 @@ const getRanking = (req, res) => {
       urlQuery.stop = 10;
     }
     const query = {
-      text: 'SELECT username, rating from users where rating is not null ORDER BY rating DESC LIMIT $1 OFFSET $2',
+      text: 'SELECT username, rating from users where rating is not null and rating > 0 ORDER BY rating DESC LIMIT $1 OFFSET $2',
       values: [urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
     };
     client.query(query)
