@@ -1,7 +1,6 @@
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Tone from 'tone';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -96,6 +95,7 @@ class MakeQuestion extends React.Component {
           shiftPitchRange={shiftPitchRange}
           notes={notes}
           pitchRange={pitchRange}
+          soundPlayer={this.soundPlayer}
         />
       </div>
     );

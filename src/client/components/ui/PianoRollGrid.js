@@ -85,12 +85,15 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
   }
 
   mouseUp() {
-    const { addNote } = this.props;
+    const { addNote, soundPlayer } = this.props;
     const { selectRange } = this.state;
 
     // ノーツを発生させる
     if (selectRange !== null) {
       if (selectRange[0] < selectRange[2]) { // 長さゼロ区間の場合を除く
+        if (soundPlayer) { // 音プレビュー
+          soundPlayer.preview(selectRange[1]);
+        }
         const note = new Note({
           start: selectRange[0],
           end: selectRange[2],
@@ -274,6 +277,7 @@ PianoRollGrid.propTypes = {
   shiftPitchRange: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
+  soundPlayer: PropTypes.object.isRequired,
 };
 
 export default PianoRollGrid;

@@ -1,7 +1,6 @@
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Tone from 'tone';
 
 import Button from '@material-ui/core/Button';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
@@ -175,6 +174,7 @@ class PlayQuestion extends React.Component {
           shiftPitchRange={shiftPitchRange}
           notes={notes}
           pitchRange={pitchRange}
+          soundPlayer={this.soundPlayer}
         />
 
         <Dialog

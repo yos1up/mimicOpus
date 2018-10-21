@@ -33,13 +33,13 @@ class SoundPlayer {
     return ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'][nn % 12] + (Math.floor(nn / 12) - 1);
   }
 
-  play(notes, bpm = 120) { // 一連の音符たちを鳴らしたい場合，Tone.Part が便利．（他に Tone.Sequence というのもあるようだ）
+  play(notes, bpm = 120) { // 一連の音符たちを鳴らしたい場合
     /*
       notes: 1-d Array of noteObject
         noteObject: { pitch, start, end, }
     */
     let secPerBeat = 60 / bpm;
-    if (Number.isNaN(secPerBeat)) secPerBeat = 1 / 120.0;
+    if (Number.isNaN(secPerBeat)) secPerBeat = 60 / 120.0;
     const timeEventTupleList = [];
     for (let i = 0; i < notes.size; i += 1) {
       const note = notes.get(i);
@@ -47,18 +47,20 @@ class SoundPlayer {
         [note.start * secPerBeat, [note.pitch, (note.end - note.start) * secPerBeat]],
       );
     }
+    // 一連の音符たちを鳴らしたい場合，このように Tone.Part が便利．（他に Tone.Sequence というのもあるようだ）
     const melody = new Tone.Part(
       (time, event) => {
         this.sampler.triggerAttackRelease(
           SoundPlayer.noteNumberToPitchName(event[0]), event[1], time, 1,
-        ); // 引数は，おそらく (音高，音長，絶対時刻[s]，ベロシティ[0~1])
+        ); // 引数は (音高，音長，絶対時刻[s]，ベロシティ[0~1])
       }, timeEventTupleList,
     );
-    melody.start(Tone.now()); // 先に Tone.Transport.start() してある必要がある．
+    melody.start(Tone.now()); // これよりも先に Tone.Transport.start() してある必要がある．
   }
 
-  preview(pitch) {
-    this.sampler.triggerAttackRelease(pitch, '4n');
+  preview(pitch) { // とりあえず一音だけ即時に鳴らしたい場合はこちらをどうぞ
+    /* pitch<int>: 0--127 */
+    this.sampler.triggerAttackRelease(SoundPlayer.noteNumberToPitchName(pitch), '4n');
   }
 }
 

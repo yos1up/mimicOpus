@@ -1,7 +1,6 @@
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Tone from 'tone';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
