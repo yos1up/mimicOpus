@@ -38,11 +38,19 @@ function SimpleGrid({
   }
   for (let i = 0; i <= rows; i += 1) { // horizontal lines
     let lw = 1;
-    if (typeof hlw !== 'undefined') lw = hlw[i % hlw.length];
+    let backgroundColor = 'black';
+    if (typeof hlw !== 'undefined') {
+      lw = hlw[i % hlw.length];
+      if (lw < 1) {
+        const c = Math.floor(255 * (1 - lw));
+        backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+        lw = 1;
+      }
+    }
     const divStyle = {
       width,
       height: lw,
-      backgroundColor: 'black',
+      backgroundColor,
       position: 'absolute',
       top: i * uh,
       left: 0,
@@ -51,11 +59,19 @@ function SimpleGrid({
   }
   for (let j = 0; j <= cols; j += 1) { // vertical lines
     let lw = 1;
-    if (typeof vlw !== 'undefined') lw = vlw[j % vlw.length];
+    let backgroundColor = 'black';
+    if (typeof vlw !== 'undefined') {
+      lw = vlw[j % vlw.length];
+      if (lw < 1) {
+        const c = Math.floor(255 * (1 - lw));
+        backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+        lw = 1;
+      }
+    }
     const divStyle = {
       width: lw,
       height,
-      backgroundColor: 'black',
+      backgroundColor,
       position: 'absolute',
       top: 0,
       left: j * uw,

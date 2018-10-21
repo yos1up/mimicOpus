@@ -23,10 +23,10 @@ class NoteBlock extends React.Component { // ノーツ
 
   render() {
     const {
-      start, end, uw, uh,
+      start, end, uw, uh, beatPerCol,
     } = this.props;
     const divStyle = {
-      width: uw * (end - start),
+      width: uw * (end - start) / beatPerCol,
       height: uh,
       backgroundColor: 'blue',
       borderRadius: 10,
@@ -52,6 +52,7 @@ NoteBlock.propTypes = {
   uw: PropTypes.number.isRequired,
   uh: PropTypes.number.isRequired,
   delNote: PropTypes.func.isRequired,
+  beatPerCol: PropTypes.number.isRequired,
 };
 
 export default NoteBlock;

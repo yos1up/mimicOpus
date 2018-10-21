@@ -14,14 +14,13 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
     const { pitchRange } = props;
     super(props);
     this.state = {
-      uw: 50,
-      uh: 18,
-      // pitchRange: props.pitchRange, [minPitch, maxPitch] props に移しました（Reduxのcontainerの設定により）
+      uw: 28, // unit width (1 column width)
+      uh: 20, // unit height (1 row height)
       rows: pitchRange[1] - pitchRange[0] + 1,
-      cols: 16,
+      cols: 32,
       xMargin: 36,
       selectRange: null,
-      // [startBeat (decimal), minPitch (integer), endBeat (decimal), maxPitch (integer)]
+      beatPerCol: 0.5, // グリッド刻み（拍数）
     };
     // 上下キー対応
     window.onkeydown = (e => this.keyDown(e));
@@ -103,42 +102,42 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
     }
   }
 
-  relPosToTimePitch(relPos) { // relPos: グリッド左上からの座標ずれ
+  relPosToTimePitch(relPos) { // relPos: グリッド左上からの座標ずれ, timePitch: 時刻[拍]とピッチ
     const { pitchRange } = this.props;
-    const { uw, uh } = this.state;
+    const { uw, uh, beatPerCol } = this.state;
     return [
-      relPos[0] / uw,
+      relPos[0] / uw * beatPerCol,
       pitchRange[1] + 0.5 - relPos[1] / uh,
     ];
   }
 
-  timePitchToRelPos(timePitch) { // timePitch: 時刻とピッチ
+  timePitchToRelPos(timePitch) { // timePitch: 時刻[拍]とピッチ, relPos: グリッド左上からの座標ずれ
     const { pitchRange } = this.props;
-    const { uw, uh } = this.state;
+    const { uw, uh, beatPerCol } = this.state;
     return [
-      timePitch[0] * uw,
+      timePitch[0] / beatPerCol * uw,
       (pitchRange[1] + 0.5 - timePitch[1]) * uh,
     ];
   }
 
   calculateSelectRangeByTwoRelPos(relPos1, relPos2, onePitch = true) {
-    const { cols } = this.state;
+    const { cols, beatPerCol } = this.state;
 
     const tp1 = this.relPosToTimePitch(relPos1);
     const tp2 = this.relPosToTimePitch(relPos2);
     let range;
     if (onePitch) {
       range = [
-        Math.max(0, Math.floor(Math.min(tp1[0], tp2[0]))),
+        Math.max(0, Math.floor(Math.min(tp1[0], tp2[0]) / beatPerCol) * beatPerCol),
         Math.max(0, Math.round(tp1[1])),
-        Math.min(cols, Math.ceil(Math.max(tp1[0], tp2[0]))),
+        Math.min(cols, Math.ceil(Math.max(tp1[0], tp2[0]) / beatPerCol) * beatPerCol),
         Math.min(127, Math.round(tp1[1])),
       ];
     } else {
       range = [
-        Math.max(0, Math.floor(Math.min(tp1[0], tp2[0]))),
+        Math.max(0, Math.floor(Math.min(tp1[0], tp2[0]) / beatPerCol) * beatPerCol),
         Math.max(0, Math.round(Math.min(tp1[1], tp2[1]))),
-        Math.min(cols, Math.ceil(Math.max(tp1[0], tp2[0]))),
+        Math.min(cols, Math.ceil(Math.max(tp1[0], tp2[0]) / beatPerCol) * beatPerCol),
         Math.min(127, Math.round(Math.max(tp1[1], tp2[1]))),
       ];
     }
@@ -148,7 +147,7 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
   render() {
     const { pitchRange, notes, delNote } = this.props;
     const {
-      rows, cols, uw, uh, xMargin, selectRange,
+      rows, cols, uw, uh, xMargin, selectRange, beatPerCol,
     } = this.state;
 
     const elementList = [];
@@ -163,8 +162,9 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
     const hlw = [...Array(rows + 1).keys()].map(i => 1 + (
       ((pitchRange[1] + 1 - i) % 12) ? 0 : 1
     ));
-    const vlw = [...Array(cols + 1).keys()].map(i => 1 + (
-      (i % 4) ? 0 : 1));
+    const vlw = [...Array(cols + 1).keys()].map(
+      i => 0.25 + ((i % 2) ? 0 : 0.75) + ((i % 8) ? 0 : 1)
+    );
     elementList.push(
       <div
         key={elementList.length}
@@ -219,6 +219,7 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
               start={note.start}
               end={note.end}
               uw={uw}
+              beatPerCol={beatPerCol}
               uh={uh}
               pitch={note.pitch}
               parent={this}
