@@ -394,7 +394,16 @@ class Search extends React.Component {
                         <IconButton
                           aria-label="Delete"
                           onClick={(e) => {
-                            deleteUploadedQuestion(id);
+                            deleteUploadedQuestion(id, () => {
+                              loadCountQuestions(
+                                tempLowBPM, tempHighBPM, tempSearchTitle, tempSearchUser,
+                                madeByMe, answered, unanswered,
+                              );
+                              loadQuestionsList(
+                                tempLowBPM, tempHighBPM, 1, 10, tempSearchTitle, tempSearchUser,
+                                madeByMe, answered, unanswered,
+                              );
+                            });
                             e.stopPropagation();
                           }}
                         >

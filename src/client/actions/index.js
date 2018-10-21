@@ -124,7 +124,7 @@ export function changeUploadedQuestion(questionId, question) {
     .catch(console.error);
 }
 
-export function deleteUploadedQuestion(questionId) {
+export function deleteUploadedQuestion(questionId, callback) {
   const method = 'POST';
   const body = JSON.stringify({ id: questionId });
   const headers = {
@@ -132,7 +132,10 @@ export function deleteUploadedQuestion(questionId) {
     'Content-Type': 'application/json',
   };
   fetch('./api/deleteQuestion', { method, headers, body })
-    .then(res => res.json())
+    .then(res => {
+      callback();
+      return res.json();
+    })
     .then(console.log)
     .catch(console.error);
 }
