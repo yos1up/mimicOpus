@@ -64,14 +64,16 @@ function play(notes, bpm = 120) { // 一連の音符たちを鳴らしたい場�
 
 class Home extends React.Component {
   componentDidMount() {
-    const { loadNewQuestionsList } = this.props;
+    const { loadNewQuestionsList, loadOsusumeQuestionsList } = this.props;
     loadNewQuestionsList();
+    loadOsusumeQuestionsList();
   }
 
   render() {
     const {
-      newQuestionsList, setQuestion, setBPM, setQuestionId, changeDisplayMode
+      newQuestionsList, osusumeQuestionsList, setQuestion, setBPM, setQuestionId, changeDisplayMode
     } = this.props;
+    console.log(osusumeQuestionsList);
     return (
       <div id="Home">
         <div>
@@ -104,9 +106,73 @@ class Home extends React.Component {
           </Typography>
         </div>
         <div
-          id="New Questions"
+          id="Osusume Questions"
           style={{
             position: 'absolute', top: 200,
+          }}
+        >
+          <Typography
+            variant="h5"
+            color="textPrimary"
+            style={{
+              position: 'absolute', top: 0, left: 10, width: 500,
+            }}
+          >
+            おすすめ問題
+          </Typography>
+          {
+            [...osusumeQuestionsList].map((item, i) => {
+              const { id, question } = item;
+              return (
+                <Card
+                  style={{
+                    position: 'absolute',
+                    width: 240,
+                    left: 250 * i,
+                    height: 150,
+                    top: 50,
+                  }}
+                  onClick={() => {
+                    setQuestion(question);
+                    setBPM(question.bpm);
+                    setQuestionId(id);
+                    changeDisplayMode(displayModes.PLAY_QUESTION);
+                  }}
+                >
+                  <CardActionArea style={{ width: '100%', height: '100%' }}>
+                    <CardContent>
+                      <Typography
+                        variant="h5"
+                        color="textSecondary"
+                        style={{
+                          position: 'absolute', top: 20, left: 30, width: 200,
+                        }}
+                      >
+                        {question.title}
+                      </Typography>
+                      <IconButton
+                        aria-label="Play"
+                        style={{
+                          position: 'absolute', left: 90, top: 70, width: 50, height: 50,
+                        }}
+                        onClick={(e) => {
+                          play(question.notes, question.bpm);
+                          e.stopPropagation();
+                        }}
+                      >
+                        <PlayArrowIcon />
+                      </IconButton>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              );
+            })
+          }
+        </div>
+        <div
+          id="New Questions"
+          style={{
+            position: 'absolute', top: 500,
           }}
         >
           <Typography
@@ -174,7 +240,9 @@ class Home extends React.Component {
 
 Home.propTypes = {
   newQuestionsList: PropTypes.instanceOf(Immutable.List).isRequired,
+  osusumeQuestionsList: PropTypes.instanceOf(Immutable.List).isRequired,
   loadNewQuestionsList: PropTypes.func.isRequired,
+  loadOsusumeQuestionsList: PropTypes.func.isRequired,
   setQuestion: PropTypes.func.isRequired,
   setBPM: PropTypes.func.isRequired,
   setQuestionId: PropTypes.func.isRequired,

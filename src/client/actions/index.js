@@ -380,3 +380,34 @@ export function loadRanking(dispatch, start = 1, stop = 10) {
     })
     .catch(console.error);
 }
+
+export function addQuestionToOsusumeList(id, question) {
+  return {
+    type: actionTypes.ADD_QUESTION_TO_OSUSUME_LIST,
+    id,
+    question,
+  };
+}
+
+export function clearOsusumeQuestionsList() {
+  return {
+    type: actionTypes.CLEAR_OSUSUME_QUESTIONS_LIST,
+  };
+}
+
+export function loadOsusumeQuestionsList(dispatch) {
+  dispatch(clearOsusumeQuestionsList());
+  const method = 'GET';
+  const params = new URLSearchParams();
+  params.set('start', 1);
+  params.set('stop', 4);
+  params.set('orderMode', 'osusume');
+  fetch(`./api/loadQuestionsList?${params.toString()}`, { method })
+    .then(res => res.json())
+    .then((results) => {
+      results.forEach((item) => {
+        dispatch(addQuestionToOsusumeList(item.id, Question.fromJS(item.question)));
+      });
+    })
+    .catch(console.error);
+}

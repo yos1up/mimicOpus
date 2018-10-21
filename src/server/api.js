@@ -94,6 +94,10 @@ const loadQuestionsList = (req, res) => {
     } else {
       urlQuery.unanswered = false;
     }
+    if (urlQuery.orderMode === null || urlQuery.orderMode === undefined) {
+      urlQuery.orderMode = 'new';
+    }
+
     if (urlQuery.user === '') {
       urlQuery.user = '%';
     }
@@ -109,21 +113,44 @@ const loadQuestionsList = (req, res) => {
     }
     filterQuery += ')';
 
-    const query = {
-      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat, q.rating, s.score FROM questions q '
-        + 'LEFT JOIN users u ON q.uid = u.id '
-        + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
-        + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
-        urlQuery.title
-      }${'%\' and u.username LIKE \''
-      }${urlQuery.user
-      }${'\' and '
-      }${filterQuery
-      }${' '
-      }${'ORDER BY q.uploadedat DESC LIMIT $4 OFFSET $5'}`,
-      values: [req.user.id, urlQuery.lowBPM, urlQuery.highBPM,
-        urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
-    };
+    let query;
+    let myRating = req.user.rating;
+    if (myRating === null || myRating === undefined) {
+      myRating = 1500;
+    }
+    if (urlQuery.orderMode === 'new') {
+      query = {
+        text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat, q.rating, s.score FROM questions q '
+          + 'LEFT JOIN users u ON q.uid = u.id '
+          + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
+          + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
+          urlQuery.title
+        }${'%\' and u.username LIKE \''
+        }${urlQuery.user
+        }${'\' and '
+        }${filterQuery
+        }${' '
+        }${'ORDER BY q.uploadedat DESC LIMIT $4 OFFSET $5'}`,
+        values: [req.user.id, urlQuery.lowBPM, urlQuery.highBPM,
+          urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
+      };
+    } else { // osusume
+      query = {
+        text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat, q.rating, s.score FROM questions q '
+          + 'LEFT JOIN users u ON q.uid = u.id '
+          + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
+          + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
+          urlQuery.title
+        }${'%\' and u.username LIKE \''
+        }${urlQuery.user
+        }${'\' and '
+        }${filterQuery
+        }${' '
+        }${'ORDER BY abs($6 - q.rating) LIMIT $4 OFFSET $5'}`,
+        values: [req.user.id, urlQuery.lowBPM, urlQuery.highBPM,
+          urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1, myRating - 693],
+      };
+    }
 
     client.query(query)
       .then((result) => {

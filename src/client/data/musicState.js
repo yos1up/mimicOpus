@@ -8,6 +8,7 @@ const MusicState = Immutable.Record({
   question: new Question({}),
   questionsList: Immutable.List(),
   newQuestionsList: Immutable.List(),
+  osusumeQuestionsList: Immutable.List(),
   bpm: 120,
   title: '',
   questionId: '',

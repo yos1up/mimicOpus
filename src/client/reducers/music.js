@@ -53,6 +53,12 @@ export default function (state = new MusicState(), action) {
     case actionTypes.CLEAR_NEW_QUESTIONS_LIST:
       return state.set('newQuestionsList', Immutable.List());
 
+    case actionTypes.ADD_QUESTION_TO_OSUSUME_LIST:
+      return state.update('osusumeQuestionsList', ql => ql.push({ id: action.id, question: action.question }));
+
+    case actionTypes.CLEAR_OSUSUME_QUESTIONS_LIST:
+      return state.set('osusumeQuestionsList', Immutable.List());
+
     default:
       return state;
   }
