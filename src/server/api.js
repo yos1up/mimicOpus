@@ -5,7 +5,7 @@ const client = require('./pgClient');
 const apiRouter = express.Router();
 
 const uploadQuestion = (req, res) => {
-  if (req.isAuthenticated()) {
+  if (req.isAuthenticated() || req.user.provider !== 'anonymous') {
     const data = req.body;
     const query = {
       text: 'INSERT INTO questions(notes, bpm, uid, title, uploadedAt, rating) VALUES($1, $2, $3, $4, $5, $6)',
@@ -23,11 +23,11 @@ const uploadQuestion = (req, res) => {
 };
 
 const changeQuestion = (req, res) => {
-  if (req.isAuthenticated()) {
+  if (req.isAuthenticated() || req.user.provider !== 'anonymous') {
     const data = req.body;
     const query = {
-      text: 'UPDATE questions SET notes = ($1), bpm = ($2), title = ($3) WHERE id=($4)',
-      values: [JSON.stringify(data.notes), data.bpm, data.title, data.id],
+      text: 'UPDATE questions SET notes = ($1), bpm = ($2), title = ($3) WHERE id=$4 and uid=$5',
+      values: [JSON.stringify(data.notes), data.bpm, data.title, data.id, req.user.id],
     };
     client.query(query)
       .then(() => res.send({ errState: 0 }))
@@ -41,11 +41,11 @@ const changeQuestion = (req, res) => {
 };
 
 const deleteQuestion = (req, res) => {
-  if (req.isAuthenticated()) {
+  if (req.isAuthenticated() || req.user.provider !== 'anonymous') {
     const { id } = req.body;
     const query = {
-      text: 'DELETE FROM questions WHERE id = $1',
-      values: [id],
+      text: 'DELETE FROM questions WHERE id = $1 and uid=$2',
+      values: [id, req.user.id],
     };
     client.query(query)
       .then(() => res.send({ errState: 0 }))
