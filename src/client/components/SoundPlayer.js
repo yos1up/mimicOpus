@@ -27,6 +27,7 @@ class SoundPlayer {
       baseUrl: './instrument_piano/',
     });
     Tone.Transport.start();
+    this.lastPlayStarted = 0;
   }
 
   static noteNumberToPitchName(nn) {
@@ -56,6 +57,12 @@ class SoundPlayer {
       }, timeEventTupleList,
     );
     melody.start(Tone.now()); // これよりも先に Tone.Transport.start() してある必要がある．
+    this.lastPlayStarted = Tone.now();
+  }
+
+  position() { // 現在の再生位置[秒]を返す
+    // TODO 再生が終わってもこの値は増加し続ける・・・
+    return Tone.now() - this.lastPlayStarted;
   }
 
   preview(pitch) { // とりあえず一音だけ即時に鳴らしたい場合はこちらをどうぞ
