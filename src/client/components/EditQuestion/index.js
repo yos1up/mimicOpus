@@ -13,6 +13,8 @@ import Input from '@material-ui/core/Input';
 import PianoRollGrid from '../ui/PianoRollGrid';
 import Question from '../../data/question';
 
+import displayModes from '../../data/displayModes';
+
 // サンプラー
 const sampler = new Tone.Sampler({
   C2: 'C2.wav',
@@ -68,7 +70,7 @@ class EditQuestion extends React.Component {
   render() {
     const {
       notes, pitchRange, bpm, title, questionId, addNote, delNote, shiftPitchRange, setBPM,
-      changeUploadedQuestion, setTitle,
+      changeUploadedQuestion, setTitle, clearNotes, changeDisplayMode,
     } = this.props;
     return (
       <div id="MakeQuestion">
@@ -94,6 +96,7 @@ class EditQuestion extends React.Component {
         </Button>
         <Typography
           style={{ position: 'absolute', top: 10, left: 300 }}
+          variant="body1"
         >
           BPM
           {bpm}
@@ -106,9 +109,10 @@ class EditQuestion extends React.Component {
           onChange={(e, v) => setBPM(v)}
           style={{
             position: 'absolute',
-            top: 25,
+            top: 40,
             left: 300,
             width: 200,
+            height: 30,
           }}
         />
         <Button
@@ -121,6 +125,8 @@ class EditQuestion extends React.Component {
               questionId,
               new Question({ notes, bpm, title: (title !== '') ? title : 'Untitled' }),
             );
+            clearNotes();
+            changeDisplayMode(displayModes.HOME);
           }}
         >
           <SaveIcon />
@@ -150,6 +156,8 @@ EditQuestion.propTypes = {
   setBPM: PropTypes.func.isRequired,
   changeUploadedQuestion: PropTypes.func.isRequired,
   setTitle: PropTypes.func.isRequired,
+  clearNotes: PropTypes.func.isRequired,
+  changeDisplayMode: PropTypes.func.isRequired,
 };
 
 export default EditQuestion;

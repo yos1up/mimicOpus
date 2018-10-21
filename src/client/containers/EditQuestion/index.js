@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 
 import {
   addNote, delNote, shiftPitchRange, setBPM, changeUploadedQuestion, setTitle,
+  clearNotes, changeDisplayMode,
 } from '../../actions';
 import EditQuestion from '../../components/EditQuestion';
 
@@ -16,6 +17,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   addNote: note => dispatch(addNote(note)),
   delNote: idx => dispatch(delNote(idx)),
+  clearNotes: () => dispatch(clearNotes()),
+  changeDisplayMode: mode => dispatch(changeDisplayMode(mode)),
   shiftPitchRange: delta => dispatch(shiftPitchRange(delta)),
   setBPM: bpm => dispatch(setBPM(bpm)),
   setTitle: title => dispatch(setTitle(title)),
