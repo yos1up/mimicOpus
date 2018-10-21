@@ -21,6 +21,9 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import displayModes from '../../data/displayModes';
 
@@ -87,6 +90,9 @@ class Search extends React.Component {
       tempHighBPM: highBPM,
       tempSearchTitle: searchTitle,
       tempSearchUser: searchUser,
+      madeByMe: true,
+      answered: true,
+      unanswered: true,
     };
   }
 
@@ -94,9 +100,12 @@ class Search extends React.Component {
     const {
       lowBPM, highBPM, searchTitle, searchUser, loadQuestionsList, loadCountQuestions,
     } = this.props;
-    const { page } = this.state;
+    const {
+      page, madeByMe, answered, unanswered,
+    } = this.state;
     loadCountQuestions(lowBPM, highBPM, searchTitle, searchUser);
-    loadQuestionsList(lowBPM, highBPM, 10 * page + 1, 10 * (page + 1), searchTitle, searchUser);
+    loadQuestionsList(lowBPM, highBPM, 10 * page + 1, 10 * (page + 1), searchTitle, searchUser,
+      madeByMe, answered, unanswered);
     this.setState({
       tempLowBPM: lowBPM,
       tempHighBPM: highBPM,
@@ -114,6 +123,7 @@ class Search extends React.Component {
     } = this.props;
     const {
       page, tempLowBPM, tempHighBPM, tempSearchTitle, tempSearchUser,
+      madeByMe, answered, unanswered,
     } = this.state;
     return (
       <div id="Search">
@@ -237,6 +247,57 @@ class Search extends React.Component {
               }}
             />
           </div>
+          <FormGroup
+            style={{
+              position: 'absolute', top: 10, left: 720, height: 200,
+            }}
+          >
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  checked={madeByMe}
+                  onChange={(e) => {
+                    this.setState({ madeByMe: e.target.checked });
+                  }}
+                  value="checkedA"
+                />
+              )}
+              style={{
+                height: 30,
+              }}
+              label="自分が作成"
+            />
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  checked={answered}
+                  onChange={(e) => {
+                    this.setState({ answered: e.target.checked });
+                  }}
+                  value="checkedB"
+                />
+              )}
+              style={{
+                height: 30,
+              }}
+              label="回答済み"
+            />
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  checked={unanswered}
+                  onChange={(e) => {
+                    this.setState({ unanswered: e.target.checked });
+                  }}
+                  value="checkedB"
+                />
+              )}
+              style={{
+                height: 30,
+              }}
+              label="未回答"
+            />
+          </FormGroup>
           <Button
             variant="contained"
             color="primary"
@@ -244,9 +305,13 @@ class Search extends React.Component {
               position: 'absolute', top: 30, left: 880, width: 100,
             }}
             onClick={() => {
-              loadCountQuestions(tempLowBPM, tempHighBPM, tempSearchTitle, tempSearchUser);
+              loadCountQuestions(
+                tempLowBPM, tempHighBPM, tempSearchTitle, tempSearchUser,
+                madeByMe, answered, unanswered,
+              );
               loadQuestionsList(
                 tempLowBPM, tempHighBPM, 1, 10, tempSearchTitle, tempSearchUser,
+                madeByMe, answered, unanswered,
               );
               this.setState({
                 page: 0,
@@ -285,7 +350,6 @@ class Search extends React.Component {
                 const { id, question } = item;
                 const date = `${question.uploadedAt.getFullYear()}/${question.uploadedAt.getMonth()}/${question.uploadedAt.getDate()}`;
                 const bMine = (uid === question.uid);
-                console.log(question.rating);
                 return (
                   <TableRow
                     key={id}
@@ -363,6 +427,7 @@ class Search extends React.Component {
                 this.setState({ page: page_ });
                 loadQuestionsList(
                   lowBPM, highBPM, 10 * page_ + 1, 10 * (page_ + 1), searchTitle, searchUser,
+                  madeByMe, answered, unanswered,
                 );
               }}
             />

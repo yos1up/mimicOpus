@@ -35,15 +35,19 @@ const mapDispatchToProps = dispatch => ({
   setTitle: title => dispatch(setTitle(title)),
   setLowBPM: bpm => dispatch(setLowBPM(bpm)),
   setHighBPM: bpm => dispatch(setHighBPM(bpm)),
-  loadQuestionsList: (lowBPM, highBPM, start, stop, title, user) => loadQuestionsList(
-    dispatch, lowBPM, highBPM, start, stop, title, user,
+  loadQuestionsList: (
+    lowBPM, highBPM, start, stop, title, user, madeByMe, answered, unanswered
+  ) => loadQuestionsList(
+    dispatch, lowBPM, highBPM, start, stop, title, user, madeByMe, answered, unanswered,
   ),
   setSearchTitle: searchTitle => dispatch(setSearchTitle(searchTitle)),
   setSearchUser: searchUser => dispatch(setSearchUser(searchUser)),
   setQuestionId: questionId => dispatch(setQuestionId(questionId)),
   deleteUploadedQuestion,
-  loadCountQuestions: (lowBPM, highBPM, title, user) => loadCountQuestions(
-    dispatch, lowBPM, highBPM, title, user,
+  loadCountQuestions: (
+    lowBPM, highBPM, title, user, madeByMe, answered, unanswered
+  ) => loadCountQuestions(
+    dispatch, lowBPM, highBPM, title, user, madeByMe, answered, unanswered,
   ),
 });
 

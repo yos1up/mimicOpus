@@ -79,9 +79,36 @@ const loadQuestionsList = (req, res) => {
     if (urlQuery.user === null || urlQuery.user === undefined) {
       urlQuery.user = '';
     }
+    if (urlQuery.madeByMe === 'true' || urlQuery.madeByMe === null || urlQuery.madeByMe === undefined) {
+      urlQuery.madeByMe = true;
+    } else {
+      urlQuery.madeByMe = false;
+    }
+    if (urlQuery.answered === 'true' || urlQuery.answered === null || urlQuery.answered === undefined) {
+      urlQuery.answered = true;
+    } else {
+      urlQuery.answered = false;
+    }
+    if (urlQuery.unanswered === 'true' || urlQuery.unanswered === null || urlQuery.unanswered === undefined) {
+      urlQuery.unanswered = true;
+    } else {
+      urlQuery.unanswered = false;
+    }
     if (urlQuery.user === '') {
       urlQuery.user = '%';
     }
+    let filterQuery = '(false';
+    if (urlQuery.madeByMe) {
+      filterQuery += ' or q.uid = $1';
+    }
+    if (urlQuery.answered) {
+      filterQuery += ' or s.score is not null';
+    }
+    if (urlQuery.unanswered) {
+      filterQuery += ' or s.score is null';
+    }
+    filterQuery += ')';
+
     const query = {
       text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat, q.rating, s.score FROM questions q '
         + 'LEFT JOIN users u ON q.uid = u.id '
@@ -90,7 +117,10 @@ const loadQuestionsList = (req, res) => {
         urlQuery.title
       }${'%\' and u.username LIKE \''
       }${urlQuery.user
-      }${'\' ORDER BY q.uploadedat DESC LIMIT $4 OFFSET $5'}`,
+      }${'\' and '
+      }${filterQuery
+      }${' '
+      }${'ORDER BY q.uploadedat DESC LIMIT $4 OFFSET $5'}`,
       values: [req.user.id, urlQuery.lowBPM, urlQuery.highBPM,
         urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
     };
@@ -139,18 +169,48 @@ const countQuestions = (req, res) => {
     if (urlQuery.user === null || urlQuery.user === undefined) {
       urlQuery.user = '';
     }
+    if (urlQuery.madeByMe === 'true' || urlQuery.madeByMe === null || urlQuery.madeByMe === undefined) {
+      urlQuery.madeByMe = true;
+    } else {
+      urlQuery.madeByMe = false;
+    }
+    if (urlQuery.answered === 'true' || urlQuery.answered === null || urlQuery.answered === undefined) {
+      urlQuery.answered = true;
+    } else {
+      urlQuery.answered = false;
+    }
+    if (urlQuery.unanswered === 'true' || urlQuery.unanswered === null || urlQuery.unanswered === undefined) {
+      urlQuery.unanswered = true;
+    } else {
+      urlQuery.unanswered = false;
+    }
     if (urlQuery.user === '') {
       urlQuery.user = '%';
     }
+    let filterQuery = '(false';
+    if (urlQuery.madeByMe) {
+      filterQuery += ' or q.uid = $1';
+    }
+    if (urlQuery.answered) {
+      filterQuery += ' or s.score is not null';
+    }
+    if (urlQuery.unanswered) {
+      filterQuery += ' or s.score is null';
+    }
+    filterQuery += ')';
+
     const query = {
-      text: `${'SELECT COUNT(*) '
-        + 'FROM questions q LEFT JOIN users u ON q.uid = u.id '
-        + 'WHERE q.bpm >= $1 and q.bpm <= $2 and q.title LIKE \'%'}${
+      text: `${'SELECT COUNT(*) FROM questions q '
+        + 'LEFT JOIN users u ON q.uid = u.id '
+        + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
+        + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
         urlQuery.title
       }${'%\' and u.username LIKE \''
       }${urlQuery.user
-      }${'\''}`,
-      values: [urlQuery.lowBPM, urlQuery.highBPM],
+      }${'\' and '
+      }${filterQuery
+      }`,
+      values: [req.user.id, urlQuery.lowBPM, urlQuery.highBPM],
     };
 
     client.query(query)

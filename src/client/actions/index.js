@@ -151,7 +151,10 @@ export function uploadQuestion(question) {
     .catch(console.error);
 }
 
-export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000, start = 1, stop = 10, title = '', user = '') {
+export function loadQuestionsList(
+  dispatch, lowBPM = 0, highBPM = 1000, start = 1, stop = 10, title = '', user = '',
+  madeByMe = true, answered = true, unanswered = true,
+) {
   dispatch(clearQuestionsList());
 
   const method = 'GET';
@@ -162,6 +165,9 @@ export function loadQuestionsList(dispatch, lowBPM = 0, highBPM = 1000, start = 
   params.set('stop', stop);
   params.set('title', title);
   params.set('user', user);
+  params.set('madeByMe', madeByMe);
+  params.set('answered', answered);
+  params.set('unanswered', unanswered);
   fetch(`./api/loadQuestionsList?${params.toString()}`, { method })
     .then(res => res.json())
     .then((results) => {
@@ -324,13 +330,18 @@ export function setCountQuestions(count) {
   };
 }
 
-export function loadCountQuestions(dispatch, lowBPM = 0, highBPM = 1000, title = '', user = '') {
+export function loadCountQuestions(
+  dispatch, lowBPM = 0, highBPM = 1000, title = '', user = '', madeByMe = true, answered = true, unanswered = true
+) {
   const method = 'GET';
   const params = new URLSearchParams();
   params.set('lowBPM', lowBPM);
   params.set('highBPM', highBPM);
   params.set('title', title);
   params.set('user', user);
+  params.set('madeByMe', madeByMe);
+  params.set('answered', answered);
+  params.set('unanswered', unanswered);
   fetch(`./api/countQuestions?${params.toString()}`, { method })
     .then(res => res.json())
     .then((results) => {
