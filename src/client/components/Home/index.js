@@ -100,14 +100,23 @@ class Home extends React.Component {
             耳コピのスキルを数値化したレーティングを表示することができます．
             <br />
             <br />
+            このWebサービスはAlpha Versionとなっております。何かバグや機能リクエストがあればyos1up(
+            <a href="https://twitter.com/yos1up">twitter</a>
+            )またはmarshi(
+            <a href="https://twitter.com/jokermarshi">twitter</a>
+            )までご連絡していただければ、助かります。
+            <br />
+            <br />
 
-            このWebサービスはオープンソースで開発されていて、デベロッパーを歓迎します。
+            このWebサービスはオープンソースで開発されていて、デベロッパーを歓迎します。(
+            <a href="https://github.com/yos1up/mimicOpus">github</a>
+            )
           </Typography>
         </div>
         <div
           id="Osusume Questions"
           style={{
-            position: 'absolute', top: 200,
+            position: 'absolute', top: 250,
           }}
         >
           <Typography
