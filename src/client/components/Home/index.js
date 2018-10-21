@@ -73,7 +73,6 @@ class Home extends React.Component {
     const {
       newQuestionsList, osusumeQuestionsList, setQuestion, setBPM, setQuestionId, changeDisplayMode
     } = this.props;
-    console.log(osusumeQuestionsList);
     return (
       <div id="Home">
         <div>

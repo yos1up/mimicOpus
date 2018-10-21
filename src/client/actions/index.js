@@ -120,7 +120,6 @@ export function changeUploadedQuestion(questionId, question) {
   };
   fetch('./api/changeQuestion', { method, headers, body })
     .then(res => res.json())
-    .then(console.log)
     .catch(console.error);
 }
 
@@ -132,11 +131,10 @@ export function deleteUploadedQuestion(questionId, callback) {
     'Content-Type': 'application/json',
   };
   fetch('./api/deleteQuestion', { method, headers, body })
-    .then(res => {
+    .then((res) => {
       callback();
       return res.json();
     })
-    .then(console.log)
     .catch(console.error);
 }
 
@@ -150,7 +148,6 @@ export function uploadQuestion(question) {
   };
   fetch('./api/uploadQuestion', { method, headers, body })
     .then(res => res.json())
-    .then(console.log)
     .catch(console.error);
 }
 
@@ -220,7 +217,6 @@ export function saveScore(qid, score) {
   };
   fetch('./api/saveScore', { method, headers, body })
     .then(res => res.json())
-    .then(console.log)
     .catch(console.error);
 }
 
