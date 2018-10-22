@@ -26,6 +26,17 @@ postgres=> CREATE DATABASE mimicopus;
 $ psql mimicopus < mimicopus_dev.sql
 ```
 
+setup for heroku
+```
+$ heroku pg:psql --app mimicopus-stg < mimicopus.sql
+```
+
+reset setup for heroku
+```
+$ heroku pg:psql --app mimicopus-stg < drop_mimicopus.sql
+$ heroku pg:psql --app mimicopus-stg < mimicopus.sql
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
