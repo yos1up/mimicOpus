@@ -45,4 +45,4 @@ In the project directory, you can run:
 `npm run dev`
 
 ### deploy
-push to heroku repository.
+`npm run build` and push to heroku repository.
