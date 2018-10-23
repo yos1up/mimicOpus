@@ -5,6 +5,7 @@ const api = require('./api');
 const auth = require('./auth');
 
 const app = express();
+app.set('port', (process.env.PORT || 8080));
 
 app.use(express.static('dist'));
 app.use(express.static('public'));
@@ -16,4 +17,4 @@ app.use(bodyParser.json());
 
 app.use('/', api);
 
-app.listen(8080, () => console.log('Listening on port 8080!'));
+app.listen(app.get('port'), () => console.log('Listening on port!'));

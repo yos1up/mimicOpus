@@ -12,7 +12,7 @@ const authRouter = express.Router();
 passport.use(new GoogleStrategy({
   clientID: process.env.MIMICOPUS_GOOGLE_CLIENT_ID,
   clientSecret: process.env.MIMICOPUS_GOOGLE_CLIENT_SECRET,
-  callbackURL: 'http://localhost:5000/auth/google/callback'
+  callbackURL: process.env.MIMICOPUS_GOOGLE_CALLBACK,
 }, ((accessToken, refreshToken, profile, done) => {
   if (profile) {
     return done(null, profile);
