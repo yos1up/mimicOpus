@@ -114,7 +114,7 @@ class Search extends React.Component {
           <div
             id="bpm picker"
             style={{
-              position: 'absolute', top: 20, left: 250,
+              position: 'absolute', top: 20, left: 210,
             }}
           >
             <Typography
@@ -173,7 +173,7 @@ class Search extends React.Component {
           <div
             id="search title user"
             style={{
-              position: 'absolute', top: 20, left: 520,
+              position: 'absolute', top: 20, left: 460,
             }}
           >
             <Typography
@@ -200,7 +200,7 @@ class Search extends React.Component {
           </div>
           <FormGroup
             style={{
-              position: 'absolute', top: 10, left: 720, height: 200,
+              position: 'absolute', top: 5, left: 680, height: 200,
             }}
           >
             <FormControlLabel
@@ -253,7 +253,7 @@ class Search extends React.Component {
             variant="contained"
             color="primary"
             style={{
-              position: 'absolute', top: 30, left: 880, width: 100,
+              position: 'absolute', top: 35, left: 820, width: 100,
             }}
             onClick={() => {
               loadCountQuestions(

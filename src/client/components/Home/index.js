@@ -31,6 +31,13 @@ class Home extends React.Component {
     } = this.props;
     return (
       <div id="Home">
+        {/* <img
+          src="./images/piano.jpg"
+          alt=""
+          style={{
+            width:1000,
+          }}
+        /> */}
         <div>
           <Typography
             variant="h6"

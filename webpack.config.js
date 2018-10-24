@@ -35,6 +35,7 @@ module.exports = {
     proxy: {
       '/api': 'http://localhost:8080',
       '/instrument_piano': 'http://localhost:8080',
+      '/images': 'http://localhost:8080',
       '/auth': 'http://localhost:8080'
     }
   },
