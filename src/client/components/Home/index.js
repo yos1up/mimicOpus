@@ -62,27 +62,12 @@ class Home extends React.Component {
             また、サインインをすることで、自分で作曲した曲を他のユーザーに耳コピしてもらったり，
             <br />
             耳コピのスキルを数値化したレーティングを表示することができます．
-            <br />
-            <br />
-            mimicopusはAlpha Versionとなっております。
-            <br />
-            何かバグや機能リクエストがあればyos1up(
-            <a href="https://twitter.com/yos1up">twitter</a>
-            )またはmarshi(
-            <a href="https://twitter.com/jokermarshi">twitter</a>
-            )までご連絡していただければ、助かります。
-            <br />
-            <br />
-
-            このWebサービスはオープンソースで開発されていて、デベロッパーを歓迎します。(
-            <a href="https://github.com/yos1up/mimicOpus">github</a>
-            )
           </Typography>
         </div>
         <div
           id="Osusume Questions"
           style={{
-            position: 'absolute', top: 370,
+            position: 'absolute', top: 200,
           }}
         >
           <Typography
@@ -146,7 +131,7 @@ class Home extends React.Component {
         <div
           id="New Questions"
           style={{
-            position: 'absolute', top: 600,
+            position: 'absolute', top: 450,
           }}
         >
           <Typography
@@ -206,6 +191,29 @@ class Home extends React.Component {
               );
             })
           }
+        </div>
+        <div>
+          <Typography
+            variant="h7"
+            color="textPrimary"
+            style={{
+              position: 'absolute', top: 700, left: 10, width: 800,
+            }}
+          >
+            mimicopusはAlpha Versionとなっております。
+            <br />
+            何かバグや機能リクエストがあればyos1up(
+            <a href="https://twitter.com/yos1up">twitter</a>
+            )またはmarshi(
+            <a href="https://twitter.com/jokermarshi">twitter</a>
+            )までご連絡していただければ、助かります。
+            <br />
+            <br />
+
+            このWebサービスはオープンソースで開発されていて、デベロッパーを歓迎します。(
+            <a href="https://github.com/yos1up/mimicOpus">github</a>
+            )
+          </Typography>
         </div>
       </div>
     );
