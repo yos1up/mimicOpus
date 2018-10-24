@@ -40,18 +40,19 @@ class Home extends React.Component {
         /> */}
         <div>
           <Typography
-            variant="h6"
+            variant="h4"
             color="textPrimary"
             style={{
-              position: 'absolute', top: 0, left: 10, width: 500,
+              position: 'absolute', top: 10, left: 10, width: 500,
             }}
           >
-            mimicopus
+            誰でも耳コピ
           </Typography>
           <Typography
+            variant="h7"
             color="textPrimary"
             style={{
-              position: 'absolute', top: 30, left: 10, width: 1000,
+              position: 'absolute', top: 80, left: 10, width: 800,
             }}
           >
             mimicopus は「耳コピ」のスキルアップのためのオンラインサービスです。
@@ -63,7 +64,9 @@ class Home extends React.Component {
             耳コピのスキルを数値化したレーティングを表示することができます．
             <br />
             <br />
-            このWebサービスはAlpha Versionとなっております。何かバグや機能リクエストがあればyos1up(
+            mimicopusはAlpha Versionとなっております。
+            <br />
+            何かバグや機能リクエストがあればyos1up(
             <a href="https://twitter.com/yos1up">twitter</a>
             )またはmarshi(
             <a href="https://twitter.com/jokermarshi">twitter</a>
@@ -79,7 +82,7 @@ class Home extends React.Component {
         <div
           id="Osusume Questions"
           style={{
-            position: 'absolute', top: 250,
+            position: 'absolute', top: 370,
           }}
         >
           <Typography
@@ -143,7 +146,7 @@ class Home extends React.Component {
         <div
           id="New Questions"
           style={{
-            position: 'absolute', top: 500,
+            position: 'absolute', top: 600,
           }}
         >
           <Typography

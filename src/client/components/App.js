@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 
 import SignIn from '../containers/SignIn';
 import License from '../containers/License';
@@ -15,6 +16,8 @@ import Ranking from '../containers/Ranking';
 
 import displayModes from '../data/displayModes';
 
+import theme from './theme';
+
 
 class App extends React.Component {
   componentDidMount() {
@@ -25,32 +28,34 @@ class App extends React.Component {
   render() {
     const { mode } = this.props;
     return (
-      <div
-        style={{
-          position: 'relative',
-          margin: '0px auto',
-          width: 1000,
-        }}
-      >
-        <Header />
+      <MuiThemeProvider theme={theme}>
         <div
-          id="contents"
           style={{
-            position: 'absolute',
-            top: 50,
+            position: 'relative',
+            margin: '0px auto',
+            width: 1000,
           }}
         >
-          {(mode === displayModes.HOME) ? (<Home />) : null}
-          {(mode === displayModes.MAKE_QUESTION) ? (<MakeQuestion />) : null}
-          {(mode === displayModes.PLAY_QUESTION) ? (<PlayQuestion />) : null}
-          {(mode === displayModes.EDIT_QUESTION) ? (<EditQuestion />) : null}
-          {(mode === displayModes.SEARCH) ? (<Search />) : null}
-          {(mode === displayModes.USER) ? (<Profile />) : null}
-          {(mode === displayModes.RANKING) ? (<Ranking />) : null}
+          <Header />
+          <div
+            id="contents"
+            style={{
+              position: 'absolute',
+              top: 50,
+            }}
+          >
+            {(mode === displayModes.HOME) ? (<Home />) : null}
+            {(mode === displayModes.MAKE_QUESTION) ? (<MakeQuestion />) : null}
+            {(mode === displayModes.PLAY_QUESTION) ? (<PlayQuestion />) : null}
+            {(mode === displayModes.EDIT_QUESTION) ? (<EditQuestion />) : null}
+            {(mode === displayModes.SEARCH) ? (<Search />) : null}
+            {(mode === displayModes.USER) ? (<Profile />) : null}
+            {(mode === displayModes.RANKING) ? (<Ranking />) : null}
+          </div>
+          <SignIn />
+          <License />
         </div>
-        <SignIn />
-        <License />
-      </div>
+      </MuiThemeProvider>
     );
   }
 }
