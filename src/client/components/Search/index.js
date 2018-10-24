@@ -12,7 +12,7 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import IconButton from '@material-ui/core/IconButton';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import EditIcon from '@material-ui/icons/Edit';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
@@ -337,7 +337,7 @@ class Search extends React.Component {
                             e.stopPropagation();
                           }}
                         >
-                          <EditIcon />
+                          <FileCopyIcon />
                         </IconButton>
                       ) : null
                       }

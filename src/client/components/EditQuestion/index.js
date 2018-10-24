@@ -24,8 +24,8 @@ class EditQuestion extends React.Component {
 
   render() {
     const {
-      notes, pitchRange, bpm, title, questionId, addNote, delNote, shiftPitchRange, setBPM,
-      changeUploadedQuestion, setTitle, clearNotes, changeDisplayMode,
+      notes, pitchRange, bpm, title, addNote, delNote, shiftPitchRange, setBPM,
+      uploadQuestion, setTitle, clearNotes, changeDisplayMode,
     } = this.props;
     return (
       <div id="MakeQuestion">
@@ -76,10 +76,11 @@ class EditQuestion extends React.Component {
           aria-label="Save"
           style={{ position: 'absolute', top: 10, left: 550 }}
           onClick={() => {
-            changeUploadedQuestion(
-              questionId,
-              new Question({ notes, bpm, title: (title !== '') ? title : 'Untitled' }),
-            );
+            uploadQuestion(new Question({
+              notes,
+              bpm,
+              title: (title !== '') ? title : 'Untitled',
+            }));
             clearNotes();
             changeDisplayMode(displayModes.HOME);
           }}
@@ -105,12 +106,11 @@ EditQuestion.propTypes = {
   pitchRange: PropTypes.arrayOf(PropTypes.number).isRequired,
   bpm: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  questionId: PropTypes.string.isRequired,
   shiftPitchRange: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
   setBPM: PropTypes.func.isRequired,
-  changeUploadedQuestion: PropTypes.func.isRequired,
+  uploadQuestion: PropTypes.func.isRequired,
   setTitle: PropTypes.func.isRequired,
   clearNotes: PropTypes.func.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
