@@ -3,6 +3,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const DummyStrategy = require('passport-dummy').Strategy;
 const session = require('express-session');
+const connectPg = require('connect-pg-simple');
 
 const client = require('./pgClient');
 
@@ -76,7 +77,18 @@ passport.deserializeUser((id, done) => {
     });
 });
 
-authRouter.use(session({ secret: 'some salt', resave: true, saveUninitialized: true }));
+const databaseURL = process.env.DATABASE_URL || 'postgresql://mimicopus:mimicopus@127.0.0.1:5432/mimicopus';
+authRouter.use(session({
+  store: new (connectPg(session))({
+    conString: databaseURL,
+    tableName: 'session'
+  }),
+  secret: 'some salt',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+}));
+
 authRouter.use(passport.initialize());
 authRouter.use(passport.session());
 authRouter.get('/auth/google', passport.authenticate('google', {
