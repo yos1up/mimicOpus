@@ -30,20 +30,42 @@ class Home extends React.Component {
       newQuestionsList, osusumeQuestionsList, setQuestion, setBPM, setQuestionId, changeDisplayMode
     } = this.props;
     return (
-      <div id="Home">
-        {/* <img
-          src="./images/piano.jpg"
+      <div
+        id="Home"
+        style={{
+          width: 1000,
+          height: 730,
+          backgroundColor: '#FFFFFF',
+          padding: 30,
+        }}
+      >
+        <img
+          src="./images/score.jpg"
           alt=""
           style={{
-            width:1000,
+            position: 'absolute',
+            width: 1060,
+            height: 790,
+            top: 0,
+            left: 0,
           }}
-        /> */}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            width: 770,
+            height: 790,
+            top: 0,
+            left: 0,
+            background: '#FFFFFF',
+          }}
+        />
         <div>
           <Typography
             variant="h4"
             color="textPrimary"
             style={{
-              position: 'absolute', top: 20, left: 10, width: 500,
+              position: 'absolute', top: 20, width: 500,
             }}
           >
             耳コピで音楽力の向上を
@@ -52,7 +74,7 @@ class Home extends React.Component {
             variant="h7"
             color="textPrimary"
             style={{
-              position: 'absolute', top: 80, left: 10, width: 800,
+              position: 'absolute', top: 80, width: 800,
             }}
           >
             mimicopus は「耳コピ」のスキルアップのためのオンラインサービスです。
@@ -195,7 +217,7 @@ class Home extends React.Component {
             variant="body1"
             color="textPrimary"
             style={{
-              position: 'absolute', top: 700, left: 10, width: 800,
+              position: 'absolute', top: 700, width: 800,
             }}
           >
             mimicopusはAlpha Versionとなっております。
