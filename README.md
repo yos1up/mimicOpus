@@ -35,9 +35,15 @@ $ heroku pg:psql --app mimicopus-stg < drop_mimicopus.sql
 $ heroku pg:psql --app mimicopus-stg < mimicopus.sql
 ```
 
-## Available Scripts
+## Environment variable
 
-In the project directory, you can run:
+We need below environment variables.
+
+- MIMICOPUS_GOOGLE_CLIENT_ID You can get this in google cloud platform.
+- MIMICOPUS_GOOGLE_CLIENT_SECRET You can get this in google cloud platform.
+- MIMICOPUS_GOOGLE_CALLBACK Full url of `/auth/google/callback`
+
+## Run
 
 ### develop server
 `npm run dev`
