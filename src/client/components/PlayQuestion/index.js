@@ -10,6 +10,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import PianoRollGrid from '../ui/PianoRollGrid';
 
@@ -137,36 +138,43 @@ class PlayQuestion extends React.Component {
     } = this.state;
     return (
       <div id="PlayQuestion">
-        <Button
-          variant="fab"
-          color="primary"
-          aria-label="Play"
-          style={{ position: 'absolute', top: 10, left: 10 }}
-          onClick={() => this.soundPlayer.play(notes, bpm)}
-        >
-          <PlayArrowIcon />
-        </Button>
+        <Tooltip title="再生">
+          <Button
+            variant="fab"
+            color="primary"
+            aria-label="Play"
+            style={{ position: 'absolute', top: 10, left: 10 }}
+            onClick={() => this.soundPlayer.play(notes, bpm)}
+          >
+            <PlayArrowIcon />
+          </Button>
+        </Tooltip>
 
-        <Button
-          variant="fab"
-          color="primary"
-          aria-label="PlayQuestion"
-          style={{ position: 'absolute', top: 10, left: 80 }}
-          onClick={() => this.soundPlayer.play(question.notes, question.bpm)}
-        >
-          <PlayCircleOutlineIcon />
-        </Button>
-        <Button
-          variant="fab"
-          color="primary"
-          aria-label="Submit"
-          style={{ position: 'absolute', top: 10, left: 150 }}
-          onClick={() => this.evaluateAndReport(
-            question.notes, notes,
-          )}
-        >
-          <SendIcon />
-        </Button>
+        <Tooltip title="問題を再生">
+          <Button
+            variant="fab"
+            color="primary"
+            aria-label="PlayQuestion"
+            style={{ position: 'absolute', top: 10, left: 80 }}
+            onClick={() => this.soundPlayer.play(question.notes, question.bpm)}
+          >
+            <PlayCircleOutlineIcon />
+          </Button>
+        </Tooltip>
+
+        <Tooltip title="提出">
+          <Button
+            variant="fab"
+            color="primary"
+            aria-label="Submit"
+            style={{ position: 'absolute', top: 10, left: 150 }}
+            onClick={() => this.evaluateAndReport(
+              question.notes, notes,
+            )}
+          >
+            <SendIcon />
+          </Button>
+        </Tooltip>
 
         <PianoRollGrid
           addNote={addNote}

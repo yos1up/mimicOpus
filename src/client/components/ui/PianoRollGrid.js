@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import SimpleGrid from './SimpleGrid';
 import NoteBlock from './NoteBlock';
@@ -169,15 +170,20 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
       i => 0.25 + ((i % 2) ? 0 : 0.75) + ((i % 8) ? 0 : 1)
     );
     elementList.push(
-      <div
-        key={elementList.length}
-        style={{
-          position: 'absolute',
-          left: xMargin,
-        }}
-      >
-        <SimpleGrid rows={rows} cols={cols} uw={uw} uh={uh} hlw={hlw} vlw={vlw} bgr={bgr} />
-      </div>,
+
+      <Tooltip title="ドラッグして音を入力">
+        <div
+          key={elementList.length}
+          style={{
+            position: 'absolute',
+            left: xMargin,
+            width: uw * cols,
+            height: uh * rows,
+          }}
+        >
+          <SimpleGrid rows={rows} cols={cols} uw={uw} uh={uh} hlw={hlw} vlw={vlw} bgr={bgr} />
+        </div>
+      </Tooltip>,
     );
 
     // yLabel (i.e. pitch name)
@@ -258,7 +264,7 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
     return (
       <div
         role="presentation"
-        style={{ position: 'absolute', top: 100 }}
+        style={{ position: 'absolute', top: 100, cursor: 'pointer' }}
         ref={(mainPianoRoll) => { this.mainPianoRoll = mainPianoRoll; }}
         onWheel={this.wheel}
         onMouseDown={this.mouseDown}

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 class NoteBlock extends React.Component { // ノーツ
@@ -36,12 +37,14 @@ class NoteBlock extends React.Component { // ノーツ
       opacity: 0.5,
     };
     return (
-      <div
-        style={divStyle}
-        onMouseDown={this.handleClick}
-        role="button"
-        tabIndex="0"
-      />
+      <Tooltip title="クリックして音を削除">
+        <div
+          style={divStyle}
+          onMouseDown={this.handleClick}
+          role="button"
+          tabIndex="0"
+        />
+      </Tooltip>
     );
   }
 }

@@ -23,6 +23,7 @@ import Button from '@material-ui/core/Button';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import displayModes from '../../data/displayModes';
 
@@ -316,50 +317,56 @@ class Search extends React.Component {
                     style={{ cursor: (bMine) ? 'default' : 'pointer' }}
                   >
                     <TableCell>
-                      <IconButton
-                        aria-label="Play"
-                        onClick={(e) => {
-                          this.soundPlayer.play(question.notes, question.bpm);
-                          e.stopPropagation();
-                        }}
-                      >
-                        <PlayArrowIcon />
-                      </IconButton>
-                      {(bMine) ? (
+                      <Tooltip title={`${question.title}を再生`}>
                         <IconButton
-                          aria-label="Edit"
+                          aria-label="Play"
                           onClick={(e) => {
-                            setNotes(question.notes);
-                            setBPM(question.bpm);
-                            setQuestionId(id);
-                            setTitle(question.title);
-                            changeDisplayMode(displayModes.EDIT_QUESTION);
+                            this.soundPlayer.play(question.notes, question.bpm);
                             e.stopPropagation();
                           }}
                         >
-                          <FileCopyIcon />
+                          <PlayArrowIcon />
                         </IconButton>
+                      </Tooltip>
+                      {(bMine) ? (
+                        <Tooltip title={`${question.title}を編集して別名保存`}>
+                          <IconButton
+                            aria-label="Edit"
+                            onClick={(e) => {
+                              setNotes(question.notes);
+                              setBPM(question.bpm);
+                              setQuestionId(id);
+                              setTitle(question.title);
+                              changeDisplayMode(displayModes.EDIT_QUESTION);
+                              e.stopPropagation();
+                            }}
+                          >
+                            <FileCopyIcon />
+                          </IconButton>
+                        </Tooltip>
                       ) : null
                       }
                       {(bMine) ? (
-                        <IconButton
-                          aria-label="Delete"
-                          onClick={(e) => {
-                            deleteUploadedQuestion(id, () => {
-                              loadCountQuestions(
-                                tempLowBPM, tempHighBPM, tempSearchTitle, tempSearchUser,
-                                madeByMe, answered, unanswered,
-                              );
-                              loadQuestionsList(
-                                tempLowBPM, tempHighBPM, 1, 10, tempSearchTitle, tempSearchUser,
-                                madeByMe, answered, unanswered,
-                              );
-                            });
-                            e.stopPropagation();
-                          }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
+                        <Tooltip title={`${question.title}を削除`}>
+                          <IconButton
+                            aria-label="Delete"
+                            onClick={(e) => {
+                              deleteUploadedQuestion(id, () => {
+                                loadCountQuestions(
+                                  tempLowBPM, tempHighBPM, tempSearchTitle, tempSearchUser,
+                                  madeByMe, answered, unanswered,
+                                );
+                                loadQuestionsList(
+                                  tempLowBPM, tempHighBPM, 1, 10, tempSearchTitle, tempSearchUser,
+                                  madeByMe, answered, unanswered,
+                                );
+                              });
+                              e.stopPropagation();
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Tooltip>
                       ) : null
                       }
                     </TableCell>

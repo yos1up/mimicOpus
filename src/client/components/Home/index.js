@@ -8,6 +8,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import displayModes from '../../data/displayModes';
 
@@ -118,31 +119,35 @@ class Home extends React.Component {
                     changeDisplayMode(displayModes.PLAY_QUESTION);
                   }}
                 >
-                  <CardActionArea style={{ width: '100%', height: '100%' }}>
-                    <CardContent>
-                      <Typography
-                        variant="h5"
-                        color="textSecondary"
-                        style={{
-                          position: 'absolute', top: 20, left: 30, width: 200,
-                        }}
-                      >
-                        {question.title}
-                      </Typography>
-                      <IconButton
-                        aria-label="Play"
-                        style={{
-                          position: 'absolute', left: 90, top: 70, width: 50, height: 50,
-                        }}
-                        onClick={(e) => {
-                          this.soundPlayer.play(question.notes, question.bpm);
-                          e.stopPropagation();
-                        }}
-                      >
-                        <PlayArrowIcon />
-                      </IconButton>
-                    </CardContent>
-                  </CardActionArea>
+                  <Tooltip title={`${question.title}を解く`}>
+                    <CardActionArea style={{ width: '100%', height: '100%' }}>
+                      <CardContent>
+                        <Typography
+                          variant="h5"
+                          color="textSecondary"
+                          style={{
+                            position: 'absolute', top: 20, left: 30, width: 200,
+                          }}
+                        >
+                          {question.title}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Tooltip>
+                  <Tooltip title={`${question.title}を再生`}>
+                    <IconButton
+                      aria-label="Play"
+                      style={{
+                        position: 'absolute', left: 90, top: 70, width: 50, height: 50,
+                      }}
+                      onClick={(e) => {
+                        this.soundPlayer.play(question.notes, question.bpm);
+                        e.stopPropagation();
+                      }}
+                    >
+                      <PlayArrowIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Card>
               );
             })
@@ -182,31 +187,35 @@ class Home extends React.Component {
                     changeDisplayMode(displayModes.PLAY_QUESTION);
                   }}
                 >
-                  <CardActionArea style={{ width: '100%', height: '100%' }}>
-                    <CardContent>
-                      <Typography
-                        variant="h5"
-                        color="textSecondary"
-                        style={{
-                          position: 'absolute', top: 20, left: 30, width: 200,
-                        }}
-                      >
-                        {question.title}
-                      </Typography>
-                      <IconButton
-                        aria-label="Play"
-                        style={{
-                          position: 'absolute', left: 90, top: 70, width: 50, height: 50,
-                        }}
-                        onClick={(e) => {
-                          this.soundPlayer.play(question.notes, question.bpm);
-                          e.stopPropagation();
-                        }}
-                      >
-                        <PlayArrowIcon />
-                      </IconButton>
-                    </CardContent>
-                  </CardActionArea>
+                  <Tooltip title={`${question.title}を解く`}>
+                    <CardActionArea style={{ width: '100%', height: '100%' }}>
+                      <CardContent>
+                        <Typography
+                          variant="h5"
+                          color="textSecondary"
+                          style={{
+                            position: 'absolute', top: 20, left: 30, width: 200,
+                          }}
+                        >
+                          {question.title}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Tooltip>
+                  <Tooltip title={`${question.title}を再生`}>
+                    <IconButton
+                      aria-label="Play"
+                      style={{
+                        position: 'absolute', left: 90, top: 70, width: 50, height: 50,
+                      }}
+                      onClick={(e) => {
+                        this.soundPlayer.play(question.notes, question.bpm);
+                        e.stopPropagation();
+                      }}
+                    >
+                      <PlayArrowIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Card>
               );
             })
