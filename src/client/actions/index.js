@@ -198,6 +198,7 @@ export function loadNewQuestionsList(dispatch) {
   const params = new URLSearchParams();
   params.set('start', 1);
   params.set('stop', 4);
+  params.set('madeByMe', false);
   fetch(`./api/loadQuestionsList?${params.toString()}`, { method })
     .then(res => res.json())
     .then((results) => {
@@ -401,6 +402,7 @@ export function loadOsusumeQuestionsList(dispatch) {
   params.set('start', 1);
   params.set('stop', 4);
   params.set('orderMode', 'osusume');
+  params.set('madeByMe', false);
   fetch(`./api/loadQuestionsList?${params.toString()}`, { method })
     .then(res => res.json())
     .then((results) => {

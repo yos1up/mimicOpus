@@ -109,7 +109,7 @@ const loadQuestionsList = (req, res) => {
       filterQuery += ' or s.score is not null';
     }
     if (urlQuery.unanswered) {
-      filterQuery += ' or s.score is null';
+      filterQuery += ' or (s.score is null and q.uid != $1)';
     }
     filterQuery += ')';
 
