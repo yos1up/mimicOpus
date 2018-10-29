@@ -66,10 +66,10 @@ class Home extends React.Component {
             variant="h4"
             color="textPrimary"
             style={{
-              position: 'absolute', top: 20, width: 500,
+              position: 'absolute', top: 20, width: 700,
             }}
           >
-            耳コピで音楽力の向上を
+            「耳コピ」はあなたの音楽をより良くする
           </Typography>
           <Typography
             variant="h7"
