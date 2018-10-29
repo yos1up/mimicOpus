@@ -229,6 +229,13 @@ const countQuestions = (req, res) => {
   }
   filterQuery += ')';
 
+  let uid;
+  if (req.isAuthenticated()) {
+    uid = req.user.id;
+  } else {
+    uid = -1;
+  }
+
   const query = {
     text: `${'SELECT COUNT(*) FROM questions q '
       + 'LEFT JOIN users u ON q.uid = u.id '
@@ -240,7 +247,7 @@ const countQuestions = (req, res) => {
     }${'\' and '
     }${filterQuery
     }`,
-    values: [req.user.id, urlQuery.lowBPM, urlQuery.highBPM],
+    values: [uid, urlQuery.lowBPM, urlQuery.highBPM],
   };
 
   client.query(query)

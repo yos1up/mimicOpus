@@ -205,6 +205,7 @@ class Search extends React.Component {
             }}
           >
             <FormControlLabel
+              disabled={uid === -1}
               control={(
                 <Checkbox
                   checked={madeByMe}
@@ -220,6 +221,7 @@ class Search extends React.Component {
               label="自分が作成"
             />
             <FormControlLabel
+              disabled={uid === -1}
               control={(
                 <Checkbox
                   checked={answered}
@@ -235,6 +237,7 @@ class Search extends React.Component {
               label="回答済み"
             />
             <FormControlLabel
+              disabled={uid === -1}
               control={(
                 <Checkbox
                   checked={unanswered}
