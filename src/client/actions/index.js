@@ -266,7 +266,6 @@ export function loadMe(dispatch) {
         dispatch(setUid(results.id));
         dispatch(setProvider(results.provider));
       } else {
-        fetch('./auth/anonymous', { method: 'GET' });
         dispatch(setUsername('anonymous'));
         dispatch(setPhotoURL(''));
         dispatch(setUid(-1));
