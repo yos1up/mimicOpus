@@ -303,7 +303,7 @@ class Search extends React.Component {
             {// TODO do not use array index
               [...questionsList].map((item) => {
                 const { id, question } = item;
-                const date = `${question.uploadedAt.getFullYear()}/${question.uploadedAt.getMonth()}/${question.uploadedAt.getDate()}`;
+                const date = `${question.uploadedAt.getFullYear()}/${question.uploadedAt.getMonth()+1}/${question.uploadedAt.getDate()}`;
                 const bMine = (uid === question.uid);
                 return (
                   <TableRow
