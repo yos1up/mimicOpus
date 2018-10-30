@@ -9,6 +9,9 @@ CREATE TABLE "session" (
 WITH (OIDS=FALSE);
 ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
 
+\copy users FROM './default_sql_tables/users.csv' (FORMAT CSV, HEADER true);
+\copy questions FROM './default_sql_tables/questions.csv' (FORMAT CSV, HEADER true);
+
 GRANT SELECT, INSERT, DELETE, UPDATE ON questions TO mimicopus;
 GRANT USAGE, SELECT ON SEQUENCE questions_id_seq TO mimicopus;
 GRANT SELECT, INSERT, DELETE ON scores TO mimicopus;

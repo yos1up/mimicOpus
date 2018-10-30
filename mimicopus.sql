@@ -8,3 +8,6 @@ CREATE TABLE "session" (
 )
 WITH (OIDS=FALSE);
 ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+\copy users FROM './default_sql_tables/users.csv' (FORMAT CSV, HEADER true);
+\copy questions FROM './default_sql_tables/questions.csv' (FORMAT CSV, HEADER true);
