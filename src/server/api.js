@@ -59,175 +59,75 @@ const deleteQuestion = (req, res) => {
 };
 
 const loadQuestionsList = (req, res) => {
-  if (req.isAuthenticated()) {
-    const urlQuery = req.query;
-    if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
-      urlQuery.lowBPM = 60;
-    }
-    if (urlQuery.highBPM === null || urlQuery.highBPM === undefined) {
-      urlQuery.highBPM = 200;
-    }
-    if (urlQuery.start === null || urlQuery.start === undefined) {
-      urlQuery.start = 1;
-    }
-    if (urlQuery.stop === null || urlQuery.stop === undefined) {
-      urlQuery.stop = 10;
-    }
-    if (urlQuery.title === null || urlQuery.title === undefined) {
-      urlQuery.title = '';
-    }
-    if (urlQuery.user === null || urlQuery.user === undefined) {
-      urlQuery.user = '';
-    }
-    if (urlQuery.madeByMe === 'true' || urlQuery.madeByMe === null || urlQuery.madeByMe === undefined) {
-      urlQuery.madeByMe = true;
-    } else {
-      urlQuery.madeByMe = false;
-    }
-    if (urlQuery.answered === 'true' || urlQuery.answered === null || urlQuery.answered === undefined) {
-      urlQuery.answered = true;
-    } else {
-      urlQuery.answered = false;
-    }
-    if (urlQuery.unanswered === 'true' || urlQuery.unanswered === null || urlQuery.unanswered === undefined) {
-      urlQuery.unanswered = true;
-    } else {
-      urlQuery.unanswered = false;
-    }
-    if (urlQuery.orderMode === null || urlQuery.orderMode === undefined) {
-      urlQuery.orderMode = 'new';
-    }
-
-    if (urlQuery.user === '') {
-      urlQuery.user = '%';
-    }
-    let filterQuery = '(false';
-    if (urlQuery.madeByMe) {
-      filterQuery += ' or q.uid = $1';
-    }
-    if (urlQuery.answered) {
-      filterQuery += ' or s.score is not null';
-    }
-    if (urlQuery.unanswered) {
-      filterQuery += ' or (s.score is null and q.uid != $1)';
-    }
-    filterQuery += ')';
-
-    let query;
-    let myRating = req.user.rating;
-    if (myRating === null || myRating === undefined) {
-      myRating = 1500;
-    }
-    if (urlQuery.orderMode === 'new') {
-      query = {
-        text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat, q.rating, s.score FROM questions q '
-          + 'LEFT JOIN users u ON q.uid = u.id '
-          + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
-          + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
-          urlQuery.title
-        }${'%\' and u.username LIKE \''
-        }${urlQuery.user
-        }${'\' and '
-        }${filterQuery
-        }${' '
-        }${'ORDER BY q.uploadedat DESC LIMIT $4 OFFSET $5'}`,
-        values: [req.user.id, urlQuery.lowBPM, urlQuery.highBPM,
-          urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
-      };
-    } else { // osusume
-      query = {
-        text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat, q.rating, s.score FROM questions q '
-          + 'LEFT JOIN users u ON q.uid = u.id '
-          + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
-          + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
-          urlQuery.title
-        }${'%\' and u.username LIKE \''
-        }${urlQuery.user
-        }${'\' and '
-        }${filterQuery
-        }${' '
-        }${'ORDER BY abs($6 - q.rating) LIMIT $4 OFFSET $5'}`,
-        values: [req.user.id, urlQuery.lowBPM, urlQuery.highBPM,
-          urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1, myRating - 693],
-      };
-    }
-
-    client.query(query)
-      .then((result) => {
-        const returnData = [];
-        result.rows.forEach((item) => {
-          returnData.push({
-            id: item.id,
-            question: {
-              notes: item.notes,
-              bpm: item.bpm,
-              uid: item.uid,
-              userName: item.username,
-              title: item.title,
-              uploadedAt: item.uploadedat,
-              score: item.score,
-              rating: item.rating,
-            }
-          });
-        });
-        res.send(returnData);
-      })
-      .catch((e) => {
-        console.log(e);
-        res.send({ errState: 1 });
-      });
-  } else {
-    res.send({ errState: 1 });
+  const urlQuery = req.query;
+  if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
+    urlQuery.lowBPM = 60;
   }
-};
+  if (urlQuery.highBPM === null || urlQuery.highBPM === undefined) {
+    urlQuery.highBPM = 200;
+  }
+  if (urlQuery.start === null || urlQuery.start === undefined) {
+    urlQuery.start = 1;
+  }
+  if (urlQuery.stop === null || urlQuery.stop === undefined) {
+    urlQuery.stop = 10;
+  }
+  if (urlQuery.title === null || urlQuery.title === undefined) {
+    urlQuery.title = '';
+  }
+  if (urlQuery.user === null || urlQuery.user === undefined) {
+    urlQuery.user = '';
+  }
+  if (urlQuery.madeByMe === 'true' || urlQuery.madeByMe === null || urlQuery.madeByMe === undefined) {
+    urlQuery.madeByMe = true;
+  } else {
+    urlQuery.madeByMe = false;
+  }
+  if (urlQuery.answered === 'true' || urlQuery.answered === null || urlQuery.answered === undefined) {
+    urlQuery.answered = true;
+  } else {
+    urlQuery.answered = false;
+  }
+  if (urlQuery.unanswered === 'true' || urlQuery.unanswered === null || urlQuery.unanswered === undefined) {
+    urlQuery.unanswered = true;
+  } else {
+    urlQuery.unanswered = false;
+  }
+  if (urlQuery.orderMode === null || urlQuery.orderMode === undefined) {
+    urlQuery.orderMode = 'new';
+  }
 
-const countQuestions = (req, res) => {
+  if (urlQuery.user === '') {
+    urlQuery.user = '%';
+  }
+  let filterQuery = '(false';
+  if (urlQuery.madeByMe) {
+    filterQuery += ' or q.uid = $1';
+  }
+  if (urlQuery.answered) {
+    filterQuery += ' or s.score is not null';
+  }
+  if (urlQuery.unanswered) {
+    filterQuery += ' or (s.score is null and q.uid != $1)';
+  }
+  filterQuery += ')';
+
+  let query;
+  let myRating;
+  let uid;
+  if (req.isAuthenticated() && req.user.rating !== null && req.user.rating !== undefined) {
+    myRating = req.user.rating;
+  } else {
+    myRating = 1500;
+  }
   if (req.isAuthenticated()) {
-    const urlQuery = req.query;
-    if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
-      urlQuery.lowBPM = 60;
-    }
-    if (urlQuery.highBPM === null || urlQuery.highBPM === undefined) {
-      urlQuery.highBPM = 200;
-    }
-    if (urlQuery.title === null || urlQuery.title === undefined) {
-      urlQuery.title = '';
-    }
-    if (urlQuery.user === null || urlQuery.user === undefined) {
-      urlQuery.user = '';
-    }
-    if (urlQuery.madeByMe === 'true' || urlQuery.madeByMe === null || urlQuery.madeByMe === undefined) {
-      urlQuery.madeByMe = true;
-    } else {
-      urlQuery.madeByMe = false;
-    }
-    if (urlQuery.answered === 'true' || urlQuery.answered === null || urlQuery.answered === undefined) {
-      urlQuery.answered = true;
-    } else {
-      urlQuery.answered = false;
-    }
-    if (urlQuery.unanswered === 'true' || urlQuery.unanswered === null || urlQuery.unanswered === undefined) {
-      urlQuery.unanswered = true;
-    } else {
-      urlQuery.unanswered = false;
-    }
-    if (urlQuery.user === '') {
-      urlQuery.user = '%';
-    }
-    let filterQuery = '(false';
-    if (urlQuery.madeByMe) {
-      filterQuery += ' or q.uid = $1';
-    }
-    if (urlQuery.answered) {
-      filterQuery += ' or s.score is not null';
-    }
-    if (urlQuery.unanswered) {
-      filterQuery += ' or s.score is null';
-    }
-    filterQuery += ')';
-
-    const query = {
-      text: `${'SELECT COUNT(*) FROM questions q '
+    uid = req.user.id;
+  } else {
+    uid = -1;
+  }
+  if (urlQuery.orderMode === 'new') {
+    query = {
+      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat, q.rating, s.score FROM questions q '
         + 'LEFT JOIN users u ON q.uid = u.id '
         + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
         + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
@@ -236,21 +136,128 @@ const countQuestions = (req, res) => {
       }${urlQuery.user
       }${'\' and '
       }${filterQuery
-      }`,
-      values: [req.user.id, urlQuery.lowBPM, urlQuery.highBPM],
+      }${' '
+      }${'ORDER BY q.uploadedat DESC LIMIT $4 OFFSET $5'}`,
+      values: [uid, urlQuery.lowBPM, urlQuery.highBPM,
+        urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
     };
-
-    client.query(query)
-      .then((result) => {
-        res.send({ errState: 0, count: parseInt(result.rows[0].count, 10) });
-      })
-      .catch((e) => {
-        console.log(e);
-        res.send({ errState: 1 });
-      });
-  } else {
-    res.send({ errState: 1 });
+  } else { // osusume
+    query = {
+      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat, q.rating, s.score FROM questions q '
+        + 'LEFT JOIN users u ON q.uid = u.id '
+        + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
+        + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
+        urlQuery.title
+      }${'%\' and u.username LIKE \''
+      }${urlQuery.user
+      }${'\' and '
+      }${filterQuery
+      }${' '
+      }${'ORDER BY abs($6 - q.rating) LIMIT $4 OFFSET $5'}`,
+      values: [uid, urlQuery.lowBPM, urlQuery.highBPM,
+        urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1, myRating - 693],
+    };
   }
+
+  client.query(query)
+    .then((result) => {
+      const returnData = [];
+      result.rows.forEach((item) => {
+        returnData.push({
+          id: item.id,
+          question: {
+            notes: item.notes,
+            bpm: item.bpm,
+            uid: item.uid,
+            userName: item.username,
+            title: item.title,
+            uploadedAt: item.uploadedat,
+            score: item.score,
+            rating: item.rating,
+          }
+        });
+      });
+      res.send(returnData);
+    })
+    .catch((e) => {
+      console.log(e);
+      res.send({ errState: 1 });
+    });
+};
+
+const countQuestions = (req, res) => {
+  const urlQuery = req.query;
+  if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
+    urlQuery.lowBPM = 60;
+  }
+  if (urlQuery.highBPM === null || urlQuery.highBPM === undefined) {
+    urlQuery.highBPM = 200;
+  }
+  if (urlQuery.title === null || urlQuery.title === undefined) {
+    urlQuery.title = '';
+  }
+  if (urlQuery.user === null || urlQuery.user === undefined) {
+    urlQuery.user = '';
+  }
+  if (urlQuery.madeByMe === 'true' || urlQuery.madeByMe === null || urlQuery.madeByMe === undefined) {
+    urlQuery.madeByMe = true;
+  } else {
+    urlQuery.madeByMe = false;
+  }
+  if (urlQuery.answered === 'true' || urlQuery.answered === null || urlQuery.answered === undefined) {
+    urlQuery.answered = true;
+  } else {
+    urlQuery.answered = false;
+  }
+  if (urlQuery.unanswered === 'true' || urlQuery.unanswered === null || urlQuery.unanswered === undefined) {
+    urlQuery.unanswered = true;
+  } else {
+    urlQuery.unanswered = false;
+  }
+  if (urlQuery.user === '') {
+    urlQuery.user = '%';
+  }
+  let filterQuery = '(false';
+  if (urlQuery.madeByMe) {
+    filterQuery += ' or q.uid = $1';
+  }
+  if (urlQuery.answered) {
+    filterQuery += ' or s.score is not null';
+  }
+  if (urlQuery.unanswered) {
+    filterQuery += ' or s.score is null';
+  }
+  filterQuery += ')';
+
+  let uid;
+  if (req.isAuthenticated()) {
+    uid = req.user.id;
+  } else {
+    uid = -1;
+  }
+
+  const query = {
+    text: `${'SELECT COUNT(*) FROM questions q '
+      + 'LEFT JOIN users u ON q.uid = u.id '
+      + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
+      + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
+      urlQuery.title
+    }${'%\' and u.username LIKE \''
+    }${urlQuery.user
+    }${'\' and '
+    }${filterQuery
+    }`,
+    values: [uid, urlQuery.lowBPM, urlQuery.highBPM],
+  };
+
+  client.query(query)
+    .then((result) => {
+      res.send({ errState: 0, count: parseInt(result.rows[0].count, 10) });
+    })
+    .catch((e) => {
+      console.log(e);
+      res.send({ errState: 1 });
+    });
 };
 
 const changeUsername = (req, res) => {
@@ -308,30 +315,26 @@ const saveScore = (req, res) => {
 };
 
 const getRanking = (req, res) => {
-  if (req.isAuthenticated()) {
-    const urlQuery = req.query;
-    if (urlQuery.start === null || urlQuery.start === undefined) {
-      urlQuery.start = 1;
-    }
-    if (urlQuery.stop === null || urlQuery.stop === undefined) {
-      urlQuery.stop = 10;
-    }
-    const query = {
-      text: 'SELECT username, rating from users where rating is not null and rating > 0 and provider <> \'anonymous\' '
-        + 'ORDER BY rating DESC LIMIT $1 OFFSET $2',
-      values: [urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
-    };
-    client.query(query)
-      .then((result) => {
-        res.send({ errState: 0, ranking: result.rows });
-      })
-      .catch((e) => {
-        console.log(e);
-        res.send({ errState: 1 });
-      });
-  } else {
-    res.send({ errState: 1 });
+  const urlQuery = req.query;
+  if (urlQuery.start === null || urlQuery.start === undefined) {
+    urlQuery.start = 1;
   }
+  if (urlQuery.stop === null || urlQuery.stop === undefined) {
+    urlQuery.stop = 10;
+  }
+  const query = {
+    text: 'SELECT username, rating from users where rating is not null and rating > 0 and provider <> \'anonymous\' '
+      + 'ORDER BY rating DESC LIMIT $1 OFFSET $2',
+    values: [urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
+  };
+  client.query(query)
+    .then((result) => {
+      res.send({ errState: 0, ranking: result.rows });
+    })
+    .catch((e) => {
+      console.log(e);
+      res.send({ errState: 1 });
+    });
 };
 
 const getMe = (req, res) => {

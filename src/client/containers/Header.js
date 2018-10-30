@@ -9,6 +9,7 @@ const mapStateToProps = state => ({
   mode: state.display.mode,
   photoURL: state.auth.photoURL,
   provider: state.auth.provider,
+  uid: state.auth.uid,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -36,7 +36,7 @@ class Header extends React.Component {
 
   render() {
     const {
-      mode, photoURL, changeDisplayMode, openSignInDialog, provider, openLicenseDialog,
+      mode, photoURL, uid, changeDisplayMode, openSignInDialog, provider, openLicenseDialog,
     } = this.props;
     const { openUserMenu } = this.state;
     return (
@@ -110,10 +110,12 @@ class Header extends React.Component {
                   <Paper>
                     <ClickAwayListener onClickAway={this.handleCloseUserMenu}>
                       <MenuList>
-                        <MenuItem onClick={() => {
-                          this.handleCloseUserMenu();
-                          changeDisplayMode(displayModes.USER);
-                        }}
+                        <MenuItem
+                          disabled={uid === -1}
+                          onClick={() => {
+                            this.handleCloseUserMenu();
+                            changeDisplayMode(displayModes.USER);
+                          }}
                         >
                           プロフィール
                         </MenuItem>
@@ -131,10 +133,12 @@ class Header extends React.Component {
                         >
                           ライセンス&クレジット
                         </MenuItem>
-                        <MenuItem onClick={() => {
-                          this.handleCloseUserMenu();
-                          location.href = '/auth/logout';
-                        }}
+                        <MenuItem
+                          disabled={uid === -1}
+                          onClick={() => {
+                            this.handleCloseUserMenu();
+                            location.href = '/auth/logout';
+                          }}
                         >
                           ログアウト
                         </MenuItem>
@@ -155,6 +159,7 @@ Header.propTypes = {
   mode: PropTypes.string.isRequired,
   photoURL: PropTypes.string.isRequired,
   provider: PropTypes.string.isRequired,
+  uid: PropTypes.string.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
   openSignInDialog: PropTypes.func.isRequired,
 };
