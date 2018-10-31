@@ -55,7 +55,7 @@ class Ranking extends React.Component {
                   >
                     <TableCell>{k}</TableCell>
                     <TableCell>{v.displayName}</TableCell>
-                    <TableCell>{v.rating}</TableCell>
+                    <TableCell>{(v.rating !== undefined && v.rating !== null) ? parseFloat(v.rating).toFixed() : ''}</TableCell>
                   </TableRow>
                 );
               })
