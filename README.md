@@ -13,26 +13,29 @@ postgres=> CREATE ROLE mimicopus WITH LOGIN PASSWORD 'mimicopus';
 
 setup for dev
 ```
-$ psql mimicopus < drop_mimicopus.sql
+postgres=> CREATE DATABASE mimicopus;
 $ psql mimicopus < mimicopus_dev.sql
+$ psql mimicopus < default_questions.sql --variable=uid=<yos1up's uid>
 ```
 
 reset setup for dev
 ```
-postgres=> DROP DATABASE mimicopus;
-postgres=> CREATE DATABASE mimicopus;
+$ psql mimicopus < drop_mimicopus.sql
 $ psql mimicopus < mimicopus_dev.sql
+$ psql mimicopus < default_questions.sql --variable=uid=<yos1up's uid>
 ```
 
 setup for heroku
 ```
 $ heroku pg:psql --app mimicopus-stg < mimicopus.sql
+$ heroku pg:psql --app mimicopus-stg < default_questions.sql --variable=uid=<yos1up's uid>
 ```
 
 reset setup for heroku
 ```
 $ heroku pg:psql --app mimicopus-stg < drop_mimicopus.sql
 $ heroku pg:psql --app mimicopus-stg < mimicopus.sql
+$ heroku pg:psql --app mimicopus-stg < default_questions.sql --variable=uid=<yos1up's uid>
 ```
 
 ## Environment variable
