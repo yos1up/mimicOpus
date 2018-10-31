@@ -17,7 +17,7 @@ function License({ open, closeLicenseDialog }) {
         </Typography>
         <br />
         <Typography variant="h7">
-          This service is releaced under the MIT License.
+          This service is released under the MIT License.
         </Typography>
       </DialogContent>
     </Dialog>
