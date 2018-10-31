@@ -36,7 +36,8 @@ class Header extends React.Component {
 
   render() {
     const {
-      mode, photoURL, uid, changeDisplayMode, openSignInDialog, provider, openLicenseDialog,
+      mode, photoURL, uid, changeDisplayMode, openSignInDialog, provider,
+      openLicenseDialog, clearNotes, setBPM,
     } = this.props;
     const { openUserMenu } = this.state;
     return (
@@ -64,7 +65,11 @@ class Header extends React.Component {
               value={(mode === displayModes.HOME || mode === displayModes.SEARCH
                 || mode === displayModes.MAKE_QUESTION || mode === displayModes.RANKING
               ) ? mode : false}
-              onChange={(e, v) => changeDisplayMode(v)}
+              onChange={(e, v) => {
+                clearNotes();
+                setBPM(120);
+                changeDisplayMode(v);
+              }}
               indicatorColor="primary"
               textColor="primary"
               style={{ float: 'left' }}
@@ -162,6 +167,8 @@ Header.propTypes = {
   uid: PropTypes.string.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
   openSignInDialog: PropTypes.func.isRequired,
+  clearNotes: PropTypes.func.isRequired,
+  setBPM: PropTypes.func.isRequired,
 };
 
 export default Header;

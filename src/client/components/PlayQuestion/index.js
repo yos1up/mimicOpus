@@ -130,7 +130,7 @@ class PlayQuestion extends React.Component {
   render() {
     const {
       notes, question, pitchRange, bpm, addNote, delNote,
-      shiftPitchRange, clearNotes, changeDisplayMode,
+      shiftPitchRange,
     } = this.props;
     const {
       dialogOpened,
@@ -189,8 +189,6 @@ class PlayQuestion extends React.Component {
           open={dialogOpened}
           onClose={() => {
             this.handleCloseDialog();
-            clearNotes();
-            changeDisplayMode(displayModes.HOME);
           }}
         >
           <DialogTitle id="simple-dialog-title">RESULT</DialogTitle>
@@ -215,8 +213,6 @@ PlayQuestion.propTypes = {
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
   saveScore: PropTypes.func.isRequired,
-  clearNotes: PropTypes.func.isRequired,
-  changeDisplayMode: PropTypes.func.isRequired,
 };
 
 export default PlayQuestion;

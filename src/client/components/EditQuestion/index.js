@@ -90,6 +90,7 @@ class EditQuestion extends React.Component {
                 title: (title !== '') ? title : 'Untitled',
               }));
               clearNotes();
+              setBPM(120);
               changeDisplayMode(displayModes.HOME);
             }}
           >
