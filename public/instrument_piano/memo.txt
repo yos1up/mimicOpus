@@ -1,0 +1,17 @@
+http://theremin.music.uiowa.edu/MISpiano.html から各鍵盤音をダウンロード
+
+
+コマンドラインで音声編集できるsoxがとっても便利
+
+インストールは
+brew intall lame
+brew install sox
+
+// .aiff を .wav に変換、かつ 0秒から4秒までにトリミング
+sox Piano.mf.C4.aiff C4.wav trim 0 4
+
+
+//最初の無音部分を取り除きたい！　：これもsoxで同時に処理できる！
+
+sox Piano.mf.C4.aiff C4.wav silence -l 1 0.01 -60d trim 0 4
+（0.01秒間 -60dB以上が続いたら、録音を開始する。最初の1回のみ。）（そのあと 0秒から 4秒までトリミング。）
