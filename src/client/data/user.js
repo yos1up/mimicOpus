@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
 const User = Immutable.Record({
-  username: 'anonymous',
+  displayName: 'anonymous',
   rating: 0,
 });
 

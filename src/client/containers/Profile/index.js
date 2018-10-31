@@ -1,18 +1,17 @@
 import { connect } from 'react-redux';
 
 import {
-  changeUsername,
+  changeDisplayName,
 } from '../../actions';
 import Profile from '../../components/Profile';
 
 const mapStateToProps = state => ({
   photoURL: state.auth.photoURL,
-  username: state.auth.username,
-  bInvalidUsername: state.auth.bInvalidUsername,
+  displayName: state.auth.displayName,
 });
 
 const mapDispatchToProps = dispatch => ({
-  changeUsername: name => changeUsername(dispatch, name),
+  changeDisplayName: name => changeDisplayName(dispatch, name),
 });
 
 export default connect(

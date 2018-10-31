@@ -6,7 +6,7 @@ class Question extends Immutable.Record({
   notes: Immutable.List(),
   bpm: 120,
   uid: '',
-  userName: '',
+  displayName: '',
   title: '',
   rating: 0,
   uploadedAt: null,

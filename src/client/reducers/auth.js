@@ -10,8 +10,8 @@ export default function (state = new AuthState(), action) {
     case actionTypes.CLOSE_SIGN_IN_DIALOG:
       return state.set('showSignIn', false);
 
-    case actionTypes.SET_USERNAME:
-      return state.set('username', action.username);
+    case actionTypes.SET_DISPLAY_NAME:
+      return state.set('displayName', action.displayName);
 
     case actionTypes.SET_PHOTO_URL:
       return state.set('photoURL', action.photoURL);
@@ -21,9 +21,6 @@ export default function (state = new AuthState(), action) {
 
     case actionTypes.SET_PROVIDER:
       return state.set('provider', action.provider);
-
-    case actionTypes.SET_B_INVALID_USERNAME:
-      return state.set('bInvalidUsername', action.bInvalidUsername);
 
     default:
       return state;

@@ -54,7 +54,7 @@ class Ranking extends React.Component {
                     key={k}
                   >
                     <TableCell>{k}</TableCell>
-                    <TableCell>{v.username}</TableCell>
+                    <TableCell>{v.displayName}</TableCell>
                     <TableCell>{v.rating}</TableCell>
                   </TableRow>
                 );

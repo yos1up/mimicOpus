@@ -221,10 +221,10 @@ export function saveScore(qid, score) {
     .catch(console.error);
 }
 
-export function setUsername(username) {
+export function setDisplayName(displayName) {
   return {
-    type: actionTypes.SET_USERNAME,
-    username,
+    type: actionTypes.SET_DISPLAY_NAME,
+    displayName,
   };
 }
 
@@ -249,24 +249,17 @@ export function setProvider(provider) {
   };
 }
 
-export function setBInvalidUsername(bInvalidUsername) {
-  return {
-    type: actionTypes.SET_B_INVALID_USERNAME,
-    bInvalidUsername,
-  };
-}
-
 export function loadMe(dispatch) {
   fetch('./api/getMe', { method: 'GET' })
     .then(res => res.json())
     .then((results) => {
       if (results.id !== -1) {
-        dispatch(setUsername(results.username));
+        dispatch(setDisplayName(results.displayName));
         dispatch(setPhotoURL(results.photoURL));
         dispatch(setUid(results.id));
         dispatch(setProvider(results.provider));
       } else {
-        dispatch(setUsername('anonymous'));
+        dispatch(setDisplayName('anonymous'));
         dispatch(setPhotoURL(''));
         dispatch(setUid(-1));
         dispatch(setProvider('anonymous'));
@@ -274,22 +267,17 @@ export function loadMe(dispatch) {
     });
 }
 
-export function changeUsername(dispatch, name) {
+export function changeDisplayName(dispatch, name) {
   const method = 'POST';
   const body = JSON.stringify({ name });
   const headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   };
-  fetch('./api/changeUsername', { method, headers, body })
+  fetch('./api/changeDisplayName', { method, headers, body })
     .then(res => res.json())
-    .then((res) => {
-      if (res.errState === 2) {
-        dispatch(setBInvalidUsername(true));
-      } else {
-        dispatch(setBInvalidUsername(false));
-        loadMe(dispatch);
-      }
+    .then(() => {
+      loadMe(dispatch);
     })
     .catch(console.error);
 }

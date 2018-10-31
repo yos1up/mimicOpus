@@ -378,7 +378,7 @@ class Search extends React.Component {
                     </TableCell>
                     <TableCell>{question.rating}</TableCell>
                     <TableCell>{question.bpm}</TableCell>
-                    <TableCell>{question.userName}</TableCell>
+                    <TableCell>{question.displayName}</TableCell>
                     <TableCell>{question.score}</TableCell>
                     <TableCell>{date}</TableCell>
                   </TableRow>

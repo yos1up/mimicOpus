@@ -4,20 +4,19 @@ import Avatar from '@material-ui/core/Avatar';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 
 
 class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tempUsername: props.username,
+      tempDisplayName: props.displayName,
     };
   }
 
   render() {
-    const { photoURL, changeUsername, bInvalidUsername } = this.props;
-    const { tempUsername } = this.state;
+    const { photoURL, changeDisplayName } = this.props;
+    const { tempDisplayName } = this.state;
     const avatarStyle = {
       position: 'absolute',
       left: 0,
@@ -43,14 +42,14 @@ class Profile extends React.Component {
           )
         }
         <Input
-          value={tempUsername}
+          value={tempDisplayName}
           inputProps={{
             'aria-label': 'Description',
           }}
           style={{
             position: 'absolute', top: 210, left: 10, height: 40, width: 180,
           }}
-          onChange={e => this.setState({ tempUsername: e.target.value })}
+          onChange={e => this.setState({ tempDisplayName: e.target.value })}
         />
         <Button
           variant="contained"
@@ -59,21 +58,11 @@ class Profile extends React.Component {
             position: 'absolute', top: 10, left: 810, height: 40, width: 120,
           }}
           onClick={() => {
-            changeUsername(tempUsername);
+            changeDisplayName(tempDisplayName);
           }}
         >
           変更
         </Button>
-        {(bInvalidUsername) ? (
-          <Typography
-            color="error"
-            style={{
-              position: 'absolute', top: 0, left: 300, width: 180,
-            }}
-          >
-            ユーザーネームが重複しています
-          </Typography>
-        ) : null}
       </div>
     );
   }
@@ -81,9 +70,8 @@ class Profile extends React.Component {
 
 Profile.propTypes = {
   photoURL: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
-  bInvalidUsername: PropTypes.bool.isRequired,
-  changeUsername: PropTypes.func.isRequired,
+  displayName: PropTypes.string.isRequired,
+  changeDisplayName: PropTypes.func.isRequired,
 };
 
 export default Profile;

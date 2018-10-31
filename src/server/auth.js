@@ -30,8 +30,8 @@ passport.serializeUser((user, done) => {
     .then((result) => {
       if (result.rows.length === 0) {
         query = {
-          text: 'INSERT INTO users(provider, idByProvider, username, photoURL, totalscore, rating) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
-          values: [user.provider, user.id, 'anonymous', user.photos[0].value, 0, null],
+          text: 'INSERT INTO users(provider, idByProvider, displayName, photoURL, totalscore, rating) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
+          values: [user.provider, user.id, user.displayName, user.photos[0].value, 0, null],
         };
         client.query(query)
           .then((result2) => {
@@ -53,7 +53,7 @@ passport.deserializeUser((id, done) => {
       const row = result.rows[0];
       done(null, {
         id: row.id,
-        username: row.username,
+        displayName: row.displayname,
         photoURL: row.photourl,
         provider: row.provider,
         rating: row.rating,

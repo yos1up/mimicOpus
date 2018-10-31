@@ -127,12 +127,12 @@ const loadQuestionsList = (req, res) => {
   }
   if (urlQuery.orderMode === 'new') {
     query = {
-      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat, q.rating, s.score FROM questions q '
+      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.displayName, q.title, q.uploadedat, q.rating, s.score FROM questions q '
         + 'LEFT JOIN users u ON q.uid = u.id '
         + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
         + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
         urlQuery.title
-      }${'%\' and u.username LIKE \''
+      }${'%\' and u.displayName LIKE \''
       }${urlQuery.user
       }${'\' and '
       }${filterQuery
@@ -143,12 +143,12 @@ const loadQuestionsList = (req, res) => {
     };
   } else { // osusume
     query = {
-      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.username, q.title, q.uploadedat, q.rating, s.score FROM questions q '
+      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.displayName, q.title, q.uploadedat, q.rating, s.score FROM questions q '
         + 'LEFT JOIN users u ON q.uid = u.id '
         + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
         + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
         urlQuery.title
-      }${'%\' and u.username LIKE \''
+      }${'%\' and u.displayName LIKE \''
       }${urlQuery.user
       }${'\' and '
       }${filterQuery
@@ -169,7 +169,7 @@ const loadQuestionsList = (req, res) => {
             notes: item.notes,
             bpm: item.bpm,
             uid: item.uid,
-            userName: item.username,
+            displayName: item.displayname,
             title: item.title,
             uploadedAt: item.uploadedat,
             score: item.score,
@@ -242,7 +242,7 @@ const countQuestions = (req, res) => {
       + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
       + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
       urlQuery.title
-    }${'%\' and u.username LIKE \''
+    }${'%\' and u.displayName LIKE \''
     }${urlQuery.user
     }${'\' and '
     }${filterQuery
@@ -260,32 +260,17 @@ const countQuestions = (req, res) => {
     });
 };
 
-const changeUsername = (req, res) => {
+const changeDisplayName = (req, res) => {
   if (req.isAuthenticated()) {
     const uid = req.user.id;
     const data = req.body;
     const { name } = data;
-    let query = {
-      text: 'SELECT * from users where username = $1',
-      values: [name],
+    const query = {
+      text: 'UPDATE users SET displayName = ($1) WHERE id=($2)',
+      values: [name, uid],
     };
     client.query(query)
-      .then((result) => {
-        if (result.rows.length === 0) {
-          query = {
-            text: 'UPDATE users SET username = ($1) WHERE id=($2)',
-            values: [name, uid],
-          };
-          client.query(query)
-            .then(() => res.send({ errState: 0 }))
-            .catch((e) => {
-              console.log(e);
-              res.send({ errState: 1 });
-            });
-        } else {
-          res.send({ errState: 2 });
-        }
-      })
+      .then(() => res.send({ errState: 0 }))
       .catch((e) => {
         console.log(e);
         res.send({ errState: 1 });
@@ -323,13 +308,19 @@ const getRanking = (req, res) => {
     urlQuery.stop = 10;
   }
   const query = {
-    text: 'SELECT username, rating from users where rating is not null and rating > 0 and provider <> \'anonymous\' '
+    text: 'SELECT displayName, rating from users where rating is not null and rating > 0 and provider <> \'anonymous\' '
       + 'ORDER BY rating DESC LIMIT $1 OFFSET $2',
     values: [urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
   };
   client.query(query)
     .then((result) => {
-      res.send({ errState: 0, ranking: result.rows });
+      res.send({
+        errState: 0,
+        ranking: result.rows.map(item => ({
+          displayName: item.displayname,
+          rating: item.rating,
+        })),
+      });
     })
     .catch((e) => {
       console.log(e);
@@ -341,7 +332,7 @@ const getMe = (req, res) => {
   if (req.isAuthenticated()) {
     res.send({
       id: req.user.id,
-      username: req.user.username,
+      displayName: req.user.displayName,
       photoURL: req.user.photoURL,
       provider: req.user.provider,
     });
@@ -356,7 +347,7 @@ apiRouter.get('/api/countQuestions', countQuestions);
 apiRouter.post('/api/changeQuestion', changeQuestion);
 apiRouter.post('/api/deleteQuestion', deleteQuestion);
 apiRouter.post('/api/saveScore', saveScore);
-apiRouter.post('/api/changeUsername', changeUsername);
+apiRouter.post('/api/changeDisplayName', changeDisplayName);
 apiRouter.get('/api/getRanking', getRanking);
 apiRouter.get('/api/getMe', getMe);
 

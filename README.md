@@ -13,7 +13,7 @@ postgres=> CREATE ROLE mimicopus WITH LOGIN PASSWORD 'mimicopus';
 
 setup for dev
 ```
-postgres=> CREATE DATABASE mimicopus;
+$ psql mimicopus < drop_mimicopus.sql
 $ psql mimicopus < mimicopus_dev.sql
 ```
 
