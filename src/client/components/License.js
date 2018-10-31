@@ -19,6 +19,14 @@ function License({ open, closeLicenseDialog }) {
         <Typography variant="h7">
           This service is released under the MIT License.
         </Typography>
+        <br />
+        <Typography variant="h6">
+          Piano Sound
+        </Typography>
+        <Typography variant="body1">
+          University of Iowa Electronic Music Studios
+          (http://theremin.music.uiowa.edu/MISpiano.html)
+        </Typography>
       </DialogContent>
     </Dialog>
   );
