@@ -4,6 +4,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 
 import SignIn from '../containers/SignIn';
 import License from '../containers/License';
+import FAQ from '../containers/FAQ';
 import Header from '../containers/Header';
 
 import Home from '../containers/Home';
@@ -54,6 +55,7 @@ class App extends React.Component {
           </div>
           <SignIn />
           <License />
+          <FAQ />
         </div>
       </MuiThemeProvider>
     );

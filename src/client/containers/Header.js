@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import {
-  changeDisplayMode, openSignInDialog, openLicenseDialog, clearNotes, setBPM,
+  changeDisplayMode, openSignInDialog, openLicenseDialog, openFAQDialog, clearNotes, setBPM,
 } from '../actions';
 import Header from '../components/Header';
 
@@ -16,6 +16,7 @@ const mapDispatchToProps = dispatch => ({
   changeDisplayMode: mode => dispatch(changeDisplayMode(mode)),
   openSignInDialog: () => dispatch(openSignInDialog()),
   openLicenseDialog: () => dispatch(openLicenseDialog()),
+  openFAQDialog: () => dispatch(openFAQDialog()),
   clearNotes: () => dispatch(clearNotes()),
   setBPM: bpm => dispatch(setBPM(bpm)),
 });

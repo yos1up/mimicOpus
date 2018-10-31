@@ -13,6 +13,12 @@ const display = (state = new DisplayState(), action) => {
     case actionTypes.CLOSE_LICENSE_DIALOG:
       return state.set('showLicense', false);
 
+    case actionTypes.OPEN_FAQ_DIALOG:
+      return state.set('showFAQ', true);
+
+    case actionTypes.CLOSE_FAQ_DIALOG:
+      return state.set('showFAQ', false);
+
     default:
       return state;
   }

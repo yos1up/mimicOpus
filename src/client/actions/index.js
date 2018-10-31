@@ -26,6 +26,18 @@ export function closeLicenseDialog() {
   };
 }
 
+export function openFAQDialog() {
+  return {
+    type: actionTypes.OPEN_FAQ_DIALOG,
+  };
+}
+
+export function closeFAQDialog() {
+  return {
+    type: actionTypes.CLOSE_FAQ_DIALOG,
+  };
+}
+
 export function changeDisplayMode(mode) {
   return {
     type: actionTypes.CHANGE_DISPLAY_MODE,
