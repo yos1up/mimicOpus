@@ -385,7 +385,7 @@ class Search extends React.Component {
                     <TableCell>{(question.rating !== undefined && question.rating !== null) ? parseFloat(question.rating).toFixed() : ''}</TableCell>
                     <TableCell>{question.bpm}</TableCell>
                     <TableCell>{question.displayName}</TableCell>
-                    <TableCell>{question.score}</TableCell>
+                    <TableCell>{(question.score !== undefined && question.score !== null) ? parseFloat(question.score).toFixed(2) : ''}</TableCell>
                     <TableCell>{date}</TableCell>
                   </TableRow>
                 );
