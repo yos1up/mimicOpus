@@ -125,20 +125,17 @@ const loadQuestionsList = (req, res) => {
   } else {
     uid = -1;
   }
+  const queryTitle = `%${urlQuery.title}%`;
+  const queryUser = `${urlQuery.user}`;
   if (urlQuery.orderMode === 'new') {
     query = {
       text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.displayName, q.title, q.uploadedat, q.rating, s.score FROM questions q '
         + 'LEFT JOIN users u ON q.uid = u.id '
         + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM answers WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
-        + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
-        urlQuery.title
-      }${'%\' and u.displayName LIKE \''
-      }${urlQuery.user
-      }${'\' and '
+        + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE $4 and u.displayName LIKE $5 and '
       }${filterQuery
-      }${' '
-      }${'ORDER BY q.uploadedat DESC LIMIT $4 OFFSET $5'}`,
-      values: [uid, urlQuery.lowBPM, urlQuery.highBPM,
+      }${' ORDER BY q.uploadedat DESC LIMIT $6 OFFSET $7'}`,
+      values: [uid, urlQuery.lowBPM, urlQuery.highBPM, queryTitle, queryUser,
         urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
     };
   } else { // osusume
@@ -146,16 +143,11 @@ const loadQuestionsList = (req, res) => {
       text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.displayName, q.title, q.uploadedat, q.rating, s.score FROM questions q '
         + 'LEFT JOIN users u ON q.uid = u.id '
         + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM answers WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
-        + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
-        urlQuery.title
-      }${'%\' and u.displayName LIKE \''
-      }${urlQuery.user
-      }${'\' and '
+        + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE $4 and u.displayName LIKE $5 and '
       }${filterQuery
-      }${' '
-      }${'ORDER BY abs($6 - q.rating) LIMIT $4 OFFSET $5'}`,
-      values: [uid, urlQuery.lowBPM, urlQuery.highBPM,
-        urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1, myRating - 693],
+      }${' ORDER BY abs($6 - q.rating) LIMIT $7 OFFSET $8'}`,
+      values: [uid, urlQuery.lowBPM, urlQuery.highBPM, queryTitle, queryUser,
+        myRating - 693, urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
     };
   }
 
@@ -236,18 +228,16 @@ const countQuestions = (req, res) => {
     uid = -1;
   }
 
+  const queryTitle = `%${urlQuery.title}%`;
+  const queryUser = `${urlQuery.user}`;
   const query = {
     text: `${'SELECT COUNT(*) FROM questions q '
       + 'LEFT JOIN users u ON q.uid = u.id '
       + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM answers WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
-      + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
-      urlQuery.title
-    }${'%\' and u.displayName LIKE \''
-    }${urlQuery.user
-    }${'\' and '
+      + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE $4 and u.displayName LIKE $5 and '
     }${filterQuery
     }`,
-    values: [uid, urlQuery.lowBPM, urlQuery.highBPM],
+    values: [uid, urlQuery.lowBPM, urlQuery.highBPM, queryTitle, queryUser],
   };
 
   client.query(query)
