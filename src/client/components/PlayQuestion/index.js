@@ -16,8 +16,6 @@ import PianoRollGrid from '../ui/PianoRollGrid';
 
 import Question from '../../data/question';
 
-import displayModes from '../../data/displayModes';
-
 import SoundPlayer from '../SoundPlayer';
 
 class PlayQuestion extends React.Component {
@@ -104,7 +102,7 @@ class PlayQuestion extends React.Component {
   }
 
   evaluateAndReport(qNotes, aNotes) {
-    const { questionId, saveScore } = this.props;
+    const { questionId, saveAnswer } = this.props;
     const score = PlayQuestion.evaluateAnswer(qNotes, aNotes);
     let message = '';
     message += `YOUR SCORE: ${score}\n`;
@@ -114,7 +112,7 @@ class PlayQuestion extends React.Component {
     this.handleOpenDialog(message);
 
     // データベースとうろく
-    saveScore(questionId, score);
+    saveAnswer(questionId, aNotes, score);
   }
 
   handleCloseDialog() {
@@ -212,7 +210,7 @@ PlayQuestion.propTypes = {
   shiftPitchRange: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
-  saveScore: PropTypes.func.isRequired,
+  saveAnswer: PropTypes.func.isRequired,
 };
 
 export default PlayQuestion;

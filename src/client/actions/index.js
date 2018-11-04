@@ -221,14 +221,14 @@ export function loadNewQuestionsList(dispatch) {
     .catch(console.error);
 }
 
-export function saveScore(qid, score) {
+export function saveAnswer(qid, notes, score) {
   const method = 'POST';
-  const body = JSON.stringify({ qid, uid: 0, score });
+  const body = JSON.stringify({ qid, notes, score });
   const headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   };
-  fetch('./api/saveScore', { method, headers, body })
+  fetch('./api/saveAnswer', { method, headers, body })
     .then(res => res.json())
     .catch(console.error);
 }

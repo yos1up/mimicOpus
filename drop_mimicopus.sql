@@ -1,4 +1,4 @@
 DROP TABLE questions;
-DROP TABLE scores;
+DROP TABLE answers;
 DROP TABLE users;
 DROP TABLE session;

@@ -129,7 +129,7 @@ const loadQuestionsList = (req, res) => {
     query = {
       text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.displayName, q.title, q.uploadedat, q.rating, s.score FROM questions q '
         + 'LEFT JOIN users u ON q.uid = u.id '
-        + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
+        + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM answers WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
         + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
         urlQuery.title
       }${'%\' and u.displayName LIKE \''
@@ -145,7 +145,7 @@ const loadQuestionsList = (req, res) => {
     query = {
       text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.displayName, q.title, q.uploadedat, q.rating, s.score FROM questions q '
         + 'LEFT JOIN users u ON q.uid = u.id '
-        + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
+        + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM answers WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
         + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
         urlQuery.title
       }${'%\' and u.displayName LIKE \''
@@ -239,7 +239,7 @@ const countQuestions = (req, res) => {
   const query = {
     text: `${'SELECT COUNT(*) FROM questions q '
       + 'LEFT JOIN users u ON q.uid = u.id '
-      + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM scores WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
+      + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM answers WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
       + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE \'%'}${
       urlQuery.title
     }${'%\' and u.displayName LIKE \''
@@ -280,12 +280,12 @@ const changeDisplayName = (req, res) => {
   }
 };
 
-const saveScore = (req, res) => {
+const saveAnswer = (req, res) => {
   if (req.isAuthenticated()) {
     const data = req.body;
     const query = {
-      text: 'INSERT INTO scores(qid, uid, score) VALUES($1, $2, $3)',
-      values: [data.qid, req.user.id, data.score],
+      text: 'INSERT INTO answers(qid, uid, notes, score) VALUES($1, $2, $3, $4)',
+      values: [data.qid, req.user.id, JSON.stringify(data.notes), data.score],
     };
 
     client.query(query)
@@ -346,7 +346,7 @@ apiRouter.get('/api/loadQuestionsList', loadQuestionsList);
 apiRouter.get('/api/countQuestions', countQuestions);
 apiRouter.post('/api/changeQuestion', changeQuestion);
 apiRouter.post('/api/deleteQuestion', deleteQuestion);
-apiRouter.post('/api/saveScore', saveScore);
+apiRouter.post('/api/saveAnswer', saveAnswer);
 apiRouter.post('/api/changeDisplayName', changeDisplayName);
 apiRouter.get('/api/getRanking', getRanking);
 apiRouter.get('/api/getMe', getMe);
