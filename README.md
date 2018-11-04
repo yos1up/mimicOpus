@@ -15,27 +15,38 @@ setup for dev
 ```
 postgres=> CREATE DATABASE mimicopus;
 $ psql mimicopus < mimicopus_dev.sql
-$ psql mimicopus < default_questions.sql --variable=uid=<yos1up's uid>
 ```
 
 reset setup for dev
 ```
 $ psql mimicopus < drop_mimicopus.sql
 $ psql mimicopus < mimicopus_dev.sql
-$ psql mimicopus < default_questions.sql --variable=uid=<yos1up's uid>
+```
+
+add default questions for dev
+```
+$ psql mimicopus
+mimicopus=# \set uid <yos1up's uid>
+mimicopus=# \i default_questions.sql
 ```
 
 setup for heroku
 ```
 $ heroku pg:psql --app mimicopus-stg < mimicopus.sql
-$ heroku pg:psql --app mimicopus-stg < default_questions.sql --variable=uid=<yos1up's uid>
 ```
+
 
 reset setup for heroku
 ```
 $ heroku pg:psql --app mimicopus-stg < drop_mimicopus.sql
 $ heroku pg:psql --app mimicopus-stg < mimicopus.sql
-$ heroku pg:psql --app mimicopus-stg < default_questions.sql --variable=uid=<yos1up's uid>
+```
+
+add default questions for heroku
+```
+$ heroku pg:psql --app mimicopus-stg
+mimicopus-stg::DATABASE=> \set uid 2
+mimicopus-stg::DATABASE=> \i default_questions.sql
 ```
 
 ## Environment variable
