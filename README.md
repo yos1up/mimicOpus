@@ -45,7 +45,7 @@ $ heroku pg:psql --app mimicopus-stg < mimicopus.sql
 add default questions for heroku
 ```
 $ heroku pg:psql --app mimicopus-stg
-mimicopus-stg::DATABASE=> \set uid 2
+mimicopus-stg::DATABASE=> \set uid <yos1up's uid>
 mimicopus-stg::DATABASE=> \i default_questions.sql
 ```
 
