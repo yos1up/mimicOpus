@@ -78,7 +78,7 @@ class Home extends React.Component {
               position: 'absolute', top: 80, width: 800,
             }}
           >
-            mimicopus は「耳コピ」のスキルアップのためのオンラインサービスです。
+            mimicopus(ミミックオーパス)は「耳コピ」のスキルアップのためのオンラインサービスです。
             <br />
             みんなが作った曲を耳コピして、ハイスコアを目指しましょう。
             <br />
