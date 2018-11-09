@@ -84,21 +84,21 @@ class Header extends React.Component {
                 <ButtonBase
                   buttonRef={(node) => { this.anchorEl = node; }}
                   style={{ float: 'right', top: 5 }}
+                  onClick={() => this.handleOpenUserMenu()}
                 >
                   <Avatar
                     alt="no image"
                     src={photoURL}
-                    onClick={() => this.handleOpenUserMenu()}
                   />
                 </ButtonBase>
               ) : (
                 <ButtonBase
                   buttonRef={(node) => { this.anchorEl = node; }}
                   style={{ float: 'right', top: 5 }}
+                  onClick={() => this.handleOpenUserMenu()}
                 >
                   <Avatar
                     ref={(node) => { this.anchorEl = node; }}
-                    onClick={() => this.handleOpenUserMenu()}
                   >
                     <AccountCircleIcon />
                   </Avatar>
