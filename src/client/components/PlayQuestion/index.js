@@ -13,10 +13,9 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import PianoRollGrid from '../ui/PianoRollGrid';
-
 import Question from '../../data/question';
-
 import SoundPlayer from '../SoundPlayer';
+import displayModes from '../../data/displayModes';
 
 class PlayQuestion extends React.Component {
   static evaluateAnswer(qNotes, aNotes) {
@@ -99,6 +98,11 @@ class PlayQuestion extends React.Component {
       dialogText: '',
     };
     this.soundPlayer = new SoundPlayer();
+  }
+
+  componentDidMount() {
+    const { changeDisplayMode } = this.props;
+    changeDisplayMode(displayModes.PLAY_QUESTION);
   }
 
   evaluateAndReport(qNotes, aNotes) {
@@ -211,6 +215,7 @@ PlayQuestion.propTypes = {
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
   saveAnswer: PropTypes.func.isRequired,
+  changeDisplayMode: PropTypes.func.isRequired,
 };
 
 export default PlayQuestion;

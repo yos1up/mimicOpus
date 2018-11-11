@@ -21,9 +21,10 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    const { loadNewQuestionsList, loadOsusumeQuestionsList } = this.props;
+    const { loadNewQuestionsList, loadOsusumeQuestionsList, changeDisplayMode } = this.props;
     loadNewQuestionsList();
     loadOsusumeQuestionsList();
+    changeDisplayMode(displayModes.HOME);
   }
 
   render() {

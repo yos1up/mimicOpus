@@ -23,6 +23,11 @@ class EditQuestion extends React.Component {
     this.soundPlayer = new SoundPlayer();
   }
 
+  componentDidMount() {
+    const { changeDisplayMode } = this.props;
+    changeDisplayMode(displayModes.EDIT_QUESTION);
+  }
+
   render() {
     const {
       notes, pitchRange, bpm, title, addNote, delNote, shiftPitchRange, setBPM,

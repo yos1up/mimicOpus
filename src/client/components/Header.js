@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import { Link } from 'react-router-dom';
 
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
@@ -74,10 +75,10 @@ class Header extends React.Component {
               textColor="primary"
               style={{ float: 'left' }}
             >
-              <Tab label="ホーム" value={displayModes.HOME} />
-              <Tab label="検索" value={displayModes.SEARCH} />
-              <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} disabled={provider === 'anonymous'} />
-              <Tab label="ランキング" value={displayModes.RANKING} />
+              <Tab label="ホーム" value={displayModes.HOME} to="/" component={Link} />
+              <Tab label="検索" value={displayModes.SEARCH} to="/search" component={Link} />
+              <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} disabled={provider === 'anonymous'} to="/makequestion" component={Link} />
+              <Tab label="ランキング" value={displayModes.RANKING} to="/ranking" component={Link} />
             </Tabs>
             {(photoURL !== null && photoURL !== undefined && photoURL !== '')
               ? (
@@ -121,6 +122,8 @@ class Header extends React.Component {
                             this.handleCloseUserMenu();
                             changeDisplayMode(displayModes.USER);
                           }}
+                          to="/user"
+                          component={Link}
                         >
                           プロフィール
                         </MenuItem>

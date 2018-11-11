@@ -51,6 +51,7 @@ class Search extends React.Component {
   componentDidMount() {
     const {
       lowBPM, highBPM, searchTitle, searchUser, loadQuestionsList, loadCountQuestions,
+      changeDisplayMode,
     } = this.props;
     const {
       page, madeByMe, answered, unanswered,
@@ -58,6 +59,7 @@ class Search extends React.Component {
     loadCountQuestions(lowBPM, highBPM, searchTitle, searchUser);
     loadQuestionsList(lowBPM, highBPM, 10 * page + 1, 10 * (page + 1), searchTitle, searchUser,
       madeByMe, answered, unanswered);
+    changeDisplayMode(displayModes.SEARCH);
     this.setState({
       tempLowBPM: lowBPM,
       tempHighBPM: highBPM,

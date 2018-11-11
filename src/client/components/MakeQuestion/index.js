@@ -17,11 +17,15 @@ import displayModes from '../../data/displayModes';
 
 import SoundPlayer from '../SoundPlayer';
 
-
 class MakeQuestion extends React.Component {
   constructor(props) {
     super(props);
     this.soundPlayer = new SoundPlayer();
+  }
+
+  componentDidMount() {
+    const { changeDisplayMode } = this.props;
+    changeDisplayMode(displayModes.MAKE_QUESTION);
   }
 
   render() {
