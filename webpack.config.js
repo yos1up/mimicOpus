@@ -33,8 +33,12 @@ module.exports = {
     port: 5000,
     open: true,
     proxy: {
-      '/': 'http://localhost:8080'
-    }
+      '/api': 'http://localhost:8080',
+      '/images': 'http://localhost:8080',
+      '/instrument_piano': 'http://localhost:8080',
+      '/style.css': 'http://localhost:8080',
+    },
+    historyApiFallback: true,
   },
   plugins: [
     new CleanWebpackPlugin([outputDirectory]),
