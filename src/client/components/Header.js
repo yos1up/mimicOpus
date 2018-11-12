@@ -38,7 +38,7 @@ class Header extends React.Component {
   render() {
     const {
       mode, photoURL, uid, openSignInDialog, provider,
-      openLicenseDialog, openFAQDialog, clearNotes, setBPM,
+      openLicenseDialog, openFAQDialog,
     } = this.props;
     const { openUserMenu } = this.state;
     return (
@@ -171,8 +171,6 @@ Header.propTypes = {
   uid: PropTypes.string.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
   openSignInDialog: PropTypes.func.isRequired,
-  clearNotes: PropTypes.func.isRequired,
-  setBPM: PropTypes.func.isRequired,
 };
 
 export default Header;

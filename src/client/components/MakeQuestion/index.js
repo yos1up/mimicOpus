@@ -25,7 +25,9 @@ class MakeQuestion extends React.Component {
   }
 
   componentDidMount() {
-    const { changeDisplayMode } = this.props;
+    const { changeDisplayMode, clearNotes, setBPM } = this.props;
+    clearNotes();
+    setBPM();
     changeDisplayMode(displayModes.MAKE_QUESTION);
   }
 
