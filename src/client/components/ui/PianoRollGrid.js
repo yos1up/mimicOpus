@@ -31,6 +31,23 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
     this.mouseDown = this.mouseDown.bind(this);
     this.mouseUp = this.mouseUp.bind(this);
     this.mouseMove = this.mouseMove.bind(this);
+
+    this.timer = setInterval(this.updateCurrentPosition.bind(this), 50);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  updateCurrentPosition() {
+    const { soundPlayer, } = this.props;
+    const { xMargin, cols, beatPerCol } = this.state;
+    if (typeof this.positionBar !== 'undefined') {
+      let currentBeat = soundPlayer.position(); // 拍数
+      currentBeat = Math.min(currentBeat, cols * beatPerCol);
+      const currentPosition = xMargin + this.beatPitchToRelPos([currentBeat, 0])[0]; // x絶対座標
+      this.positionBar.updateCurrentPosition(currentPosition);
+    }
   }
 
   keyDown(event) {
@@ -150,7 +167,9 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
   }
 
   render() {
-    const { pitchRange, notes, delNote, soundPlayer, } = this.props;
+    const {
+      pitchRange, notes, delNote, soundPlayer,
+    } = this.props;
     const {
       rows, cols, uw, uh, xMargin, selectRange, beatPerCol,
     } = this.state;
@@ -243,7 +262,12 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
 
     // current position bar
     elementList.push(
-      <PositionBar soundPlayer={soundPlayer} parent={this} />
+      <PositionBar
+        soundPlayer={soundPlayer}
+        height={uh * rows}
+        parent={this}
+        ref={(node) => { this.positionBar = node; }}
+      />
     );
 
     // selection
