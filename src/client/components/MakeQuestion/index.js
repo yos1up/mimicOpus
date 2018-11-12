@@ -9,6 +9,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import Slider from '@material-ui/lab/Slider';
 import Input from '@material-ui/core/Input';
 import Tooltip from '@material-ui/core/Tooltip';
+import { withRouter } from 'react-router';
 
 import PianoRollGrid from '../ui/PianoRollGrid';
 import Question from '../../data/question';
@@ -31,7 +32,7 @@ class MakeQuestion extends React.Component {
   render() {
     const {
       notes, pitchRange, bpm, title, addNote, delNote, shiftPitchRange, setBPM,
-      uploadQuestion, setTitle, clearNotes, changeDisplayMode,
+      uploadQuestion, setTitle, clearNotes, history,
     } = this.props;
     return (
       <div id="MakeQuestion">
@@ -97,7 +98,7 @@ class MakeQuestion extends React.Component {
               }));
               clearNotes();
               setBPM(120);
-              changeDisplayMode(displayModes.HOME);
+              history.push('/');
             }}
           >
             <SaveIcon />
@@ -132,4 +133,4 @@ MakeQuestion.propTypes = {
   changeDisplayMode: PropTypes.func.isRequired,
 };
 
-export default MakeQuestion;
+export default withRouter(MakeQuestion);

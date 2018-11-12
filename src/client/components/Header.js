@@ -37,7 +37,7 @@ class Header extends React.Component {
 
   render() {
     const {
-      mode, photoURL, uid, changeDisplayMode, openSignInDialog, provider,
+      mode, photoURL, uid, openSignInDialog, provider,
       openLicenseDialog, openFAQDialog, clearNotes, setBPM,
     } = this.props;
     const { openUserMenu } = this.state;
@@ -66,11 +66,6 @@ class Header extends React.Component {
               value={(mode === displayModes.HOME || mode === displayModes.SEARCH
                 || mode === displayModes.MAKE_QUESTION || mode === displayModes.RANKING
               ) ? mode : false}
-              onChange={(e, v) => {
-                clearNotes();
-                setBPM(120);
-                changeDisplayMode(v);
-              }}
               indicatorColor="primary"
               textColor="primary"
               style={{ float: 'left' }}
@@ -120,7 +115,6 @@ class Header extends React.Component {
                           disabled={uid === -1}
                           onClick={() => {
                             this.handleCloseUserMenu();
-                            changeDisplayMode(displayModes.USER);
                           }}
                           to="/user"
                           component={Link}

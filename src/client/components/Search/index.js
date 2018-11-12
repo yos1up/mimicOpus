@@ -24,6 +24,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from '@material-ui/core/Tooltip';
+import { withRouter } from 'react-router';
 
 import displayModes from '../../data/displayModes';
 
@@ -69,11 +70,12 @@ class Search extends React.Component {
   }
 
   render() {
+    // TODO: history validation
     const {
-      questionsList, setQuestion, changeDisplayMode, setBPM, setLowBPM, setHighBPM,
+      questionsList, setQuestion, setBPM, setLowBPM, setHighBPM,
       loadQuestionsList, setQuestionId, setNotes, setTitle, deleteUploadedQuestion, uid,
       setSearchTitle, setSearchUser, countQuestions, loadCountQuestions,
-      lowBPM, highBPM, searchUser, searchTitle,
+      lowBPM, highBPM, searchUser, searchTitle, history,
     } = this.props;
     const {
       page, tempLowBPM, tempHighBPM, tempSearchTitle, tempSearchUser,
@@ -316,7 +318,7 @@ class Search extends React.Component {
                         setQuestion(question);
                         setBPM(question.bpm);
                         setQuestionId(id);
-                        changeDisplayMode(displayModes.PLAY_QUESTION);
+                        history.push('/playquestion');
                       }
                     }}
                     style={{ cursor: (bMine) ? 'default' : 'pointer' }}
@@ -347,7 +349,7 @@ class Search extends React.Component {
                                 setBPM(question.bpm);
                                 setQuestionId(id);
                                 setTitle(question.title);
-                                changeDisplayMode(displayModes.EDIT_QUESTION);
+                                history.push('/editquestion');
                                 e.stopPropagation();
                               }}
                             >
@@ -439,4 +441,4 @@ Search.propTypes = {
   loadCountQuestions: PropTypes.func.isRequired,
 };
 
-export default Search;
+export default withRouter(Search);
