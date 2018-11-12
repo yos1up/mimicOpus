@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import Tooltip from '@material-ui/core/Tooltip';
+import { withRouter } from 'react-router';
 
 import displayModes from '../../data/displayModes';
 
@@ -21,14 +22,15 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    const { loadNewQuestionsList, loadOsusumeQuestionsList } = this.props;
+    const { loadNewQuestionsList, loadOsusumeQuestionsList, changeDisplayMode } = this.props;
     loadNewQuestionsList();
     loadOsusumeQuestionsList();
+    changeDisplayMode(displayModes.HOME);
   }
 
   render() {
     const {
-      newQuestionsList, osusumeQuestionsList, setQuestion, setBPM, setQuestionId, changeDisplayMode
+      newQuestionsList, osusumeQuestionsList, setQuestion, setBPM, setQuestionId, history,
     } = this.props;
     return (
       <div
@@ -116,7 +118,7 @@ class Home extends React.Component {
                     setQuestion(question);
                     setBPM(question.bpm);
                     setQuestionId(id);
-                    changeDisplayMode(displayModes.PLAY_QUESTION);
+                    history.push('/playquestion');
                   }}
                 >
                   <Tooltip title={`${question.title}を解く`}>
@@ -184,7 +186,7 @@ class Home extends React.Component {
                     setQuestion(question);
                     setBPM(question.bpm);
                     setQuestionId(id);
-                    changeDisplayMode(displayModes.PLAY_QUESTION);
+                    history.push('/playquestion');
                   }}
                 >
                   <Tooltip title={`${question.title}を解く`}>
@@ -258,4 +260,4 @@ Home.propTypes = {
   changeDisplayMode: PropTypes.func.isRequired,
 };
 
-export default Home;
+export default withRouter(Home);

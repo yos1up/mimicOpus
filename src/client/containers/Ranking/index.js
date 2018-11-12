@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import {
-  loadRanking,
+  loadRanking, changeDisplayMode,
 } from '../../actions';
 
 import Ranking from '../../components/Ranking';
@@ -12,6 +12,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   loadRanking: (start, stop) => loadRanking(dispatch, start, stop),
+  changeDisplayMode: mode => dispatch(changeDisplayMode(mode)),
 });
 
 export default connect(

@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MuiThemeProvider } from '@material-ui/core/styles';
+import { Route, Switch } from 'react-router';
+import { Link } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
 
 import SignIn from '../containers/SignIn';
 import License from '../containers/License';
@@ -15,7 +18,7 @@ import Search from '../containers/Search';
 import Profile from '../containers/Profile';
 import Ranking from '../containers/Ranking';
 
-import displayModes from '../data/displayModes';
+import { history } from '../configureStore';
 
 import theme from './theme';
 
@@ -27,7 +30,6 @@ class App extends React.Component {
   }
 
   render() {
-    const { mode } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
         <div
@@ -37,22 +39,29 @@ class App extends React.Component {
             width: 1000,
           }}
         >
+          <Link to="/search">
+            sss
+          </Link>
           <Header />
-          <div
-            id="contents"
-            style={{
-              position: 'absolute',
-              top: 50,
-            }}
-          >
-            {(mode === displayModes.HOME) ? (<Home />) : null}
-            {(mode === displayModes.MAKE_QUESTION) ? (<MakeQuestion />) : null}
-            {(mode === displayModes.PLAY_QUESTION) ? (<PlayQuestion />) : null}
-            {(mode === displayModes.EDIT_QUESTION) ? (<EditQuestion />) : null}
-            {(mode === displayModes.SEARCH) ? (<Search />) : null}
-            {(mode === displayModes.USER) ? (<Profile />) : null}
-            {(mode === displayModes.RANKING) ? (<Ranking />) : null}
-          </div>
+          <ConnectedRouter history={history}>
+            <div
+              id="contents"
+              style={{
+                position: 'absolute',
+                top: 50,
+              }}
+            >
+              <Switch>
+                <Route exact path="/" component={Home} onEnter={() => console.log('Home')} />
+                <Route path="/makequestion" component={MakeQuestion} onEnter={() => console.log('makequestion')} />
+                <Route path="/playquestion" component={PlayQuestion} onEnter={() => console.log('playquestion')} />
+                <Route path="/editquestion" component={EditQuestion} onEnter={() => console.log('editquestion')} />
+                <Route path="/search" component={Search} onEnter={() => console.log('search')} />
+                <Route path="/user" component={Profile} onEnter={() => console.log('user')} />
+                <Route path="/ranking" component={Ranking} onEnter={() => console.log('ranking')} />
+              </Switch>
+            </div>
+          </ConnectedRouter>
           <SignIn />
           <License />
           <FAQ />
@@ -63,7 +72,6 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  mode: PropTypes.string.isRequired,
   loadMe: PropTypes.func.isRequired,
 };
 
