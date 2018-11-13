@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { Route, Switch } from 'react-router';
-import { Link } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 
 import SignIn from '../containers/SignIn';
@@ -22,6 +21,8 @@ import { history } from '../configureStore';
 
 import theme from './theme';
 
+import Tracker from './Tracker';
+
 
 class App extends React.Component {
   componentDidMount() {
@@ -39,9 +40,6 @@ class App extends React.Component {
             width: 1000,
           }}
         >
-          <Link to="/search">
-            sss
-          </Link>
           <Header />
           <ConnectedRouter history={history}>
             <div
@@ -51,14 +49,16 @@ class App extends React.Component {
                 top: 50,
               }}
             >
+
+              <Route component={Tracker} />
               <Switch>
-                <Route exact path="/" component={Home} onEnter={() => console.log('Home')} />
-                <Route path="/makequestion" component={MakeQuestion} onEnter={() => console.log('makequestion')} />
-                <Route path="/playquestion" component={PlayQuestion} onEnter={() => console.log('playquestion')} />
-                <Route path="/editquestion" component={EditQuestion} onEnter={() => console.log('editquestion')} />
-                <Route path="/search" component={Search} onEnter={() => console.log('search')} />
-                <Route path="/user" component={Profile} onEnter={() => console.log('user')} />
-                <Route path="/ranking" component={Ranking} onEnter={() => console.log('ranking')} />
+                <Route exact path="/" component={Home} />
+                <Route path="/makequestion" component={MakeQuestion} />
+                <Route path="/playquestion" component={PlayQuestion} />
+                <Route path="/editquestion" component={EditQuestion} />
+                <Route path="/search" component={Search} />
+                <Route path="/user" component={Profile} />
+                <Route path="/ranking" component={Ranking} />
               </Switch>
             </div>
           </ConnectedRouter>

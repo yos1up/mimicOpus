@@ -38,6 +38,7 @@
     "prop-types": "^15.6.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-ga": "^2.5.3",
     "react-google-button": "^0.5.3",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
