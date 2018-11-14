@@ -22,24 +22,6 @@ const uploadQuestion = (req, res) => {
   }
 };
 
-const changeQuestion = (req, res) => {
-  if (req.isAuthenticated() || req.user.provider !== 'anonymous') {
-    const data = req.body;
-    const query = {
-      text: 'UPDATE questions SET notes = ($1), bpm = ($2), title = ($3) WHERE id=$4 and uid=$5',
-      values: [JSON.stringify(data.notes), data.bpm, data.title, data.id, req.user.id],
-    };
-    client.query(query)
-      .then(() => res.send({ errState: 0 }))
-      .catch((e) => {
-        console.log(e);
-        res.send({ errState: 1 });
-      });
-  } else {
-    res.send({ errState: 1 });
-  }
-};
-
 const deleteQuestion = (req, res) => {
   if (req.isAuthenticated() || req.user.provider !== 'anonymous') {
     const { id } = req.body;
@@ -334,7 +316,6 @@ const getMe = (req, res) => {
 apiRouter.post('/api/uploadQuestion', uploadQuestion);
 apiRouter.get('/api/loadQuestionsList', loadQuestionsList);
 apiRouter.get('/api/countQuestions', countQuestions);
-apiRouter.post('/api/changeQuestion', changeQuestion);
 apiRouter.post('/api/deleteQuestion', deleteQuestion);
 apiRouter.post('/api/saveAnswer', saveAnswer);
 apiRouter.post('/api/changeDisplayName', changeDisplayName);

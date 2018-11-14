@@ -27,59 +27,44 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { withRouter } from 'react-router';
 
 import displayModes from '../../data/displayModes';
+import filterLevels from '../../data/filterLevels';
+import SearchQuery from '../../data/searchQuery';
 
 import SoundPlayer from '../SoundPlayer';
 
 class Search extends React.Component {
   constructor(props) {
     super(props);
-    const {
-      lowBPM, highBPM, searchTitle, searchUser,
-    } = props;
+    const searchQuery = new SearchQuery();
     this.state = {
       page: 0,
-      tempLowBPM: lowBPM,
-      tempHighBPM: highBPM,
-      tempSearchTitle: searchTitle,
-      tempSearchUser: searchUser,
-      madeByMe: true,
-      answered: true,
-      unanswered: true,
+      searchQuery,
+      tempSearchQuery: searchQuery,
     };
     this.soundPlayer = new SoundPlayer();
   }
 
   componentDidMount() {
     const {
-      lowBPM, highBPM, searchTitle, searchUser, loadQuestionsList, loadCountQuestions,
-      changeDisplayMode,
+      loadQuestionsList, loadCountQuestions, changeDisplayMode,
     } = this.props;
     const {
-      page, madeByMe, answered, unanswered,
+      page, searchQuery,
     } = this.state;
-    loadCountQuestions(lowBPM, highBPM, searchTitle, searchUser);
-    loadQuestionsList(lowBPM, highBPM, 10 * page + 1, 10 * (page + 1), searchTitle, searchUser,
-      madeByMe, answered, unanswered);
+    loadCountQuestions(searchQuery);
+    loadQuestionsList(searchQuery, 10 * page + 1, 10 * (page + 1));
     changeDisplayMode(displayModes.SEARCH);
-    this.setState({
-      tempLowBPM: lowBPM,
-      tempHighBPM: highBPM,
-      tempSearchTitle: searchTitle,
-      tempSearchUser: searchUser,
-    });
   }
 
   render() {
     // TODO: history validation
     const {
-      questionsList, setQuestion, setBPM, setLowBPM, setHighBPM,
+      questionsList, setQuestion, setBPM,
       loadQuestionsList, setQuestionId, setNotes, setTitle, deleteUploadedQuestion, uid,
-      setSearchTitle, setSearchUser, countQuestions, loadCountQuestions,
-      lowBPM, highBPM, searchUser, searchTitle, history,
+      countQuestions, loadCountQuestions, history,
     } = this.props;
     const {
-      page, tempLowBPM, tempHighBPM, tempSearchTitle, tempSearchUser,
-      madeByMe, answered, unanswered,
+      page, searchQuery, tempSearchQuery,
     } = this.state;
     return (
       <div id="Search">
@@ -102,7 +87,7 @@ class Search extends React.Component {
               タイトル
             </Typography>
             <Input
-              value={tempSearchTitle}
+              value={tempSearchQuery.title}
               inputProps={{
                 'aria-label': 'Description',
               }}
@@ -111,7 +96,7 @@ class Search extends React.Component {
               }}
               onChange={(e) => {
                 this.setState({
-                  tempSearchTitle: e.target.value,
+                  tempSearchQuery: tempSearchQuery.set('title', e.target.value),
                 });
               }}
             />
@@ -135,9 +120,11 @@ class Search extends React.Component {
               }}
             >
               <Select
-                value={tempLowBPM}
+                value={tempSearchQuery.lowBPM}
                 onChange={(e) => {
-                  this.setState({ tempLowBPM: e.target.value });
+                  this.setState({
+                    tempSearchQuery: tempSearchQuery.set('lowBPM', e.target.value),
+                  });
                 }}
                 displayEmpty
               >
@@ -161,9 +148,11 @@ class Search extends React.Component {
               }}
             >
               <Select
-                value={tempHighBPM}
+                value={tempSearchQuery.highBPM}
                 onChange={(e) => {
-                  this.setState({ tempHighBPM: e.target.value });
+                  this.setState({
+                    tempSearchQuery: tempSearchQuery.set('highBPM', e.target.value),
+                  });
                 }}
                 displayEmpty
               >
@@ -189,7 +178,7 @@ class Search extends React.Component {
               作成者
             </Typography>
             <Input
-              value={tempSearchUser}
+              value={tempSearchQuery.user}
               inputProps={{
                 'aria-label': 'Description',
               }}
@@ -198,7 +187,7 @@ class Search extends React.Component {
               }}
               onChange={(e) => {
                 this.setState({
-                  tempSearchUser: e.target.value,
+                  tempSearchQuery: tempSearchQuery.set('user', e.target.value),
                 });
               }}
             />
@@ -216,13 +205,37 @@ class Search extends React.Component {
             >
               難易度
             </Typography>
+            <FormControl
+              style={{
+                position: 'absolute', top: 20, left: 0, width: 150,
+              }}
+            >
+              <Select
+                value={tempSearchQuery.level}
+                onChange={(e) => {
+                  this.setState({
+                    tempSearchQuery: tempSearchQuery.set('level', e.target.value),
+                  });
+                }}
+                displayEmpty
+              >
+                <MenuItem value={filterLevels.TO_TWO_HND}>~200</MenuItem>
+                <MenuItem value={filterLevels.TWO_HND_TO_FOUR_HND}>200~400</MenuItem>
+                <MenuItem value={filterLevels.FOUR_HND_TO_SIX_HND}>400~600</MenuItem>
+                <MenuItem value={filterLevels.SIX_HND_TO_EIGHT_HND}>600~800</MenuItem>
+                <MenuItem value={filterLevels.EIGHT_HND_TO_ONE_K}>800~1000</MenuItem>
+                <MenuItem value={filterLevels.FROM_ONE_K}>1000~</MenuItem>
+              </Select>
+            </FormControl>
             <FormControlLabel
               disabled={uid === -1}
               control={(
                 <Checkbox
-                  checked={answered}
+                  checked={tempSearchQuery.showNoLevel}
                   onChange={(e) => {
-                    this.setState({ answered: e.target.checked });
+                    this.setState({
+                      tempSearchQuery: tempSearchQuery.set('showNoLevel', e.target.checked),
+                    });
                   }}
                   value="checkedB"
                 />
@@ -235,26 +248,6 @@ class Search extends React.Component {
               }}
               label="未評価も表示"
             />
-            <FormControl
-              style={{
-                position: 'absolute', top: 20, left: 0, width: 150,
-              }}
-            >
-              <Select
-                value={0}
-                onChange={(e) => {
-                  this.setState({ tempHighBPM: e.target.value });
-                }}
-                displayEmpty
-              >
-                <MenuItem value={0}>~200</MenuItem>
-                <MenuItem value={1}>200~400</MenuItem>
-                <MenuItem value={2}>400~600</MenuItem>
-                <MenuItem value={3}>600~800</MenuItem>
-                <MenuItem value={4}>800~1000</MenuItem>
-                <MenuItem value={5}>1000~</MenuItem>
-              </Select>
-            </FormControl>
           </div>
           <FormGroup
             style={{
@@ -265,9 +258,11 @@ class Search extends React.Component {
               disabled={uid === -1}
               control={(
                 <Checkbox
-                  checked={madeByMe}
+                  checked={tempSearchQuery.madeByMe}
                   onChange={(e) => {
-                    this.setState({ madeByMe: e.target.checked });
+                    this.setState({
+                      tempSearchQuery: tempSearchQuery.set('madeByMe', e.target.checked),
+                    });
                   }}
                   value="checkedA"
                 />
@@ -281,9 +276,11 @@ class Search extends React.Component {
               disabled={uid === -1}
               control={(
                 <Checkbox
-                  checked={answered}
+                  checked={tempSearchQuery.answered}
                   onChange={(e) => {
-                    this.setState({ answered: e.target.checked });
+                    this.setState({
+                      tempSearchQuery: tempSearchQuery.set('answered', e.target.checked),
+                    });
                   }}
                   value="checkedB"
                 />
@@ -297,9 +294,11 @@ class Search extends React.Component {
               disabled={uid === -1}
               control={(
                 <Checkbox
-                  checked={unanswered}
+                  checked={tempSearchQuery.unanswered}
                   onChange={(e) => {
-                    this.setState({ unanswered: e.target.checked });
+                    this.setState({
+                      tempSearchQuery: tempSearchQuery.set('unanswered', e.target.checked),
+                    });
                   }}
                   value="checkedB"
                 />
@@ -317,21 +316,12 @@ class Search extends React.Component {
               position: 'absolute', top: 35, left: 820, width: 100,
             }}
             onClick={() => {
-              loadCountQuestions(
-                tempLowBPM, tempHighBPM, tempSearchTitle, tempSearchUser,
-                madeByMe, answered, unanswered,
-              );
-              loadQuestionsList(
-                tempLowBPM, tempHighBPM, 1, 10, tempSearchTitle, tempSearchUser,
-                madeByMe, answered, unanswered,
-              );
+              loadCountQuestions(tempSearchQuery);
+              loadQuestionsList(tempSearchQuery, 1, 10);
               this.setState({
+                searchQuery: tempSearchQuery,
                 page: 0,
               });
-              setLowBPM(tempLowBPM);
-              setHighBPM(tempHighBPM);
-              setSearchTitle(tempSearchTitle);
-              setSearchUser(tempSearchUser);
             }}
           >
             検索
@@ -417,14 +407,8 @@ class Search extends React.Component {
                               aria-label="Delete"
                               onClick={(e) => {
                                 deleteUploadedQuestion(id, () => {
-                                  loadCountQuestions(
-                                    tempLowBPM, tempHighBPM, tempSearchTitle, tempSearchUser,
-                                    madeByMe, answered, unanswered,
-                                  );
-                                  loadQuestionsList(
-                                    tempLowBPM, tempHighBPM, 1, 10, tempSearchTitle, tempSearchUser,
-                                    madeByMe, answered, unanswered,
-                                  );
+                                  loadCountQuestions(tempSearchQuery);
+                                  loadQuestionsList(tempSearchQuery, 1, 10);
                                 });
                                 e.stopPropagation();
                               }}
@@ -458,10 +442,7 @@ class Search extends React.Component {
               rowsPerPageOptions={[10]}
               onChangePage={(event, page_) => {
                 this.setState({ page: page_ });
-                loadQuestionsList(
-                  lowBPM, highBPM, 10 * page_ + 1, 10 * (page_ + 1), searchTitle, searchUser,
-                  madeByMe, answered, unanswered,
-                );
+                loadQuestionsList(tempSearchQuery, 10 * page_ + 1, 10 * (page_ + 1));
               }}
             />
           </TableFooter>
@@ -474,23 +455,15 @@ class Search extends React.Component {
 Search.propTypes = {
   questionsList: PropTypes.instanceOf(Immutable.List).isRequired,
   uid: PropTypes.number.isRequired,
-  lowBPM: PropTypes.number.isRequired,
-  highBPM: PropTypes.number.isRequired,
   countQuestions: PropTypes.number.isRequired,
-  searchTitle: PropTypes.string.isRequired,
-  searchUser: PropTypes.string.isRequired,
   setQuestion: PropTypes.func.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
   setBPM: PropTypes.func.isRequired,
   setNotes: PropTypes.func.isRequired,
   setTitle: PropTypes.func.isRequired,
-  setLowBPM: PropTypes.func.isRequired,
-  setHighBPM: PropTypes.func.isRequired,
   loadQuestionsList: PropTypes.func.isRequired,
   setQuestionId: PropTypes.func.isRequired,
   deleteUploadedQuestion: PropTypes.func.isRequired,
-  setSearchTitle: PropTypes.func.isRequired,
-  setSearchUser: PropTypes.func.isRequired,
   loadCountQuestions: PropTypes.func.isRequired,
 };
 
