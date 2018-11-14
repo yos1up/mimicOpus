@@ -9,30 +9,35 @@ import PositionBar from './PositionBar';
 import Note from '../../data/note';
 
 class PianoRollGrid extends React.Component { // グリッドエリア + yラベル
-  /*
-    pitchRange: [最小ノートナンバー, 最大ノートナンバー]
-  */
   constructor(props) {
-    const { pitchRange } = props;
     super(props);
     this.state = {
       uw: 28, // unit width (1 column width)
       uh: 20, // unit height (1 row height)
-      rows: pitchRange[1] - pitchRange[0] + 1,
+      rows: 128,
       cols: 32,
       xMargin: 36,
       selectRange: null,
       beatPerCol: 0.5, // グリッド刻み（拍数）
+      toSetScrollTop: true,
     };
-    // 上下キー対応
-    window.onkeydown = (e => this.keyDown(e));
 
-    this.wheel = this.wheel.bind(this);
     this.mouseDown = this.mouseDown.bind(this);
     this.mouseUp = this.mouseUp.bind(this);
     this.mouseMove = this.mouseMove.bind(this);
 
     this.timer = setInterval(this.updateCurrentPosition.bind(this), 50);
+  }
+
+  componentDidMount() {
+    const { toSetScrollTop } = this.state;
+    if (toSetScrollTop) {
+      this.overflowDiv.scrollTop = 1040;
+      this.toSetScrollTop = false;
+      this.setState({
+        toSetScrollTop: false,
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -47,24 +52,6 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
       currentBeat = Math.min(currentBeat, cols * beatPerCol);
       const currentPosition = xMargin + this.beatPitchToRelPos([currentBeat, 0])[0]; // x絶対座標
       this.positionBar.updateCurrentPosition(currentPosition);
-    }
-  }
-
-  keyDown(event) {
-    const { shiftPitchRange } = this.props;
-    if (event.keyCode === 38) { // up key
-      shiftPitchRange(1);
-    } else if (event.keyCode === 40) { // down key
-      shiftPitchRange(-1);
-    }
-  }
-
-  wheel(event) {
-    const { pitchRange, shiftPitchRange } = this.props;
-    if (event.deltaY < 0 && pitchRange[1] < 127) {
-      shiftPitchRange(1);
-    } else if (event.deltaY > 0 && pitchRange[0] > 0) {
-      shiftPitchRange(-1);
     }
   }
 
@@ -125,20 +112,18 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
   }
 
   relPosToBeatPitch(relPos) { // relPos: グリッド左上からの座標ずれ, beatPitch: 拍とピッチ
-    const { pitchRange } = this.props;
     const { uw, uh, beatPerCol } = this.state;
     return [
       relPos[0] / uw * beatPerCol,
-      pitchRange[1] + 0.5 - relPos[1] / uh,
+      127 + 0.5 - relPos[1] / uh,
     ];
   }
 
   beatPitchToRelPos(beatPitch) { // beatPitch: 拍とピッチ, relPos: グリッド左上からの座標ずれ
-    const { pitchRange } = this.props;
     const { uw, uh, beatPerCol } = this.state;
     return [
       beatPitch[0] / beatPerCol * uw,
-      (pitchRange[1] + 0.5 - beatPitch[1]) * uh,
+      (127 + 0.5 - beatPitch[1]) * uh,
     ];
   }
 
@@ -168,7 +153,7 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
 
   render() {
     const {
-      pitchRange, notes, delNote, soundPlayer,
+      notes, delNote, soundPlayer
     } = this.props;
     const {
       rows, cols, uw, uh, xMargin, selectRange, beatPerCol,
@@ -180,36 +165,33 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
     const isBlackKey = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0];
     const bgr = [];
     for (let i = 0; i < rows; i += 1) {
-      const pitch = pitchRange[1] - i;
+      const pitch = 127 - i;
       bgr.push(isBlackKey[pitch % 12] ? '#EEEEFF' : '#FFFFFF');
     }
     const hlw = [...Array(rows + 1).keys()].map(i => 1 + (
-      ((pitchRange[1] + 1 - i) % 12) ? 0 : 1
+      ((127 + 1 - i) % 12) ? 0 : 1
     ));
     const vlw = [...Array(cols + 1).keys()].map(
       i => 0.25 + ((i % 2) ? 0 : 0.75) + ((i % 8) ? 0 : 1)
     );
     elementList.push(
-
-      <Tooltip title="ドラッグして音を入力">
-        <div
-          key={elementList.length}
-          style={{
-            position: 'absolute',
-            left: xMargin,
-            width: uw * cols,
-            height: uh * rows,
-          }}
-        >
-          <SimpleGrid rows={rows} cols={cols} uw={uw} uh={uh} hlw={hlw} vlw={vlw} bgr={bgr} />
-        </div>
-      </Tooltip>,
+      <div
+        key={elementList.length}
+        style={{
+          position: 'absolute',
+          left: xMargin,
+          width: uw * cols,
+          height: uh * rows,
+        }}
+      >
+        <SimpleGrid rows={rows} cols={cols} uw={uw} uh={uh} hlw={hlw} vlw={vlw} bgr={bgr} />
+      </div>
     );
 
     // yLabel (i.e. pitch name)
     const pitchName = ['C', '', 'D', '', 'E', 'F', '', 'G', '', 'A', '', 'B'];
     for (let i = 0; i < rows; i += 1) {
-      const pitch = pitchRange[1] - i;
+      const pitch = 127 - i;
       let label = pitchName[pitch % 12];
       if (label === 'C') label += (pitch / 12 - 1);
       elementList.push(
@@ -230,7 +212,7 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
     // notes
     for (let i = 0; i < notes.size; i += 1) {
       const note = notes.get(i);
-      if (pitchRange[0] <= note.pitch && note.pitch <= pitchRange[1]) {
+      if (note.pitch >= 0 && note.pitch <= 127) {
         const leftBottom = this.beatPitchToRelPos([
           note.start, note.pitch - 0.5,
         ]);
@@ -292,25 +274,44 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
     }
 
     return (
-      <div
-        role="presentation"
-        style={{ position: 'absolute', top: 100, cursor: 'pointer' }}
-        ref={(mainPianoRoll) => { this.mainPianoRoll = mainPianoRoll; }}
-        onWheel={this.wheel}
-        onMouseDown={this.mouseDown}
-        onMouseUp={this.mouseUp}
-        onMouseMove={this.mouseMove}
-      >
-        {elementList}
-      </div>
+      <Tooltip title="ドラッグして音を入力">
+        <div
+          style={{
+            position: 'absolute',
+            top: 100,
+            height: 400,
+            width: xMargin + uw * cols + 2,
+            overflowY: 'scroll',
+          }}
+          ref={(overflowDiv) => {
+            this.overflowDiv = overflowDiv;
+          }}
+        >
+          <div
+            role="presentation"
+            style={{
+              position: 'absolute',
+              top: 0,
+              cursor: 'pointer',
+            }}
+            ref={(mainPianoRoll) => {
+              this.mainPianoRoll = mainPianoRoll;
+            }}
+            onWheel={this.wheel}
+            onMouseDown={this.mouseDown}
+            onMouseUp={this.mouseUp}
+            onMouseMove={this.mouseMove}
+          >
+            {elementList}
+          </div>
+        </div>
+      </Tooltip>
     );
   }
 }
 
 PianoRollGrid.propTypes = {
   notes: PropTypes.instanceOf(Immutable.List).isRequired,
-  pitchRange: PropTypes.arrayOf(PropTypes.number).isRequired,
-  shiftPitchRange: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
   soundPlayer: PropTypes.object.isRequired,
