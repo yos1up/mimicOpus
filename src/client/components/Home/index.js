@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withRouter } from 'react-router';
+import { TwitterTimelineEmbed, TwitterHashtagButton } from 'react-twitter-embed';
 
 import displayModes from '../../data/displayModes';
 
@@ -37,38 +38,28 @@ class Home extends React.Component {
         id="Home"
         style={{
           width: 1000,
-          height: 730,
+          height: 830,
           backgroundColor: '#FFFFFF',
           padding: 30,
         }}
       >
         <img
-          src="./images/score.jpg"
+          src="./images/logo_transparent.png"
           alt=""
           style={{
             position: 'absolute',
-            width: 1060,
-            height: 790,
-            top: 0,
-            left: 0,
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            width: 770,
-            height: 790,
-            top: 0,
-            left: 0,
-            background: '#FFFFFF',
+            width: 192,
+            height: 192,
+            top: -24,
+            left: 500 - 200,
           }}
         />
         <div>
           <Typography
-            variant="h4"
+            variant="h6"
             color="textPrimary"
             style={{
-              position: 'absolute', top: 20, width: 700,
+              position: 'absolute', top: 130, width: 1000,
             }}
           >
             「耳コピ」はあなたの音楽をより良くする
@@ -77,7 +68,7 @@ class Home extends React.Component {
             variant="h7"
             color="textPrimary"
             style={{
-              position: 'absolute', top: 80, width: 800,
+              position: 'absolute', top: 170, width: 800,
             }}
           >
             mimicopus(ミミックオーパス)は「耳コピ」のスキルアップのためのオンラインサービスです。
@@ -88,9 +79,27 @@ class Home extends React.Component {
           </Typography>
         </div>
         <div
+          style={{
+            position: 'absolute', left: 800, top: 0,
+          }}
+        >
+          <TwitterHashtagButton
+            tag="mimicOpus"
+            style={{
+              position: 'relative',
+            }}
+          />
+          <TwitterTimelineEmbed
+            sourceType="profile"
+            screenName="mimicOpus"
+            options={{ width: 200, height: 250 }}
+          />
+        </div>
+
+        <div
           id="Osusume Questions"
           style={{
-            position: 'absolute', top: 200,
+            position: 'absolute', top: 300,
           }}
         >
           <Typography
@@ -158,7 +167,7 @@ class Home extends React.Component {
         <div
           id="New Questions"
           style={{
-            position: 'absolute', top: 450,
+            position: 'absolute', top: 550,
           }}
         >
           <Typography
@@ -228,7 +237,7 @@ class Home extends React.Component {
             variant="body1"
             color="textPrimary"
             style={{
-              position: 'absolute', top: 700, width: 800,
+              position: 'absolute', top: 800, width: 800,
             }}
           >
             mimicopusはAlpha Versionとなっております。
