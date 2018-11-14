@@ -96,7 +96,7 @@ class Search extends React.Component {
           >
             <Typography
               style={{
-                position: 'absolute', top: 0, left: 0, width: 180,
+                position: 'absolute', top: 0, left: 0, width: 150,
               }}
             >
               タイトル
@@ -107,7 +107,7 @@ class Search extends React.Component {
                 'aria-label': 'Description',
               }}
               style={{
-                position: 'absolute', top: 20, left: 0, width: 180,
+                position: 'absolute', top: 20, left: 0, width: 150,
               }}
               onChange={(e) => {
                 this.setState({
@@ -119,19 +119,19 @@ class Search extends React.Component {
           <div
             id="bpm picker"
             style={{
-              position: 'absolute', top: 20, left: 210,
+              position: 'absolute', top: 20, left: 180,
             }}
           >
             <Typography
               style={{
-                position: 'absolute', top: 0, left: 0, width: 180,
+                position: 'absolute', top: 0, left: 0, width: 120,
               }}
             >
               BPM
             </Typography>
             <FormControl
               style={{
-                position: 'absolute', top: 20, left: 0, width: 100,
+                position: 'absolute', top: 20, left: 0, width: 60,
               }}
             >
               <Select
@@ -150,14 +150,14 @@ class Search extends React.Component {
             </FormControl>
             <Typography
               style={{
-                position: 'absolute', top: 30, left: 110, width: 20,
+                position: 'absolute', top: 30, left: 60, width: 20,
               }}
             >
               ~
             </Typography>
             <FormControl
               style={{
-                position: 'absolute', top: 20, left: 130, width: 100,
+                position: 'absolute', top: 20, left: 80, width: 60,
               }}
             >
               <Select
@@ -178,12 +178,12 @@ class Search extends React.Component {
           <div
             id="search title user"
             style={{
-              position: 'absolute', top: 20, left: 460,
+              position: 'absolute', top: 20, left: 330,
             }}
           >
             <Typography
               style={{
-                position: 'absolute', top: 0, left: 0, width: 180,
+                position: 'absolute', top: 0, left: 0, width: 150,
               }}
             >
               作成者
@@ -194,7 +194,7 @@ class Search extends React.Component {
                 'aria-label': 'Description',
               }}
               style={{
-                position: 'absolute', top: 20, left: 0, width: 180,
+                position: 'absolute', top: 20, left: 0, width: 150,
               }}
               onChange={(e) => {
                 this.setState({
@@ -202,6 +202,59 @@ class Search extends React.Component {
                 });
               }}
             />
+          </div>
+          <div
+            id="level filter"
+            style={{
+              position: 'absolute', top: 20, left: 490,
+            }}
+          >
+            <Typography
+              style={{
+                position: 'absolute', top: 0, left: 0, width: 150,
+              }}
+            >
+              難易度
+            </Typography>
+            <FormControlLabel
+              disabled={uid === -1}
+              control={(
+                <Checkbox
+                  checked={answered}
+                  onChange={(e) => {
+                    this.setState({ answered: e.target.checked });
+                  }}
+                  value="checkedB"
+                />
+              )}
+              style={{
+                position: 'absolute',
+                height: 30,
+                top: 50,
+                width: 160,
+              }}
+              label="未評価も表示"
+            />
+            <FormControl
+              style={{
+                position: 'absolute', top: 20, left: 0, width: 150,
+              }}
+            >
+              <Select
+                value={0}
+                onChange={(e) => {
+                  this.setState({ tempHighBPM: e.target.value });
+                }}
+                displayEmpty
+              >
+                <MenuItem value={0}>~200</MenuItem>
+                <MenuItem value={1}>200~400</MenuItem>
+                <MenuItem value={2}>400~600</MenuItem>
+                <MenuItem value={3}>600~800</MenuItem>
+                <MenuItem value={4}>800~1000</MenuItem>
+                <MenuItem value={5}>1000~</MenuItem>
+              </Select>
+            </FormControl>
           </div>
           <FormGroup
             style={{
