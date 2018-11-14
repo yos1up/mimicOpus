@@ -107,7 +107,12 @@ class PlayQuestion extends React.Component {
 
   evaluateAndReport(qNotes, aNotes) {
     const { questionId, saveAnswer } = this.props;
-    const score = PlayQuestion.evaluateAnswer(qNotes, aNotes);
+    let score = PlayQuestion.evaluateAnswer(qNotes, aNotes);
+    if (score !== undefined && score !== null) {
+      score = parseFloat(score).toFixed(2);
+    } else {
+      score = 'Nothing';
+    }
     let message = '';
     message += `YOUR SCORE: ${score}\n`;
     // if (score >= 100) message += '!!! CONGRATULATION !!!';
