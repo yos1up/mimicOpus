@@ -10,7 +10,6 @@ import FAQ from '../containers/FAQ';
 import Header from '../containers/Header';
 
 import Home from '../containers/Home';
-import EditQuestion from '../containers/EditQuestion';
 import MakeQuestion from '../containers/MakeQuestion';
 import PlayQuestion from '../containers/PlayQuestion';
 import Search from '../containers/Search';
@@ -55,7 +54,6 @@ class App extends React.Component {
                 <Route exact path="/" component={Home} />
                 <Route path="/makequestion" component={MakeQuestion} />
                 <Route path="/playquestion" component={PlayQuestion} />
-                <Route path="/editquestion" component={EditQuestion} />
                 <Route path="/search" component={Search} />
                 <Route path="/user" component={Profile} />
                 <Route path="/ranking" component={Ranking} />

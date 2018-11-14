@@ -393,7 +393,7 @@ class Search extends React.Component {
                                 setBPM(question.bpm);
                                 setQuestionId(id);
                                 setTitle(question.title);
-                                history.push('/editquestion');
+                                history.push('/makequestion');
                                 e.stopPropagation();
                               }}
                             >
