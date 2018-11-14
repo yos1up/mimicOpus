@@ -39,13 +39,14 @@ class SoundPlayer {
       notes: 1-d Array of noteObject
         noteObject: { pitch, start, end, }
     */
-    let secPerBeat = 60 / bpm;
-    if (Number.isNaN(secPerBeat)) secPerBeat = 60 / 120.0;
+    this.bpm = bpm;
+    this.secPerBeat = 60 / bpm;
+    if (Number.isNaN(this.secPerBeat)) this.secPerBeat = 60 / 120.0;
     const timeEventTupleList = [];
     for (let i = 0; i < notes.size; i += 1) {
       const note = notes.get(i);
       timeEventTupleList.push(
-        [note.start * secPerBeat, [note.pitch, (note.end - note.start) * secPerBeat]],
+        [note.start * this.secPerBeat, [note.pitch, (note.end - note.start) * this.secPerBeat]],
       );
     }
     // 一連の音符たちを鳴らしたい場合，このように Tone.Part が便利．（他に Tone.Sequence というのもあるようだ）
@@ -60,9 +61,10 @@ class SoundPlayer {
     this.lastPlayStarted = Tone.now();
   }
 
-  position() { // 現在の再生位置[秒]を返す
+  position() { // 現在の再生位置[拍]を返す
     // TODO 再生が終わってもこの値は増加し続ける・・・
-    return Tone.now() - this.lastPlayStarted;
+    if (typeof this.secPerBeat === 'undefined') return 0;
+    return (Tone.now() - this.lastPlayStarted) / this.secPerBeat;
   }
 
   preview(pitch) { // とりあえず一音だけ即時に鳴らしたい場合はこちらをどうぞ

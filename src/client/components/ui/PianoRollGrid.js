@@ -5,6 +5,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import SimpleGrid from './SimpleGrid';
 import NoteBlock from './NoteBlock';
+import PositionBar from './PositionBar';
 import Note from '../../data/note';
 
 class PianoRollGrid extends React.Component { // グリッドエリア + yラベル
@@ -30,6 +31,23 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
     this.mouseDown = this.mouseDown.bind(this);
     this.mouseUp = this.mouseUp.bind(this);
     this.mouseMove = this.mouseMove.bind(this);
+
+    this.timer = setInterval(this.updateCurrentPosition.bind(this), 50);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  updateCurrentPosition() {
+    const { soundPlayer, } = this.props;
+    const { xMargin, cols, beatPerCol } = this.state;
+    if (typeof this.positionBar !== 'undefined') {
+      let currentBeat = soundPlayer.position(); // 拍数
+      currentBeat = Math.min(currentBeat, cols * beatPerCol);
+      const currentPosition = xMargin + this.beatPitchToRelPos([currentBeat, 0])[0]; // x絶対座標
+      this.positionBar.updateCurrentPosition(currentPosition);
+    }
   }
 
   keyDown(event) {
@@ -106,7 +124,7 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
     }
   }
 
-  relPosToTimePitch(relPos) { // relPos: グリッド左上からの座標ずれ, timePitch: 時刻[拍]とピッチ
+  relPosToBeatPitch(relPos) { // relPos: グリッド左上からの座標ずれ, beatPitch: 拍とピッチ
     const { pitchRange } = this.props;
     const { uw, uh, beatPerCol } = this.state;
     return [
@@ -115,20 +133,20 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
     ];
   }
 
-  timePitchToRelPos(timePitch) { // timePitch: 時刻[拍]とピッチ, relPos: グリッド左上からの座標ずれ
+  beatPitchToRelPos(beatPitch) { // beatPitch: 拍とピッチ, relPos: グリッド左上からの座標ずれ
     const { pitchRange } = this.props;
     const { uw, uh, beatPerCol } = this.state;
     return [
-      timePitch[0] / beatPerCol * uw,
-      (pitchRange[1] + 0.5 - timePitch[1]) * uh,
+      beatPitch[0] / beatPerCol * uw,
+      (pitchRange[1] + 0.5 - beatPitch[1]) * uh,
     ];
   }
 
   calculateSelectRangeByTwoRelPos(relPos1, relPos2, onePitch = true) {
     const { cols, beatPerCol } = this.state;
 
-    const tp1 = this.relPosToTimePitch(relPos1);
-    const tp2 = this.relPosToTimePitch(relPos2);
+    const tp1 = this.relPosToBeatPitch(relPos1);
+    const tp2 = this.relPosToBeatPitch(relPos2);
     let range;
     if (onePitch) {
       range = [
@@ -149,7 +167,9 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
   }
 
   render() {
-    const { pitchRange, notes, delNote } = this.props;
+    const {
+      pitchRange, notes, delNote, soundPlayer,
+    } = this.props;
     const {
       rows, cols, uw, uh, xMargin, selectRange, beatPerCol,
     } = this.state;
@@ -211,10 +231,10 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
     for (let i = 0; i < notes.size; i += 1) {
       const note = notes.get(i);
       if (pitchRange[0] <= note.pitch && note.pitch <= pitchRange[1]) {
-        const leftBottom = this.timePitchToRelPos([
+        const leftBottom = this.beatPitchToRelPos([
           note.start, note.pitch - 0.5,
         ]);
-        const rightTop = this.timePitchToRelPos([
+        const rightTop = this.beatPitchToRelPos([
           note.end, note.pitch + 0.5,
         ]);
         const divStyle = {
@@ -240,13 +260,23 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
       }
     }
 
+    // current position bar
+    elementList.push(
+      <PositionBar
+        soundPlayer={soundPlayer}
+        height={uh * rows}
+        parent={this}
+        ref={(node) => { this.positionBar = node; }}
+      />
+    );
+
     // selection
     if (selectRange !== null) {
       // [startBeat (decimal), minPitch (integer), endBeat (decimal), maxPitch (integer)]
-      const leftBottom = this.timePitchToRelPos([
+      const leftBottom = this.beatPitchToRelPos([
         selectRange[0], selectRange[1] - 0.5,
       ]);
-      const rightTop = this.timePitchToRelPos([
+      const rightTop = this.beatPitchToRelPos([
         selectRange[2], selectRange[3] + 0.5,
       ]);
       const divStyle = {
