@@ -40,48 +40,70 @@ const deleteQuestion = (req, res) => {
   }
 };
 
+const defaultQuestionQuery = (query_) => {
+  const query = query_;
+  if (query.lowBPM === null || query.lowBPM === undefined) {
+    query.lowBPM = 60;
+  }
+  if (query.highBPM === null || query.highBPM === undefined) {
+    query.highBPM = 200;
+  }
+  if (query.title === null || query.title === undefined) {
+    query.title = '';
+  }
+  if (query.user === null || query.user === undefined) {
+    query.user = '';
+  }
+  if (query.lowRating === null || query.lowRating === undefined) {
+    query.lowRating = -10000;
+  }
+  if (query.highRating === null || query.highRating === undefined) {
+    query.highRating = 10000;
+  }
+  if (query.showNoLevel === 'true' || query.showNoLevel === null || query.showNoLevel === undefined) {
+    query.showNoLevel = true;
+  } else {
+    query.showNoLevel = false;
+  }
+  if (query.madeByMe === 'true' || query.madeByMe === null || query.madeByMe === undefined) {
+    query.madeByMe = true;
+  } else {
+    query.madeByMe = false;
+  }
+  if (query.answered === 'true' || query.answered === null || query.answered === undefined) {
+    query.answered = true;
+  } else {
+    query.answered = false;
+  }
+  if (query.unanswered === 'true' || query.unanswered === null || query.unanswered === undefined) {
+    query.unanswered = true;
+  } else {
+    query.unanswered = false;
+  }
+  if (query.orderMode === null || query.orderMode === undefined) {
+    query.orderMode = 'new';
+  }
+  return query;
+};
+
 const loadQuestionsList = (req, res) => {
-  const urlQuery = req.query;
-  if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
-    urlQuery.lowBPM = 60;
-  }
-  if (urlQuery.highBPM === null || urlQuery.highBPM === undefined) {
-    urlQuery.highBPM = 200;
-  }
+  const urlQuery = defaultQuestionQuery(req.query);
   if (urlQuery.start === null || urlQuery.start === undefined) {
     urlQuery.start = 1;
   }
   if (urlQuery.stop === null || urlQuery.stop === undefined) {
     urlQuery.stop = 10;
   }
-  if (urlQuery.title === null || urlQuery.title === undefined) {
-    urlQuery.title = '';
-  }
-  if (urlQuery.user === null || urlQuery.user === undefined) {
-    urlQuery.user = '';
-  }
-  if (urlQuery.madeByMe === 'true' || urlQuery.madeByMe === null || urlQuery.madeByMe === undefined) {
-    urlQuery.madeByMe = true;
-  } else {
-    urlQuery.madeByMe = false;
-  }
-  if (urlQuery.answered === 'true' || urlQuery.answered === null || urlQuery.answered === undefined) {
-    urlQuery.answered = true;
-  } else {
-    urlQuery.answered = false;
-  }
-  if (urlQuery.unanswered === 'true' || urlQuery.unanswered === null || urlQuery.unanswered === undefined) {
-    urlQuery.unanswered = true;
-  } else {
-    urlQuery.unanswered = false;
-  }
-  if (urlQuery.orderMode === null || urlQuery.orderMode === undefined) {
-    urlQuery.orderMode = 'new';
-  }
 
   if (urlQuery.user === '') {
     urlQuery.user = '%';
   }
+
+  let levelFilterQuery = '(q.rating >= $6 and q.rating <= $7)';
+  if (urlQuery.showNoLevel) {
+    levelFilterQuery = `(q.rating is null or ${levelFilterQuery})`;
+  }
+
   let filterQuery = '(false';
   if (urlQuery.madeByMe) {
     filterQuery += ' or q.uid = $1';
@@ -116,8 +138,11 @@ const loadQuestionsList = (req, res) => {
         + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM answers WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
         + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE $4 and u.displayName LIKE $5 and '
       }${filterQuery
-      }${' ORDER BY q.uploadedat DESC LIMIT $6 OFFSET $7'}`,
+      }${' and '
+      }${levelFilterQuery
+      }${' ORDER BY q.uploadedat DESC LIMIT $8 OFFSET $9'}`,
       values: [uid, urlQuery.lowBPM, urlQuery.highBPM, queryTitle, queryUser,
+        urlQuery.lowRating, urlQuery.highRating,
         urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
     };
   } else { // osusume
@@ -127,9 +152,12 @@ const loadQuestionsList = (req, res) => {
         + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM answers WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
         + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE $4 and u.displayName LIKE $5 and '
       }${filterQuery
-      }${' ORDER BY abs($6 - q.rating) LIMIT $7 OFFSET $8'}`,
+      }${' and '
+      }${levelFilterQuery
+      }${' ORDER BY abs($8 - q.rating) LIMIT $9 OFFSET $10'}`,
       values: [uid, urlQuery.lowBPM, urlQuery.highBPM, queryTitle, queryUser,
-        myRating - 693, urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
+        urlQuery.lowRating, urlQuery.highRating, myRating - 693,
+        urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
     };
   }
 
@@ -160,37 +188,17 @@ const loadQuestionsList = (req, res) => {
 };
 
 const countQuestions = (req, res) => {
-  const urlQuery = req.query;
-  if (urlQuery.lowBPM === null || urlQuery.lowBPM === undefined) {
-    urlQuery.lowBPM = 60;
-  }
-  if (urlQuery.highBPM === null || urlQuery.highBPM === undefined) {
-    urlQuery.highBPM = 200;
-  }
-  if (urlQuery.title === null || urlQuery.title === undefined) {
-    urlQuery.title = '';
-  }
-  if (urlQuery.user === null || urlQuery.user === undefined) {
-    urlQuery.user = '';
-  }
-  if (urlQuery.madeByMe === 'true' || urlQuery.madeByMe === null || urlQuery.madeByMe === undefined) {
-    urlQuery.madeByMe = true;
-  } else {
-    urlQuery.madeByMe = false;
-  }
-  if (urlQuery.answered === 'true' || urlQuery.answered === null || urlQuery.answered === undefined) {
-    urlQuery.answered = true;
-  } else {
-    urlQuery.answered = false;
-  }
-  if (urlQuery.unanswered === 'true' || urlQuery.unanswered === null || urlQuery.unanswered === undefined) {
-    urlQuery.unanswered = true;
-  } else {
-    urlQuery.unanswered = false;
-  }
+  const urlQuery = defaultQuestionQuery(req.query);
+
   if (urlQuery.user === '') {
     urlQuery.user = '%';
   }
+
+  let levelFilterQuery = '(q.rating >= $6 and q.rating <= $7)';
+  if (urlQuery.showNoLevel) {
+    levelFilterQuery = `(q.rating is null or ${levelFilterQuery})`;
+  }
+
   let filterQuery = '(false';
   if (urlQuery.madeByMe) {
     filterQuery += ' or q.uid = $1';
@@ -218,8 +226,11 @@ const countQuestions = (req, res) => {
       + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM answers WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
       + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE $4 and u.displayName LIKE $5 and '
     }${filterQuery
+    }${' and '
+    }${levelFilterQuery
     }`,
-    values: [uid, urlQuery.lowBPM, urlQuery.highBPM, queryTitle, queryUser],
+    values: [uid, urlQuery.lowBPM, urlQuery.highBPM, queryTitle, queryUser,
+      urlQuery.lowRating, urlQuery.highRating],
   };
 
   client.query(query)

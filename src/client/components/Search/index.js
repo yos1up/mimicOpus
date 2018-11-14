@@ -225,6 +225,7 @@ class Search extends React.Component {
                 <MenuItem value={filterLevels.SIX_HND_TO_EIGHT_HND}>600~800</MenuItem>
                 <MenuItem value={filterLevels.EIGHT_HND_TO_ONE_K}>800~1000</MenuItem>
                 <MenuItem value={filterLevels.FROM_ONE_K}>1000~</MenuItem>
+                <MenuItem value={filterLevels.ALL}>すべての難易度</MenuItem>
               </Select>
             </FormControl>
             <FormControlLabel

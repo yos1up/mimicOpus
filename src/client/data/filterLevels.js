@@ -5,6 +5,7 @@ const filterLevels = {
   SIX_HND_TO_EIGHT_HND: 3,
   EIGHT_HND_TO_ONE_K: 4,
   FROM_ONE_K: 5,
+  ALL: 6,
 };
 
 export default filterLevels;
