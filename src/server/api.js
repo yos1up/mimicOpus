@@ -133,9 +133,10 @@ const loadQuestionsList = (req, res) => {
   const queryUser = `${urlQuery.user}`;
   if (urlQuery.orderMode === 'new') {
     query = {
-      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.displayName, q.title, q.uploadedat, q.rating, s.score FROM questions q '
+      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.displayName, q.title, q.uploadedat, q.rating, s.score, n.count FROM questions q '
         + 'LEFT JOIN users u ON q.uid = u.id '
         + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM answers WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
+        + 'LEFT JOIN (SELECT qid, COUNT(DISTINCT uid) FROM answers GROUP BY qid) n ON q.id = n.qid '
         + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE $4 and u.displayName LIKE $5 and '
       }${filterQuery
       }${' and '
@@ -147,9 +148,10 @@ const loadQuestionsList = (req, res) => {
     };
   } else { // osusume
     query = {
-      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.displayName, q.title, q.uploadedat, q.rating, s.score FROM questions q '
+      text: `${'SELECT q.id, q.notes, q.bpm, q.uid, u.displayName, q.title, q.uploadedat, q.rating, s.score, n.count FROM questions q '
         + 'LEFT JOIN users u ON q.uid = u.id '
         + 'LEFT JOIN (SELECT DISTINCT on (uid, qid) qid, score FROM answers WHERE uid = $1 ORDER BY uid, qid, score DESC) s ON q.id = s.qid '
+        + 'LEFT JOIN (SELECT qid, COUNT(DISTINCT uid) FROM answers GROUP BY qid) n ON q.id = n.qid '
         + 'WHERE q.bpm >= $2 and q.bpm <= $3 and q.title LIKE $4 and u.displayName LIKE $5 and '
       }${filterQuery
       }${' and '
@@ -165,6 +167,7 @@ const loadQuestionsList = (req, res) => {
     .then((result) => {
       const returnData = [];
       result.rows.forEach((item) => {
+        const playedUserNum = (item.count !== null && item.count !== undefined) ? item.count : 0;
         returnData.push({
           id: item.id,
           question: {
@@ -176,6 +179,7 @@ const loadQuestionsList = (req, res) => {
             uploadedAt: item.uploadedat,
             score: item.score,
             rating: item.rating,
+            playedUserNum,
           }
         });
       });

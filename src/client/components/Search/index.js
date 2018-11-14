@@ -341,6 +341,11 @@ class Search extends React.Component {
               <TableCell />
               <TableCell>タイトル</TableCell>
               <TableCell>難易度</TableCell>
+              <TableCell>
+                プレイ
+                <br />
+                ユーザー
+              </TableCell>
               <TableCell>BPM</TableCell>
               <TableCell>作成者</TableCell>
               <TableCell>得点</TableCell>
@@ -353,6 +358,7 @@ class Search extends React.Component {
                 const { id, question } = item;
                 const date = `${question.uploadedAt.getFullYear()}/${question.uploadedAt.getMonth() + 1}/${question.uploadedAt.getDate()}`;
                 const bMine = (uid === question.uid);
+                console.log(question.playedUserNum);
                 return (
                   <TableRow
                     key={id}
@@ -422,9 +428,20 @@ class Search extends React.Component {
                       </div>
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {question.title}
+                      <div style={{ width: 100 }}>
+                        {question.title}
+                      </div>
                     </TableCell>
-                    <TableCell>{(question.rating !== undefined && question.rating !== null) ? parseFloat(question.rating).toFixed() : ''}</TableCell>
+                    <TableCell>
+                      <div style={{ width: 30 }}>
+                        {(question.rating !== undefined && question.rating !== null) ? parseFloat(question.rating).toFixed() : ''}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div style={{ width: 50 }}>
+                        {question.playedUserNum}
+                      </div>
+                    </TableCell>
                     <TableCell>{question.bpm}</TableCell>
                     <TableCell>{question.displayName}</TableCell>
                     <TableCell>{(question.score !== undefined && question.score !== null) ? parseFloat(question.score).toFixed(2) : ''}</TableCell>
