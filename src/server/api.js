@@ -122,7 +122,7 @@ const loadQuestionsList = (req, res) => {
   if (req.isAuthenticated() && req.user.rating !== null && req.user.rating !== undefined) {
     myRating = req.user.rating;
   } else {
-    myRating = 1500;
+    myRating = 800;
   }
   if (req.isAuthenticated()) {
     uid = req.user.id;
@@ -158,7 +158,7 @@ const loadQuestionsList = (req, res) => {
       }${levelFilterQuery
       }${' ORDER BY abs($8 - q.rating) LIMIT $9 OFFSET $10'}`,
       values: [uid, urlQuery.lowBPM, urlQuery.highBPM, queryTitle, queryUser,
-        urlQuery.lowRating, urlQuery.highRating, myRating - 693,
+        urlQuery.lowRating, urlQuery.highRating, myRating - 1000,
         urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
     };
   }
