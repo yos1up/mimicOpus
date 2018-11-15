@@ -28,6 +28,8 @@ class SoundPlayer {
     });
     Tone.Transport.start();
     this.lastPlayStarted = 0;
+
+    this.melody = null;
   }
 
   static noteNumberToPitchName(nn) {
@@ -49,22 +51,33 @@ class SoundPlayer {
         [note.start * this.secPerBeat, [note.pitch, (note.end - note.start) * this.secPerBeat]],
       );
     }
+    if (this.melody !== null) {
+      this.melody.stop();
+    }
     // 一連の音符たちを鳴らしたい場合，このように Tone.Part が便利．（他に Tone.Sequence というのもあるようだ）
-    const melody = new Tone.Part(
+    this.melody = new Tone.Part(
       (time, event) => {
         this.sampler.triggerAttackRelease(
           SoundPlayer.noteNumberToPitchName(event[0]), event[1], time, 1,
         ); // 引数は (音高，音長，絶対時刻[s]，ベロシティ[0~1])
       }, timeEventTupleList,
     );
-    melody.start(Tone.now()); // これよりも先に Tone.Transport.start() してある必要がある．
+    this.melody.start(Tone.now()); // これよりも先に Tone.Transport.start() してある必要がある．
     this.lastPlayStarted = Tone.now();
   }
 
   position() { // 現在の再生位置[拍]を返す
     // TODO 再生が終わってもこの値は増加し続ける・・・
     if (typeof this.secPerBeat === 'undefined') return 0;
+    if (this.melody === null) return 0;
     return (Tone.now() - this.lastPlayStarted) / this.secPerBeat;
+  }
+
+  stop() {
+    if (this.melody !== null) {
+      this.melody.stop();
+      this.melody = null;
+    }
   }
 
   preview(pitch) { // とりあえず一音だけ即時に鳴らしたい場合はこちらをどうぞ

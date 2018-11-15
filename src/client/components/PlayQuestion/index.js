@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import StopIcon from '@material-ui/icons/Stop';
 import SendIcon from '@material-ui/icons/Send';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -16,6 +17,13 @@ import PianoRollGrid from '../ui/PianoRollGrid';
 import Question from '../../data/question';
 import SoundPlayer from '../SoundPlayer';
 import displayModes from '../../data/displayModes';
+
+const playModes = {
+  STOP: 'STOP',
+  PLAY_ANSWER: 'PLAY_ANSWER',
+  PLAY_QUESTION: 'PLAY_QUESTION',
+};
+
 
 class PlayQuestion extends React.Component {
   static evaluateAnswer(qNotes, aNotes) {
@@ -96,6 +104,7 @@ class PlayQuestion extends React.Component {
     this.state = {
       dialogOpened: false,
       dialogText: '',
+      playMode: playModes.STOP,
     };
     this.soundPlayer = new SoundPlayer();
   }
@@ -142,6 +151,7 @@ class PlayQuestion extends React.Component {
     const {
       dialogOpened,
       dialogText,
+      playMode,
     } = this.state;
     return (
       <div id="PlayQuestion">
@@ -151,9 +161,21 @@ class PlayQuestion extends React.Component {
             color="primary"
             aria-label="Play"
             style={{ position: 'absolute', top: 10, left: 10 }}
-            onClick={() => this.soundPlayer.play(notes, bpm)}
+            onClick={() => {
+              if (playMode === playModes.PLAY_ANSWER) {
+                this.soundPlayer.stop();
+                this.setState({
+                  playMode: playModes.STOP,
+                });
+              } else {
+                this.soundPlayer.play(notes, bpm);
+                this.setState({
+                  playMode: playModes.PLAY_ANSWER,
+                });
+              }
+            }}
           >
-            <PlayArrowIcon />
+            {(playMode === playModes.PLAY_ANSWER) ? (<StopIcon />) : (<PlayArrowIcon />)}
           </Button>
         </Tooltip>
 
@@ -163,9 +185,21 @@ class PlayQuestion extends React.Component {
             color="primary"
             aria-label="PlayQuestion"
             style={{ position: 'absolute', top: 10, left: 80 }}
-            onClick={() => this.soundPlayer.play(question.notes, question.bpm)}
+            onClick={() => {
+              if (playMode === playModes.PLAY_QUESTION) {
+                this.soundPlayer.stop();
+                this.setState({
+                  playMode: playModes.STOP,
+                });
+              } else {
+                this.soundPlayer.play(question.notes, question.bpm);
+                this.setState({
+                  playMode: playModes.PLAY_QUESTION,
+                });
+              }
+            }}
           >
-            <PlayCircleOutlineIcon />
+            {(playMode === playModes.PLAY_QUESTION) ? (<StopIcon />) : (<PlayCircleOutlineIcon />)}
           </Button>
         </Tooltip>
 
