@@ -10,7 +10,7 @@ const SearchQuery = Immutable.Record({
   madeByMe: true,
   answered: true,
   unanswered: true,
-  level: filterLevels.TO_TWO_HND,
+  level: filterLevels.ALL,
   showNoLevel: true,
 });
 
