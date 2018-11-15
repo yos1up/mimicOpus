@@ -402,6 +402,7 @@ export function loadOsusumeQuestionsList(dispatch) {
   params.set('stop', 4);
   params.set('orderMode', 'osusume');
   params.set('madeByMe', false);
+  params.set('answered', false);
   fetch(`./api/loadQuestionsList?${params.toString()}`, { method })
     .then(res => res.json())
     .then((results) => {
