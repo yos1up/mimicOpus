@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import StopIcon from '@material-ui/icons/Stop';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SaveIcon from '@material-ui/icons/Save';
 import Slider from '@material-ui/lab/Slider';
@@ -18,9 +19,17 @@ import displayModes from '../../data/displayModes';
 
 import SoundPlayer from '../SoundPlayer';
 
+const playModes = {
+  STOP: 'STOP',
+  PLAY: 'PLAY',
+};
+
 class MakeQuestion extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      playMode: playModes.STOP,
+    };
     this.soundPlayer = new SoundPlayer();
   }
 
@@ -34,6 +43,7 @@ class MakeQuestion extends React.Component {
       notes, pitchRange, bpm, title, addNote, delNote, shiftPitchRange, setBPM,
       uploadQuestion, setTitle, clearNotes, history,
     } = this.props;
+    const { playMode } = this.state;
     return (
       <div id="MakeQuestion">
 
@@ -56,9 +66,21 @@ class MakeQuestion extends React.Component {
             color="primary"
             aria-label="Play"
             style={{ position: 'absolute', top: 10, left: 210 }}
-            onClick={() => this.soundPlayer.play(notes, bpm)}
+            onClick={() => {
+              if (playMode === playModes.PLAY) {
+                this.soundPlayer.stop();
+                this.setState({
+                  playMode: playModes.STOP,
+                });
+              } else {
+                this.soundPlayer.play(notes, bpm);
+                this.setState({
+                  playMode: playModes.PLAY,
+                });
+              }
+            }}
           >
-            <PlayArrowIcon />
+            {(playMode === playModes.PLAY) ? (<StopIcon />) : (<PlayArrowIcon />)}
           </Button>
         </Tooltip>
         <Typography
