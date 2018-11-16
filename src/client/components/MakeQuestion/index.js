@@ -29,7 +29,7 @@ class MakeQuestion extends React.Component {
     super(props);
     this.state = {
       playMode: playModes.STOP,
-    }
+    };
     this.soundPlayer = new SoundPlayer();
   }
 
