@@ -12,6 +12,7 @@ import Input from '@material-ui/core/Input';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withRouter } from 'react-router';
 
+import StartSetter from '../ui/StartSetter';
 import PianoRollGrid from '../ui/PianoRollGrid';
 import Question from '../../data/question';
 
@@ -30,6 +31,7 @@ class MakeQuestion extends React.Component {
     this.state = {
       playMode: playModes.STOP,
       currentBeat: 0,
+      startBeat: 0,
     };
     this.soundPlayer = new SoundPlayer(50, (ticks) => {
       if (ticks > 16) {
@@ -51,7 +53,7 @@ class MakeQuestion extends React.Component {
       notes, pitchRange, bpm, title, addNote, delNote, shiftPitchRange, setBPM,
       uploadQuestion, setTitle, clearNotes, history,
     } = this.props;
-    const { playMode, currentBeat } = this.state;
+    const { playMode, currentBeat, startBeat } = this.state;
     return (
       <div id="MakeQuestion">
 
@@ -135,15 +137,25 @@ class MakeQuestion extends React.Component {
           </Button>
         </Tooltip>
 
-        <PianoRollGrid
-          addNote={addNote}
-          delNote={delNote}
-          shiftPitchRange={shiftPitchRange}
-          notes={notes}
-          pitchRange={pitchRange}
-          soundPlayer={this.soundPlayer}
-          currentBeat={currentBeat}
+        <StartSetter
+          style={{
+            position: 'absolute', left: 36, top: 100, height: 50, width: 896,
+          }}
+          startBeat={startBeat}
+          totalBeat={16}
+          onChangeStartBeat={(newStartBeat) => { this.setState({ startBeat: newStartBeat }); }}
         />
+        <div style={{ position: 'absolute', top: 100 }}>
+          <PianoRollGrid
+            addNote={addNote}
+            delNote={delNote}
+            shiftPitchRange={shiftPitchRange}
+            notes={notes}
+            pitchRange={pitchRange}
+            soundPlayer={this.soundPlayer}
+            currentBeat={currentBeat}
+          />
+        </div>
       </div>
     );
   }

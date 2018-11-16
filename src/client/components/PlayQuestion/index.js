@@ -13,6 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 
+import StartSetter from '../ui/StartSetter';
 import PianoRollGrid from '../ui/PianoRollGrid';
 import Question from '../../data/question';
 import SoundPlayer from '../SoundPlayer';
@@ -106,6 +107,7 @@ class PlayQuestion extends React.Component {
       dialogText: '',
       playMode: playModes.STOP,
       currentBeat: 0,
+      startBeat: 0,
     };
     this.soundPlayer = new SoundPlayer(50, (ticks) => {
       if (ticks > 16) {
@@ -161,6 +163,7 @@ class PlayQuestion extends React.Component {
       dialogText,
       playMode,
       currentBeat,
+      startBeat,
     } = this.state;
     return (
       <div id="PlayQuestion">
@@ -226,15 +229,25 @@ class PlayQuestion extends React.Component {
           </Button>
         </Tooltip>
 
-        <PianoRollGrid
-          addNote={addNote}
-          delNote={delNote}
-          shiftPitchRange={shiftPitchRange}
-          notes={notes}
-          pitchRange={pitchRange}
-          soundPlayer={this.soundPlayer}
-          currentBeat={currentBeat}
+        <StartSetter
+          style={{
+            position: 'absolute', left: 36, top: 100, height: 50, width: 896,
+          }}
+          startBeat={startBeat}
+          totalBeat={16}
+          onChangeStartBeat={(newStartBeat) => { this.setState({ startBeat: newStartBeat }); }}
         />
+        <div style={{ position: 'absolute', top: 100 }}>
+          <PianoRollGrid
+            addNote={addNote}
+            delNote={delNote}
+            shiftPitchRange={shiftPitchRange}
+            notes={notes}
+            pitchRange={pitchRange}
+            soundPlayer={this.soundPlayer}
+            currentBeat={currentBeat}
+          />
+        </div>
 
         <Dialog
           open={dialogOpened}
