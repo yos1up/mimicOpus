@@ -2,48 +2,37 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-class PositionBar extends React.Component { // 現在の再生位置を示す縦棒
-  /*
-    height: 縦棒の長さ
-    barX: x絶対座標
-  */
-  constructor(props) {
-    super(props);
-    this.state = {
-      barX: null,
-    };
-  }
-
-  updateCurrentPosition(x) {
-    this.setState({ barX: x });
+class PositionBar extends React.Component {
+  shouldComponentUpdate(nextProps) {
+    const { currentPosition, height } = this.props;
+    const currentPosDiff = (nextProps.currentPosition !== currentPosition);
+    const heightDiff = (nextProps.height !== height);
+    return currentPosDiff || heightDiff;
   }
 
   render() {
-    const { height, } = this.props;
-    const { barX, } = this.state;
+    const { height, currentPosition } = this.props;
 
-    if (barX) {
-      const divStyle = {
-        width: 2,
-        height,
-        backgroundColor: 'red',
-        position: 'absolute',
-        top: 0,
-        left: barX,
-        opacity: 0.5,
-      };
-      return (
-        <div
-          style={divStyle}
-        />
-      );
-    }
-    return null;
+    const divStyle = {
+      width: 2,
+      height,
+      backgroundColor: 'red',
+      position: 'absolute',
+      top: 0,
+      left: currentPosition,
+      opacity: 0.5,
+    };
+    return (
+      <div
+        style={divStyle}
+      />
+    );
   }
 }
 
 PositionBar.propTypes = {
   height: PropTypes.number.isRequired,
+  currentPosition: PropTypes.number.isRequired,
 };
 
 export default PositionBar;

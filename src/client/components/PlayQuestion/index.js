@@ -105,8 +105,16 @@ class PlayQuestion extends React.Component {
       dialogOpened: false,
       dialogText: '',
       playMode: playModes.STOP,
+      currentBeat: 0,
     };
-    this.soundPlayer = new SoundPlayer();
+    this.soundPlayer = new SoundPlayer(50, (ticks) => {
+      if (ticks > 16) {
+        this.soundPlayer.stop();
+        this.setState({ playMode: playModes.STOP });
+      } else {
+        this.setState({ currentBeat: ticks });
+      }
+    });
   }
 
   componentDidMount() {
@@ -152,6 +160,7 @@ class PlayQuestion extends React.Component {
       dialogOpened,
       dialogText,
       playMode,
+      currentBeat,
     } = this.state;
     return (
       <div id="PlayQuestion">
@@ -224,6 +233,7 @@ class PlayQuestion extends React.Component {
           notes={notes}
           pitchRange={pitchRange}
           soundPlayer={this.soundPlayer}
+          currentBeat={currentBeat}
         />
 
         <Dialog

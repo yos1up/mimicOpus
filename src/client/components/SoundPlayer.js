@@ -1,7 +1,7 @@
 import Tone from 'tone';
 
 class SoundPlayer {
-  constructor() {
+  constructor(updateInterval = 50, onChangeTicks = () => {}) {
     // サンプラー
     this.sampler = new Tone.Sampler({
       C2: 'C2.wav',
@@ -30,6 +30,10 @@ class SoundPlayer {
     this.lastPlayStarted = 0;
 
     this.melody = null;
+
+    this.interval = null;
+    this.onChangeTicks = onChangeTicks;
+    this.updateInterval = updateInterval;
   }
 
   static noteNumberToPitchName(nn) {
@@ -54,6 +58,11 @@ class SoundPlayer {
     if (this.melody !== null) {
       this.melody.stop();
     }
+    if (this.interval !== null) {
+      clearInterval(this.interval);
+      this.onChangeTicks(0);
+    }
+
     // 一連の音符たちを鳴らしたい場合，このように Tone.Part が便利．（他に Tone.Sequence というのもあるようだ）
     this.melody = new Tone.Part(
       (time, event) => {
@@ -64,13 +73,7 @@ class SoundPlayer {
     );
     this.melody.start(Tone.now()); // これよりも先に Tone.Transport.start() してある必要がある．
     this.lastPlayStarted = Tone.now();
-  }
-
-  position() { // 現在の再生位置[拍]を返す
-    // TODO 再生が終わってもこの値は増加し続ける・・・
-    if (typeof this.secPerBeat === 'undefined') return 0;
-    if (this.melody === null) return 0;
-    return (Tone.now() - this.lastPlayStarted) / this.secPerBeat;
+    this.interval = setInterval(this.updateTicks.bind(this), 50);
   }
 
   stop() {
@@ -78,6 +81,22 @@ class SoundPlayer {
       this.melody.stop();
       this.melody = null;
     }
+    if (this.interval !== null) {
+      clearInterval(this.interval);
+      this.onChangeTicks(0);
+    }
+  }
+
+  updateTicks() {
+    let ticks;
+    if (typeof this.secPerBeat === 'undefined') {
+      ticks = 0;
+    } else if (this.melody === null) {
+      ticks = 0;
+    } else {
+      ticks = (Tone.now() - this.lastPlayStarted) / this.secPerBeat;
+    }
+    this.onChangeTicks(ticks);
   }
 
   preview(pitch) { // とりあえず一音だけ即時に鳴らしたい場合はこちらをどうぞ

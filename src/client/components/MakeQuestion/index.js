@@ -29,8 +29,16 @@ class MakeQuestion extends React.Component {
     super(props);
     this.state = {
       playMode: playModes.STOP,
+      currentBeat: 0,
     };
-    this.soundPlayer = new SoundPlayer();
+    this.soundPlayer = new SoundPlayer(50, (ticks) => {
+      if (ticks > 16) {
+        this.soundPlayer.stop();
+        this.setState({ playMode: playModes.STOP });
+      } else {
+        this.setState({ currentBeat: ticks });
+      }
+    });
   }
 
   componentDidMount() {
@@ -43,7 +51,7 @@ class MakeQuestion extends React.Component {
       notes, pitchRange, bpm, title, addNote, delNote, shiftPitchRange, setBPM,
       uploadQuestion, setTitle, clearNotes, history,
     } = this.props;
-    const { playMode } = this.state;
+    const { playMode, currentBeat } = this.state;
     return (
       <div id="MakeQuestion">
 
@@ -134,6 +142,7 @@ class MakeQuestion extends React.Component {
           notes={notes}
           pitchRange={pitchRange}
           soundPlayer={this.soundPlayer}
+          currentBeat={currentBeat}
         />
       </div>
     );
