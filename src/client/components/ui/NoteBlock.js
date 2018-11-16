@@ -15,6 +15,21 @@ class NoteBlock extends React.Component { // ノーツ
     this.handleClick = this.handleClick.bind(this);
   }
 
+  shouldComponentUpdate(nextProps) {
+    const {
+      start, end, uw, uh, beatPerCol,
+    } = this.props;
+    const {
+      start_, end_, uw_, uh_, beatPerCol_,
+    } = nextProps;
+    const sdiff = (start !== start_);
+    const ediff = (end !== end_);
+    const wdiff = (uw !== uw_);
+    const hdiff = (uh !== uh_);
+    const bpcdiff = (beatPerCol !== beatPerCol_);
+    return sdiff || ediff || wdiff || hdiff || bpcdiff;
+  }
+
   handleClick(event) {
     const { delNote } = this.props;
     // クリックイベントの親オブジェクトへの伝播を止める

@@ -107,7 +107,14 @@ class PlayQuestion extends React.Component {
       playMode: playModes.STOP,
       currentBeat: 0,
     };
-    this.soundPlayer = new SoundPlayer(50, (ticks) => { this.setState({ currentBeat: ticks }); });
+    this.soundPlayer = new SoundPlayer(50, (ticks) => {
+      if (ticks > 16) {
+        this.soundPlayer.stop();
+        this.setState({ playMode: playModes.STOP });
+      } else {
+        this.setState({ currentBeat: ticks });
+      }
+    });
   }
 
   componentDidMount() {
