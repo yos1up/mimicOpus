@@ -77,9 +77,10 @@ function IRTderivative(scoreList, r, theta, a) {
     const sc = scoreList[i][2]; // score
 
     const sigmoidValue = sigmoid(a[q] * (r[u] - theta[q]));
-    derR[u] += a[q] * (-sc + sigmoidValue);
-    derTheta[q] += a[q] * (sc - sigmoidValue);
-    derA[q] += (r[u] - theta[q]) * (-sc + sigmoidValue);
+    const derH = (sigmoidValue - sc) * sigmoidValue * (1 - sigmoidValue);
+    derR[u] += a[q] * derH;
+    derTheta[q] += -a[q] * derH;
+    derA[q] += (r[u] - theta[q]) * derH;
   }
 
   for (let u = 0; u < nu; u += 1) {
