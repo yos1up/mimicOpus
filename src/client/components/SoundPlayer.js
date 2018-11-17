@@ -1,7 +1,7 @@
 import Tone from 'tone';
 
 class SoundPlayer {
-  constructor(updateInterval = 50, onChangeTicks = () => {}) {
+  constructor(updateInterval = 50, onChangeBeats = () => {}) {
     // サンプラー
     this.sampler = new Tone.Sampler({
       C2: 'C2.wav',
@@ -30,9 +30,10 @@ class SoundPlayer {
     this.lastPlayStarted = 0;
 
     this.melody = null;
+    this.startBeat = null;
 
     this.interval = null;
-    this.onChangeTicks = onChangeTicks;
+    this.onChangeBeats = onChangeBeats;
     this.updateInterval = updateInterval;
   }
 
@@ -40,7 +41,7 @@ class SoundPlayer {
     return ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'][nn % 12] + (Math.floor(nn / 12) - 1);
   }
 
-  play(notes, bpm = 120) { // 一連の音符たちを鳴らしたい場合
+  play(notes, bpm = 120, startBeat = 0) { // 一連の音符たちを鳴らしたい場合
     /*
       notes: 1-d Array of noteObject
         noteObject: { pitch, start, end, }
@@ -51,16 +52,20 @@ class SoundPlayer {
     const timeEventTupleList = [];
     for (let i = 0; i < notes.size; i += 1) {
       const note = notes.get(i);
-      timeEventTupleList.push(
-        [note.start * this.secPerBeat, [note.pitch, (note.end - note.start) * this.secPerBeat]],
-      );
+
+      if (note.start >= startBeat) {
+        timeEventTupleList.push(
+          [(note.start - startBeat) * this.secPerBeat,
+            [note.pitch, (note.end - note.start) * this.secPerBeat]],
+        );
+      }
     }
     if (this.melody !== null) {
       this.melody.stop();
     }
     if (this.interval !== null) {
       clearInterval(this.interval);
-      this.onChangeTicks(0);
+      this.onChangeBeats(0);
     }
 
     // 一連の音符たちを鳴らしたい場合，このように Tone.Part が便利．（他に Tone.Sequence というのもあるようだ）
@@ -71,9 +76,10 @@ class SoundPlayer {
         ); // 引数は (音高，音長，絶対時刻[s]，ベロシティ[0~1])
       }, timeEventTupleList,
     );
+    this.startBeat = startBeat;
     this.melody.start(Tone.now()); // これよりも先に Tone.Transport.start() してある必要がある．
     this.lastPlayStarted = Tone.now();
-    this.interval = setInterval(this.updateTicks.bind(this), 50);
+    this.interval = setInterval(this.updateBeats.bind(this), 50);
   }
 
   stop() {
@@ -81,22 +87,25 @@ class SoundPlayer {
       this.melody.stop();
       this.melody = null;
     }
+    if (this.startBeat !== null) {
+      this.startBeat = null;
+    }
     if (this.interval !== null) {
       clearInterval(this.interval);
-      this.onChangeTicks(0);
+      this.onChangeBeats(null);
     }
   }
 
-  updateTicks() {
-    let ticks;
+  updateBeats() {
+    let beats;
     if (typeof this.secPerBeat === 'undefined') {
-      ticks = 0;
+      beats = null;
     } else if (this.melody === null) {
-      ticks = 0;
+      beats = null;
     } else {
-      ticks = (Tone.now() - this.lastPlayStarted) / this.secPerBeat;
+      beats = (Tone.now() - this.lastPlayStarted) / this.secPerBeat + this.startBeat;
     }
-    this.onChangeTicks(ticks);
+    this.onChangeBeats(beats);
   }
 
   preview(pitch) { // とりあえず一音だけ即時に鳴らしたい場合はこちらをどうぞ

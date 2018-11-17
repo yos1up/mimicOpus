@@ -106,15 +106,15 @@ class PlayQuestion extends React.Component {
       dialogOpened: false,
       dialogText: '',
       playMode: playModes.STOP,
-      currentBeat: 0,
+      currentBeat: null,
       startBeat: 0,
     };
-    this.soundPlayer = new SoundPlayer(50, (ticks) => {
-      if (ticks > 16) {
+    this.soundPlayer = new SoundPlayer(50, (beats) => {
+      if (beats > 16) {
         this.soundPlayer.stop();
         this.setState({ playMode: playModes.STOP });
       } else {
-        this.setState({ currentBeat: ticks });
+        this.setState({ currentBeat: beats });
       }
     });
   }
@@ -180,7 +180,7 @@ class PlayQuestion extends React.Component {
                   playMode: playModes.STOP,
                 });
               } else {
-                this.soundPlayer.play(notes, bpm);
+                this.soundPlayer.play(notes, bpm, startBeat);
                 this.setState({
                   playMode: playModes.PLAY_ANSWER,
                 });
@@ -204,7 +204,7 @@ class PlayQuestion extends React.Component {
                   playMode: playModes.STOP,
                 });
               } else {
-                this.soundPlayer.play(question.notes, question.bpm);
+                this.soundPlayer.play(question.notes, question.bpm, startBeat);
                 this.setState({
                   playMode: playModes.PLAY_QUESTION,
                 });
@@ -245,7 +245,7 @@ class PlayQuestion extends React.Component {
             notes={notes}
             pitchRange={pitchRange}
             soundPlayer={this.soundPlayer}
-            currentBeat={currentBeat}
+            currentBeat={(currentBeat !== null) ? currentBeat : startBeat}
           />
         </div>
 

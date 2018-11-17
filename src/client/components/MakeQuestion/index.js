@@ -30,7 +30,7 @@ class MakeQuestion extends React.Component {
     super(props);
     this.state = {
       playMode: playModes.STOP,
-      currentBeat: 0,
+      currentBeat: null,
       startBeat: 0,
     };
     this.soundPlayer = new SoundPlayer(50, (ticks) => {
@@ -83,7 +83,7 @@ class MakeQuestion extends React.Component {
                   playMode: playModes.STOP,
                 });
               } else {
-                this.soundPlayer.play(notes, bpm);
+                this.soundPlayer.play(notes, bpm, startBeat);
                 this.setState({
                   playMode: playModes.PLAY,
                 });
@@ -153,7 +153,7 @@ class MakeQuestion extends React.Component {
             notes={notes}
             pitchRange={pitchRange}
             soundPlayer={this.soundPlayer}
-            currentBeat={currentBeat}
+            currentBeat={(currentBeat !== null) ? currentBeat : startBeat}
           />
         </div>
       </div>
