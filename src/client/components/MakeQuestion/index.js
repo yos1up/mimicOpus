@@ -33,12 +33,12 @@ class MakeQuestion extends React.Component {
       currentBeat: null,
       startBeat: 0,
     };
-    this.soundPlayer = new SoundPlayer(50, (ticks) => {
-      if (ticks > 16) {
+    this.soundPlayer = new SoundPlayer(50, (beats) => {
+      if (beats > 16) {
         this.soundPlayer.stop();
         this.setState({ playMode: playModes.STOP });
       } else {
-        this.setState({ currentBeat: ticks });
+        this.setState({ currentBeat: beats });
       }
     });
   }
