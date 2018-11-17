@@ -120,7 +120,8 @@ class PlayQuestion extends React.Component {
   }
 
   componentDidMount() {
-    const { changeDisplayMode } = this.props;
+    const { changeDisplayMode, clearNotes } = this.props;
+    clearNotes();
     changeDisplayMode(displayModes.PLAY_QUESTION);
   }
 
@@ -276,6 +277,7 @@ PlayQuestion.propTypes = {
   shiftPitchRange: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
+  clearNotes: PropTypes.func.isRequired,
   saveAnswer: PropTypes.func.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
 };
