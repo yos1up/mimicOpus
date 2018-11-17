@@ -55,7 +55,7 @@ class SoundPlayer {
   }
 
   constructor(updateInterval = 50, onChangeBeats = () => {}) {
-    this.context = new AudioContext();
+    this.context = new window.AudioContext();
     const urls = {
       C2: './instrument_piano/C2.wav',
       E2: './instrument_piano/E2.wav',
@@ -71,12 +71,13 @@ class SoundPlayer {
       Ab5: './instrument_piano/Ab5.wav',
       C6: './instrument_piano/C6.wav',
     };
-    let pianoWaves = new Array(128);
+    this.pianoWaves = new Array(128);
+    this.pianoBufers = new Array(128);
 
     const promises = Object.entries(urls).map((item) => {
       const [pitch, url] = item;
       const promise = new Promise(resolve => readWav(url, this.context, (audioBuffer) => {
-        pianoWaves[pitchToNumber[pitch]] = [
+        this.pianoWaves[pitchToNumber[pitch]] = [
           audioBuffer.getChannelData(0), audioBuffer.getChannelData(1)];
         resolve(pitch);
       }));
@@ -84,13 +85,110 @@ class SoundPlayer {
     });
 
     Promise.all(promises).then(() => {
-      pianoWaves = SoundPlayer.interpolationWaves(pianoWaves);
+      this.pianoWaves = SoundPlayer.interpolationWaves(this.pianoWaves);
+      this.pianoBufers = this.pianoWaves.map(
+        (waves) => {
+          const buffer = this.context.createBuffer(2, waves[0].length, this.context.sampleRate);
+          const zeroChannelData = buffer.getChannelData(0);
+          for (let i = 0; i < zeroChannelData.length; i += 1) {
+            zeroChannelData[i] = waves[0][i];
+          }
+          const oneChannelData = buffer.getChannelData(1);
+          for (let i = 0; i < zeroChannelData.length; i += 1) {
+            oneChannelData[i] = waves[1][i];
+          }
+          return buffer;
+        }
+      );
     });
+
+    this.lastPlayStarted = null;
+    this.melody = null;
+    this.startBeat = null;
+
+    this.interval = null;
+    this.onChangeBeats = onChangeBeats;
+    this.updateInterval = updateInterval;
+  }
+
+  play(notes, bpm = 120, startBeat = 0) { // 一連の音符たちを鳴らしたい場合
+    /*
+      notes: 1-d Array of noteObject
+        noteObject: { pitch, start, end, }
+    */
+    this.bpm = bpm;
+    this.secPerBeat = 60 / bpm;
+    if (Number.isNaN(this.secPerBeat)) this.secPerBeat = 60 / 120.0;
+
+    if (this.melody !== null) {
+      for (let i = 0; i < this.melody.size; i += 1) {
+        const source = this.melody[i];
+        source.disconnect();
+      }
+    }
+    if (this.interval !== null) {
+      clearInterval(this.interval);
+      this.onChangeBeats(0);
+    }
+
+    this.lastPlayStarted = this.context.currentTime;
+    this.startBeat = startBeat;
+
+    this.melody = [];
+    for (let i = 0; i < notes.size; i += 1) {
+      const note = notes.get(i);
+
+      if (note.start >= startBeat) {
+        const source = this.context.createBufferSource();
+        const start = this.lastPlayStarted + (note.start - startBeat) * this.secPerBeat;
+        const stop = this.lastPlayStarted + (note.end - startBeat) * this.secPerBeat;
+        source.buffer = this.pianoBufers[note.pitch];
+        source.connect(this.context.destination);
+        source.start(start);
+        source.stop(stop);
+        this.melody.push(source);
+      }
+    }
+
+    this.interval = setInterval(this.updateBeats.bind(this), 50);
+  }
+
+  stop() {
+    if (this.melody !== null) {
+      for (let i = 0; i < this.melody.size; i += 1) {
+        const source = this.melody[i];
+        source.disconnect();
+      }
+    }
+    this.melody = null;
+    if (this.startBeat !== null) {
+      this.startBeat = null;
+    }
+    if (this.interval !== null) {
+      clearInterval(this.interval);
+      this.onChangeBeats(null);
+    }
+  }
+
+  updateBeats() {
+    let beats;
+    if (typeof this.secPerBeat === 'undefined') {
+      beats = null;
+    } else if (this.melody === null) {
+      beats = null;
+    } else {
+      beats = (this.context.currentTime - this.lastPlayStarted) / this.secPerBeat + this.startBeat;
+    }
+    this.onChangeBeats(beats);
   }
 
   preview(pitch) { // とりあえず一音だけ即時に鳴らしたい場合はこちらをどうぞ
     /* pitch<int>: 0--127 */
-    // this.sampler.triggerAttackRelease(SoundPlayer.noteNumberToPitchName(pitch), '4n');
+    const source = this.context.createBufferSource();
+    source.buffer = this.pianoBufers[pitch];
+    source.connect(this.context.destination);
+    source.start(this.context.currentTime);
+    source.stop(this.context.currentTime + 1);
   }
 }
 

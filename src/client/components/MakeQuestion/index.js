@@ -18,7 +18,7 @@ import Question from '../../data/question';
 
 import displayModes from '../../data/displayModes';
 
-import SoundPlayer from '../SoundPlayer';
+import SoundPlayer from '../../SoundPlayer';
 
 const playModes = {
   STOP: 'STOP',

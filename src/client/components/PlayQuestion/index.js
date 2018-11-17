@@ -16,8 +16,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import StartSetter from '../ui/StartSetter';
 import PianoRollGrid from '../ui/PianoRollGrid';
 import Question from '../../data/question';
-import SoundPlayer from '../SoundPlayer';
-import NewSoundPlayer from '../../SoundPlayer';
+import SoundPlayer from '../../SoundPlayer';
 import displayModes from '../../data/displayModes';
 
 const playModes = {
@@ -113,14 +112,6 @@ class PlayQuestion extends React.Component {
     this.soundPlayer = new SoundPlayer(50, (beats) => {
       if (beats > 16) {
         this.soundPlayer.stop();
-        this.setState({ playMode: playModes.STOP });
-      } else {
-        this.setState({ currentBeat: beats });
-      }
-    });
-    this.newSoundPlayer = new NewSoundPlayer(50, (beats) => {
-      if (beats > 16) {
-        this.newSoundPlayer.stop();
         this.setState({ playMode: playModes.STOP });
       } else {
         this.setState({ currentBeat: beats });
