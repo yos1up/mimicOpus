@@ -261,7 +261,7 @@ class PianoRollGrid extends React.Component { // グリッドエリア + yラベ
         <div
           style={{
             position: 'absolute',
-            top: 100,
+            top: 0,
             height: 400,
             width: xMargin + uw * cols + 2,
             overflowY: 'scroll',

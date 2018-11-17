@@ -232,13 +232,13 @@ class PlayQuestion extends React.Component {
 
         <StartSetter
           style={{
-            position: 'absolute', left: 36, top: 100, height: 50, width: 896,
+            position: 'absolute', left: 36, top: 100, height: 30, width: 896,
           }}
           startBeat={startBeat}
           totalBeat={16}
           onChangeStartBeat={(newStartBeat) => { this.setState({ startBeat: newStartBeat }); }}
         />
-        <div style={{ position: 'absolute', top: 100 }}>
+        <div style={{ position: 'absolute', top: 130 }}>
           <PianoRollGrid
             addNote={addNote}
             delNote={delNote}

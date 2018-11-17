@@ -14,12 +14,12 @@ class PositionBar extends React.Component {
     const { height, currentPosition } = this.props;
 
     const divStyle = {
-      width: 2,
+      width: 4,
       height,
-      backgroundColor: 'red',
+      backgroundColor: '#3f51b5',
       position: 'absolute',
       top: 0,
-      left: currentPosition,
+      left: currentPosition - (4 / 2 - 1),
       opacity: 0.5,
     };
     return (
