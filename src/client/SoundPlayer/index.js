@@ -27,6 +27,7 @@ class SoundPlayer {
   }
 
   static interpolationWaves(waves) {
+    // 全てのpitchのwaveをあらかじめ作っておく
     const existId = [];
     for (let i = 0; i < waves.length; i += 1) {
       if (waves[i] !== undefined) {
@@ -55,6 +56,9 @@ class SoundPlayer {
   }
 
   constructor(updateInterval = 50, onChangeBeats = () => {}) {
+    // 最初の読み込みに時間がかかってしまう
+    // まず考えられるのは、アプリ自体の起動の最初だけこの処理をすることである
+    // あとはWebAssemblyとかである
     this.context = new window.AudioContext();
     const urls = {
       C2: './instrument_piano/C2.wav',
@@ -131,22 +135,67 @@ class SoundPlayer {
       this.onChangeBeats(0);
     }
 
-    this.lastPlayStarted = this.context.currentTime;
-    this.startBeat = startBeat;
 
-    this.melody = [];
-    for (let i = 0; i < notes.size; i += 1) {
-      const note = notes.get(i);
+    if (true) {
+      // ここが音声合成をしてから再生するところ
+      this.melody = [];
 
-      if (note.start >= startBeat) {
-        const source = this.context.createBufferSource();
-        const start = this.lastPlayStarted + (note.start - startBeat) * this.secPerBeat;
-        const stop = this.lastPlayStarted + (note.end - startBeat) * this.secPerBeat;
-        source.buffer = this.pianoBufers[note.pitch];
-        source.connect(this.context.destination);
-        source.start(start);
-        source.stop(stop);
-        this.melody.push(source);
+      const fullsize = parseInt(
+        this.context.sampleRate * this.secPerBeat * 16, 10
+      );
+      const bufferSize = parseInt(
+        this.context.sampleRate * this.secPerBeat * (16 - startBeat), 10
+      );
+      const sizeDiff = fullsize - bufferSize;
+      const melodyBuffer = this.context.createBuffer(
+        2, bufferSize, this.context.sampleRate
+      );
+
+      const zeroChannelData = melodyBuffer.getChannelData(0);
+      const oneChannelData = melodyBuffer.getChannelData(1);
+      for (let i = 0; i < notes.size; i += 1) {
+        const note = notes.get(i);
+
+        const start = parseInt(this.context.sampleRate * note.start * this.secPerBeat, 10);
+        let stop = fullsize;
+        stop = Math.min(stop, parseInt(this.context.sampleRate * note.end * this.secPerBeat, 10));
+        stop = Math.min(stop, start + this.pianoWaves[note.pitch][0].length);
+
+        for (let t = start; t < stop; t += 1) {
+          if (t >= sizeDiff) {
+            zeroChannelData[t - sizeDiff] += this.pianoWaves[note.pitch][0][t - start];
+            oneChannelData[t - sizeDiff] += this.pianoWaves[note.pitch][1][t - start];
+          }
+        }
+      }
+
+      this.startBeat = startBeat;
+      this.lastPlayStarted = this.context.currentTime;
+
+      const source = this.context.createBufferSource();
+      source.buffer = melodyBuffer;
+      source.connect(this.context.destination);
+      source.start(this.lastPlayStarted);
+      source.stop(this.lastPlayStarted + (16 - this.startBeat) * this.secPerBeat);
+      this.melody.push(source);
+    } else {
+      // こっちが従来通りのやつ
+      this.startBeat = startBeat;
+      this.lastPlayStarted = this.context.currentTime;
+      this.melody = [];
+      for (let i = 0; i < notes.size; i += 1) {
+        const note = notes.get(i);
+
+        if (note.start >= startBeat) {
+          const source = this.context.createBufferSource();
+          const start = this.lastPlayStarted + (note.start - startBeat) * this.secPerBeat;
+          const stop = this.lastPlayStarted + (note.end - startBeat) * this.secPerBeat;
+          source.buffer = this.pianoBufers[note.pitch];
+          source.connect(this.context.destination);
+          source.start(start);
+          source.stop(stop);
+          this.melody.push(source);
+        }
       }
     }
 
@@ -155,7 +204,7 @@ class SoundPlayer {
 
   stop() {
     if (this.melody !== null) {
-      for (let i = 0; i < this.melody.size; i += 1) {
+      for (let i = 0; i < this.melody.length; i += 1) {
         const source = this.melody[i];
         source.disconnect();
       }
