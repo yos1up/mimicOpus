@@ -16,7 +16,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import StartSetter from '../ui/StartSetter';
 import PianoRollGrid from '../ui/PianoRollGrid';
 import Question from '../../data/question';
-import SoundPlayer from '../../SoundPlayer';
+import SoundPlayer from '../../SoundPlayer'; //新
+// import SoundPlayer from '../SoundPlayer'; // 旧
 import displayModes from '../../data/displayModes';
 
 const playModes = {
@@ -181,10 +182,18 @@ class PlayQuestion extends React.Component {
                   playMode: playModes.STOP,
                 });
               } else {
+                /*
                 this.soundPlayer.play(notes, bpm, startBeat);
                 this.setState({
                   playMode: playModes.PLAY_ANSWER,
                 });
+                */
+                this.soundPlayer.record(notes, bpm, startBeat, (buffer) => {
+                  const ab = buffer.get();
+                  console.log(ab);
+                  this.soundPlayer.playBuffer(buffer);                
+                });
+                console.log('hogehoge');
               }
             }}
           >
