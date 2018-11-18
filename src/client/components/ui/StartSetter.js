@@ -17,7 +17,7 @@ class StartSetter extends React.Component {
   handleClick(event) {
     const { totalBeat, onChangeStartBeat } = this.props;
     let newStartBeat = event.nativeEvent.offsetX / event.target.clientWidth * totalBeat;
-    newStartBeat = Math.round(newStartBeat);
+    newStartBeat = Math.round(newStartBeat / 4) * 4;
     onChangeStartBeat(newStartBeat);
   }
 
