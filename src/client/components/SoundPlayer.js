@@ -78,7 +78,7 @@ class SoundPlayer {
     );
     this.startBeat = startBeat;
     this.melody.start(Tone.now()); // これよりも先に Tone.Transport.start() してある必要がある．
-    this.lastPlayStarted = Tone.now();
+    this.lastPlayStarted = Tone.now() + 0.25; // なぜか遅れるので0.25を足しておく
     this.interval = setInterval(this.updateBeats.bind(this), 50);
   }
 
@@ -103,7 +103,9 @@ class SoundPlayer {
     } else if (this.melody === null) {
       beats = null;
     } else {
-      beats = (Tone.now() - this.lastPlayStarted) / this.secPerBeat + this.startBeat;
+      beats = (Tone.now() - this.lastPlayStarted) / this.secPerBeat;
+      beats = (beats < 0) ? 0 : beats; // 0.25足すとマイナスになるので、ここで直す
+      beats += this.startBeat;
     }
     this.onChangeBeats(beats);
   }

@@ -24,7 +24,7 @@ class StartSetter extends React.Component {
   handleMouseMove(event) {
     const { totalBeat } = this.props;
     let hoverBeats = event.nativeEvent.offsetX / event.target.clientWidth * totalBeat;
-    hoverBeats = Math.round(hoverBeats);
+    hoverBeats = Math.round(hoverBeats / 4) * 4;
     this.setState({
       hoverBeats,
     });
