@@ -5,6 +5,8 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 
+import displayModes from '../../data/displayModes';
+
 
 class Profile extends React.Component {
   constructor(props) {
@@ -12,6 +14,11 @@ class Profile extends React.Component {
     this.state = {
       tempDisplayName: props.displayName,
     };
+  }
+
+  componentDidMount() {
+    const { changeDisplayMode } = this.props;
+    changeDisplayMode(displayModes.USER);
   }
 
   render() {
@@ -72,6 +79,7 @@ Profile.propTypes = {
   photoURL: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
   changeDisplayName: PropTypes.func.isRequired,
+  changeDisplayMode: PropTypes.func.isRequired,
 };
 
 export default Profile;

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import StopIcon from '@material-ui/icons/Stop';
 import SendIcon from '@material-ui/icons/Send';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -12,11 +13,18 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 
+import StartSetter from '../ui/StartSetter';
 import PianoRollGrid from '../ui/PianoRollGrid';
-
 import Question from '../../data/question';
-
 import SoundPlayer from '../SoundPlayer';
+import displayModes from '../../data/displayModes';
+
+const playModes = {
+  STOP: 'STOP',
+  PLAY_ANSWER: 'PLAY_ANSWER',
+  PLAY_QUESTION: 'PLAY_QUESTION',
+};
+
 
 class PlayQuestion extends React.Component {
   static evaluateAnswer(qNotes, aNotes) {
@@ -97,13 +105,34 @@ class PlayQuestion extends React.Component {
     this.state = {
       dialogOpened: false,
       dialogText: '',
+      playMode: playModes.STOP,
+      currentBeat: null,
+      startBeat: 0,
     };
-    this.soundPlayer = new SoundPlayer();
+    this.soundPlayer = new SoundPlayer(50, (beats) => {
+      if (beats > 16) {
+        this.soundPlayer.stop();
+        this.setState({ playMode: playModes.STOP });
+      } else {
+        this.setState({ currentBeat: beats });
+      }
+    });
+  }
+
+  componentDidMount() {
+    const { changeDisplayMode, clearNotes } = this.props;
+    clearNotes();
+    changeDisplayMode(displayModes.PLAY_QUESTION);
   }
 
   evaluateAndReport(qNotes, aNotes) {
     const { questionId, saveAnswer } = this.props;
-    const score = PlayQuestion.evaluateAnswer(qNotes, aNotes);
+    let score = PlayQuestion.evaluateAnswer(qNotes, aNotes);
+    if (score !== undefined && score !== null) {
+      score = parseFloat(score).toFixed(2);
+    } else {
+      score = 'Nothing';
+    }
     let message = '';
     message += `YOUR SCORE: ${score}\n`;
     // if (score >= 100) message += '!!! CONGRATULATION !!!';
@@ -133,6 +162,9 @@ class PlayQuestion extends React.Component {
     const {
       dialogOpened,
       dialogText,
+      playMode,
+      currentBeat,
+      startBeat,
     } = this.state;
     return (
       <div id="PlayQuestion">
@@ -142,9 +174,21 @@ class PlayQuestion extends React.Component {
             color="primary"
             aria-label="Play"
             style={{ position: 'absolute', top: 10, left: 10 }}
-            onClick={() => this.soundPlayer.play(notes, bpm)}
+            onClick={() => {
+              if (playMode === playModes.PLAY_ANSWER) {
+                this.soundPlayer.stop();
+                this.setState({
+                  playMode: playModes.STOP,
+                });
+              } else {
+                this.soundPlayer.play(notes, bpm, startBeat);
+                this.setState({
+                  playMode: playModes.PLAY_ANSWER,
+                });
+              }
+            }}
           >
-            <PlayArrowIcon />
+            {(playMode === playModes.PLAY_ANSWER) ? (<StopIcon />) : (<PlayArrowIcon />)}
           </Button>
         </Tooltip>
 
@@ -154,9 +198,21 @@ class PlayQuestion extends React.Component {
             color="primary"
             aria-label="PlayQuestion"
             style={{ position: 'absolute', top: 10, left: 80 }}
-            onClick={() => this.soundPlayer.play(question.notes, question.bpm)}
+            onClick={() => {
+              if (playMode === playModes.PLAY_QUESTION) {
+                this.soundPlayer.stop();
+                this.setState({
+                  playMode: playModes.STOP,
+                });
+              } else {
+                this.soundPlayer.play(question.notes, question.bpm, startBeat);
+                this.setState({
+                  playMode: playModes.PLAY_QUESTION,
+                });
+              }
+            }}
           >
-            <PlayCircleOutlineIcon />
+            {(playMode === playModes.PLAY_QUESTION) ? (<StopIcon />) : (<PlayCircleOutlineIcon />)}
           </Button>
         </Tooltip>
 
@@ -174,14 +230,25 @@ class PlayQuestion extends React.Component {
           </Button>
         </Tooltip>
 
-        <PianoRollGrid
-          addNote={addNote}
-          delNote={delNote}
-          shiftPitchRange={shiftPitchRange}
-          notes={notes}
-          pitchRange={pitchRange}
-          soundPlayer={this.soundPlayer}
+        <StartSetter
+          style={{
+            position: 'absolute', left: 36, top: 100, height: 30, width: 896,
+          }}
+          startBeat={startBeat}
+          totalBeat={16}
+          onChangeStartBeat={(newStartBeat) => { this.setState({ startBeat: newStartBeat }); }}
         />
+        <div style={{ position: 'absolute', top: 130 }}>
+          <PianoRollGrid
+            addNote={addNote}
+            delNote={delNote}
+            shiftPitchRange={shiftPitchRange}
+            notes={notes}
+            pitchRange={pitchRange}
+            soundPlayer={this.soundPlayer}
+            currentBeat={(currentBeat !== null) ? currentBeat : startBeat}
+          />
+        </div>
 
         <Dialog
           open={dialogOpened}
@@ -210,7 +277,9 @@ PlayQuestion.propTypes = {
   shiftPitchRange: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
+  clearNotes: PropTypes.func.isRequired,
   saveAnswer: PropTypes.func.isRequired,
+  changeDisplayMode: PropTypes.func.isRequired,
 };
 
 export default PlayQuestion;

@@ -1,3 +1,4 @@
+const fallback = require('express-history-api-fallback'); // ここがポイント！
 const express = require('express');
 const bodyParser = require('body-parser'); // body-parser
 
@@ -29,5 +30,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/', api);
+
+// app.use(fallback('index.html', { root: 'dist' })); // ここがポイント！
+// app.use(fallback('index.html', { root: 'public' })); // ここがポイント！
+app.use(fallback('/', { root: 'dist' }));
+
 
 app.listen(app.get('port'), () => console.log('Listening on port!'));

@@ -1,16 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { ConnectedRouter } from 'connected-react-router';
 
+import { history, store } from './configureStore';
 import App from './containers/App';
-import rootReducer from './reducers';
 
-const store = createStore(rootReducer);
 
 ReactDOM.render(
   <Provider store={store}>
-    <App store={store} />
+    <ConnectedRouter history={history}>
+      <App />
+    </ConnectedRouter>
   </Provider>,
   document.getElementById('root'),
 );

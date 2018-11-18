@@ -10,6 +10,8 @@ import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 
+import displayModes from '../../data/displayModes';
+
 
 class Ranking extends React.Component {
   constructor(props) {
@@ -20,9 +22,10 @@ class Ranking extends React.Component {
   }
 
   componentDidMount() {
-    const { loadRanking } = this.props;
+    const { loadRanking, changeDisplayMode } = this.props;
     const { page } = this.state;
     loadRanking(10 * page + 1, 10 * (page + 1));
+    changeDisplayMode(displayModes.RANKING);
   }
 
   render() {
@@ -83,6 +86,7 @@ class Ranking extends React.Component {
 Ranking.propTypes = {
   rankedUsers: PropTypes.instanceOf(Immutable.Map).isRequired,
   loadRanking: PropTypes.func.isRequired,
+  changeDisplayMode: PropTypes.func.isRequired,
 };
 
 export default Ranking;

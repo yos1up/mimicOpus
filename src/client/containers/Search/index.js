@@ -6,13 +6,9 @@ import {
   setBPM,
   setNotes,
   setTitle,
-  setLowBPM,
-  setHighBPM,
   loadQuestionsList,
   setQuestionId,
   deleteUploadedQuestion,
-  setSearchTitle,
-  setSearchUser,
   loadCountQuestions,
 } from '../../actions';
 import Search from '../../components/Search';
@@ -33,22 +29,12 @@ const mapDispatchToProps = dispatch => ({
   setBPM: bpm => dispatch(setBPM(bpm)),
   setNotes: notes => dispatch(setNotes(notes)),
   setTitle: title => dispatch(setTitle(title)),
-  setLowBPM: bpm => dispatch(setLowBPM(bpm)),
-  setHighBPM: bpm => dispatch(setHighBPM(bpm)),
-  loadQuestionsList: (
-    lowBPM, highBPM, start, stop, title, user, madeByMe, answered, unanswered
-  ) => loadQuestionsList(
-    dispatch, lowBPM, highBPM, start, stop, title, user, madeByMe, answered, unanswered,
+  loadQuestionsList: (searchQuery, start, stop) => loadQuestionsList(
+    dispatch, searchQuery, start, stop
   ),
-  setSearchTitle: searchTitle => dispatch(setSearchTitle(searchTitle)),
-  setSearchUser: searchUser => dispatch(setSearchUser(searchUser)),
   setQuestionId: questionId => dispatch(setQuestionId(questionId)),
   deleteUploadedQuestion,
-  loadCountQuestions: (
-    lowBPM, highBPM, title, user, madeByMe, answered, unanswered
-  ) => loadCountQuestions(
-    dispatch, lowBPM, highBPM, title, user, madeByMe, answered, unanswered,
-  ),
+  loadCountQuestions: searchQuery => loadCountQuestions(dispatch, searchQuery),
 });
 
 export default connect(

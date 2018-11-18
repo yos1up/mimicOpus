@@ -1,6 +1,7 @@
 import actionTypes from './actionTypes';
 import Question from '../data/question';
 import User from '../data/user';
+import filterLevels from '../data/filterLevels';
 
 export function openSignInDialog() {
   return {
@@ -121,20 +122,6 @@ export function clearQuestionsList() {
   };
 }
 
-export function changeUploadedQuestion(questionId, question) {
-  const obj = question.toJS();
-  obj.id = questionId;
-  const method = 'POST';
-  const body = JSON.stringify(obj);
-  const headers = {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  };
-  fetch('./api/changeQuestion', { method, headers, body })
-    .then(res => res.json())
-    .catch(console.error);
-}
-
 export function deleteUploadedQuestion(questionId, callback) {
   const method = 'POST';
   const body = JSON.stringify({ id: questionId });
@@ -163,29 +150,127 @@ export function uploadQuestion(question) {
     .catch(console.error);
 }
 
-export function loadQuestionsList(
-  dispatch, lowBPM = 0, highBPM = 1000, start = 1, stop = 10, title = '', user = '',
-  madeByMe = true, answered = true, unanswered = true,
-) {
+export function setCountQuestions(count) {
+  return {
+    type: actionTypes.SET_COUNT_QUESTIONS,
+    count,
+  };
+}
+
+export function loadQuestionsList(dispatch, searchQuery, start = 1, stop = 10) {
   dispatch(clearQuestionsList());
 
   const method = 'GET';
   const params = new URLSearchParams();
-  params.set('lowBPM', lowBPM);
-  params.set('highBPM', highBPM);
+  params.set('lowBPM', searchQuery.lowBPM);
+  params.set('highBPM', searchQuery.highBPM);
+  params.set('title', searchQuery.title);
+  params.set('user', searchQuery.user);
+  params.set('madeByMe', searchQuery.madeByMe);
+  params.set('answered', searchQuery.answered);
+  params.set('unanswered', searchQuery.unanswered);
+
+  let lowRating;
+  let highRating;
+  switch (searchQuery.level) {
+    case filterLevels.TO_TWO_HND:
+      lowRating = -10000;
+      highRating = 200;
+      break;
+    case filterLevels.TWO_HND_TO_FOUR_HND:
+      lowRating = 200;
+      highRating = 400;
+      break;
+    case filterLevels.FOUR_HND_TO_SIX_HND:
+      lowRating = 400;
+      highRating = 600;
+      break;
+    case filterLevels.SIX_HND_TO_EIGHT_HND:
+      lowRating = 600;
+      highRating = 800;
+      break;
+    case filterLevels.EIGHT_HND_TO_ONE_K:
+      lowRating = 800;
+      highRating = 1000;
+      break;
+    case filterLevels.FROM_ONE_K:
+      lowRating = 1000;
+      highRating = 10000;
+      break;
+    case filterLevels.ALL:
+    default:
+      lowRating = -10000;
+      highRating = 10000;
+      break;
+  }
+  params.set('lowRating', lowRating);
+  params.set('highRating', highRating);
+  params.set('showNoLevel', searchQuery.showNoLevel);
+
   params.set('start', start);
   params.set('stop', stop);
-  params.set('title', title);
-  params.set('user', user);
-  params.set('madeByMe', madeByMe);
-  params.set('answered', answered);
-  params.set('unanswered', unanswered);
   fetch(`./api/loadQuestionsList?${params.toString()}`, { method })
     .then(res => res.json())
     .then((results) => {
       results.forEach((item) => {
         dispatch(addQuestionToList(item.id, Question.fromJS(item.question)));
       });
+    })
+    .catch(console.error);
+}
+
+export function loadCountQuestions(dispatch, searchQuery) {
+  const method = 'GET';
+  const params = new URLSearchParams();
+  params.set('lowBPM', searchQuery.lowBPM);
+  params.set('highBPM', searchQuery.highBPM);
+  params.set('title', searchQuery.title);
+  params.set('user', searchQuery.user);
+  params.set('madeByMe', searchQuery.madeByMe);
+  params.set('answered', searchQuery.answered);
+  params.set('unanswered', searchQuery.unanswered);
+
+  let lowRating;
+  let highRating;
+  switch (searchQuery.level) {
+    case filterLevels.TO_TWO_HND:
+      lowRating = -10000;
+      highRating = 200;
+      break;
+    case filterLevels.TWO_HND_TO_FOUR_HND:
+      lowRating = 200;
+      highRating = 400;
+      break;
+    case filterLevels.FOUR_HND_TO_SIX_HND:
+      lowRating = 400;
+      highRating = 600;
+      break;
+    case filterLevels.SIX_HND_TO_EIGHT_HND:
+      lowRating = 600;
+      highRating = 800;
+      break;
+    case filterLevels.EIGHT_HND_TO_ONE_K:
+      lowRating = 800;
+      highRating = 1000;
+      break;
+    case filterLevels.FROM_ONE_K:
+      lowRating = 1000;
+      highRating = 10000;
+      break;
+    case filterLevels.ALL:
+    default:
+      lowRating = -10000;
+      highRating = 10000;
+      break;
+  }
+  params.set('lowRating', lowRating);
+  params.set('highRating', highRating);
+  params.set('showNoLevel', searchQuery.showNoLevel);
+
+  fetch(`./api/countQuestions?${params.toString()}`, { method })
+    .then(res => res.json())
+    .then((results) => {
+      dispatch(setCountQuestions(results.count));
     })
     .catch(console.error);
 }
@@ -290,61 +375,6 @@ export function changeDisplayName(dispatch, name) {
     .then(res => res.json())
     .then(() => {
       loadMe(dispatch);
-    })
-    .catch(console.error);
-}
-
-export function setLowBPM(bpm) {
-  return {
-    type: actionTypes.SET_LOW_BPM,
-    bpm,
-  };
-}
-
-export function setHighBPM(bpm) {
-  return {
-    type: actionTypes.SET_HIGH_BPM,
-    bpm,
-  };
-}
-
-export function setSearchTitle(searchTitle) {
-  return {
-    type: actionTypes.SET_SEARCH_TITLE,
-    searchTitle,
-  };
-}
-
-export function setSearchUser(searchUser) {
-  return {
-    type: actionTypes.SET_SEARCH_USER,
-    searchUser,
-  };
-}
-
-export function setCountQuestions(count) {
-  return {
-    type: actionTypes.SET_COUNT_QUESTIONS,
-    count,
-  };
-}
-
-export function loadCountQuestions(
-  dispatch, lowBPM = 0, highBPM = 1000, title = '', user = '', madeByMe = true, answered = true, unanswered = true
-) {
-  const method = 'GET';
-  const params = new URLSearchParams();
-  params.set('lowBPM', lowBPM);
-  params.set('highBPM', highBPM);
-  params.set('title', title);
-  params.set('user', user);
-  params.set('madeByMe', madeByMe);
-  params.set('answered', answered);
-  params.set('unanswered', unanswered);
-  fetch(`./api/countQuestions?${params.toString()}`, { method })
-    .then(res => res.json())
-    .then((results) => {
-      dispatch(setCountQuestions(results.count));
     })
     .catch(console.error);
 }
