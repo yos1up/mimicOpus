@@ -110,9 +110,13 @@ class SoundPlayer {
     let beats;
     if (typeof this.secPerBeat === 'undefined') {
       beats = null;
-    } else if (this.melody === null) {
-      beats = null;
-    } else {
+    } else if (this.melody === null) { // midi 再生中でない場合
+      if (this.player.state !== Tone.State.Stopped) { // audio 再生中ならば
+        beats = this.player.position / this.secPerBeat;
+      } else {
+        beats = null;
+      }
+    } else { // midi 再生中は
       beats = (Tone.now() - this.lastPlayStarted) / this.secPerBeat + this.startBeat;
     }
     this.onChangeBeats(beats);
@@ -124,87 +128,43 @@ class SoundPlayer {
   }
 
   record(notes, bpm = 120, startBeat = 0, afterRecordCallback = () => {}) {
-    // オフライン録音 (TODO: play と共通のコードが多いので纏めた方が良い）
     /*
+      オフライン録音を行います．
       notes: 1-d Array of noteObject
         noteObject: { pitch, start, end, }
       afterRecordCallback: オフライン録音終了後の処理を記したコールバック関数．
-        function(buffer); （録音結果の Tone.Buffer が引数 buffer に格納された状態で呼ばれる．）
+        function(buffer); （録音結果の AudioBuffer が引数 buffer に格納された状態で呼ばれます．）
     */
-    this.bpm = bpm;
-    this.secPerBeat = 60 / bpm;
-    if (Number.isNaN(this.secPerBeat)) this.secPerBeat = 60 / 120.0;
+    let secPerBeat = 60 / bpm;
+    if (Number.isNaN(secPerBeat)) secPerBeat = 60 / 120.0;
+    
     const timeEventTupleList = [];
     for (let i = 0; i < notes.size; i += 1) {
       const note = notes.get(i);
 
       if (note.start >= startBeat) {
         timeEventTupleList.push(
-          [(note.start - startBeat) * this.secPerBeat,
-            [note.pitch, (note.end - note.start) * this.secPerBeat]],
+          [(note.start - startBeat) * secPerBeat,
+            [note.pitch, (note.end - note.start) * secPerBeat]],
         );
       }
     }
-    /*
-    if (this.melody !== null) {
-      this.melody.stop();
-    }
-    if (this.interval !== null) {
-      clearInterval(this.interval);
-      this.onChangeBeats(0);
-    }
-    */
-    /*
-    const callback = (buffer) => {
-      this.player.buffer = buffer;
-      this.player.start();
-      afterRecordCallback(buffer);
-    };
-    */
-    console.log(this.sampler.context);
+    const recordSecond = secPerBeat * 16.25; // 録音の秒数．
+    Tone.Offline((Transport) => {
+      /*
+        sampler の接続先を一時的に Master から OfflineMaster に切り替える．
+        disconnect して toMaster() すればいいのだが，
+        「sampler の context が offline じゃない」と怒られる．
+        そこで無理やりプロパティの一部を書き換える．(*)
+      */
+      this.sampler.disconnect();
+      const offlineSynth = new Tone.Synth();
+      this.sampler.output = offlineSynth.output; // (*)
+      this.sampler.connect(Tone.Master); // .toMaster() では OnlineContext につながるので注意（なぜ？）
 
-    Tone.Offline(function (Transport) {
-      
-      /* // Error: buffer not set
-      const offlineSampler = getPianoSampler().chain(Tone.Master);
       const melody = new Tone.Part(
         (time, event) => {
-          offlineSampler.triggerAttackRelease(
-            SoundPlayer.noteNumberToPitchName(event[0]), event[1], time, 1,
-          ); // 引数は (音高，音長，絶対時刻[s]，ベロシティ[0~1])
-        }, timeEventTupleList,
-      );
-      Transport.start();
-      // this.startBeat = startBeat;      
-      melody.start(Tone.now()); // これよりも先に Tone.Transport.start() してある必要がある．
-      */
-      
-      /* // Error: different audio context に接続できない (triggerAttackRelease が実時間で走り（オンライン処理？），そのたびに表示)
-      const offlineSampler = getPianoSampler(() => {
-        const melody = new Tone.Part(
-          (time, event) => {
-            console.log(offlineSampler.context);
-            offlineSampler.triggerAttackRelease(
-              SoundPlayer.noteNumberToPitchName(event[0]), event[1], time, 1,
-            ); // 引数は (音高，音長，絶対時刻[s]，ベロシティ[0~1])
-          }, timeEventTupleList,
-        );
-
-        Transport.start();
-        // this.startBeat = startBeat;
-        melody.start(Tone.now()); // これよりも先に Tone.Transport.start() してある必要がある．
-      });
-      */
-      
-      // 動く．ただし Synth. (全てのノートの triggerAttackRelease は瞬時に走る．)
-      const synth = new Tone.Synth();
-      console.log(synth.context);
-      console.log(this.sampler.context);
-      synth.toMaster();
-      const melody = new Tone.Part(
-        (time, event) => {
-          console.log(synth.context);
-          synth.triggerAttackRelease(
+          this.sampler.triggerAttackRelease(
             SoundPlayer.noteNumberToPitchName(event[0]), event[1], time, 1,
           ); // 引数は (音高，音長，絶対時刻[s]，ベロシティ[0~1])
         }, timeEventTupleList,
@@ -212,18 +172,47 @@ class SoundPlayer {
       Transport.start();
       // this.startBeat = startBeat;
       melody.start(Tone.now()); // これよりも先に Tone.Transport.start() してある必要がある．
-      // sequence.start(Tone.now());
-      
-    }.bind(this), 10).then(afterRecordCallback);
-    /*
-    this.lastPlayStarted = Tone.now();
-    this.interval = setInterval(this.updateBeats.bind(this), 50);
-    */
+    }, recordSecond).then((buffer) => {
+      /*
+        録音終了後の処理．
+        まず，sampler の接続先を OfflineMaster から Master に戻す処理．
+      */
+      console.log('[soundPlayer] record successful');
+      this.sampler.disconnect();
+      const synth = new Tone.Synth();
+      this.sampler.output = synth.output;
+      this.sampler.connect(Tone.Master);
+      /* そのあと，カスタムコールバックを行う */
+      afterRecordCallback(buffer.get()); // get() により Tone.Buffer から AudioBuffer に変換している
+    });
   }
 
-  playBuffer(toneBuffer){
-    this.player.buffer = toneBuffer;
-    this.player.start();
+  playBuffer(audioBuffer, bpm = 120, startBeat = 0) {
+    /*
+      audioBuffer の再生．
+      play() とインターフェースを合わせてある．
+    */
+    this.bpm = bpm;
+    this.secPerBeat = 60 / bpm;
+    if (Number.isNaN(this.secPerBeat)) this.secPerBeat = 60 / 120.0;
+    this.player.buffer = new Tone.Buffer(audioBuffer);
+    const offsetSecond = 60.0 / bpm * startBeat;
+    this.player.start(undefined, offsetSecond);
+    if (this.interval !== null) {
+      clearInterval(this.interval);
+    }
+    this.interval = setInterval(this.updateBeats.bind(this), 50);
+  }
+
+  stopBuffer() {
+    /*
+      audioBuffer の停止．
+    */
+    this.player.stop();
+    if (this.interval !== null) {
+      clearInterval(this.interval);
+      this.onChangeBeats(null);
+    }
   }
 }
 
