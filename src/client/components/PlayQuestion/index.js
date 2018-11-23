@@ -16,8 +16,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import StartSetter from '../ui/StartSetter';
 import PianoRollGrid from '../ui/PianoRollGrid';
 import Question from '../../data/question';
-// import SoundPlayer from '../../SoundPlayer'; //新
-import SoundPlayer from '../SoundPlayer'; // 旧
+// import SoundPlayer from '../../SoundPlayer'; //新 (Web audio API スクラッチ実装)
+import SoundPlayer from '../SoundPlayer'; // 旧 (Tone.Offline でオフライン録音)
 import displayModes from '../../data/displayModes';
 
 const playModes = {
@@ -118,7 +118,6 @@ class PlayQuestion extends React.Component {
         this.setState({ currentBeat: beats });
       }
     });
-    this.questionAudioBuffer = null; // 初回再生時に生成・代入される．
   }
 
   componentDidMount() {
@@ -202,26 +201,20 @@ class PlayQuestion extends React.Component {
             style={{ position: 'absolute', top: 10, left: 80 }}
             onClick={() => {
               if (playMode === playModes.PLAY_QUESTION) {
-                if (this.questionAudioBuffer) { // audioとしての再生を行なっている場合
-                  this.soundPlayer.stopBuffer();
-                } else { // midiとしての再生を行なっている場合
-                  this.soundPlayer.stop();
-                }
+                this.soundPlayer.stop();
                 this.setState({
                   playMode: playModes.STOP,
                 });
               } else {
-                if (this.soundPlayer.record) { // soundPlayer が録音に対応している場合．audioとしての再生を行う．
-                  if (!this.questionAudioBuffer) { // 未録音の場合．（初回の問題再生時）
-                    this.soundPlayer.record(question.notes, question.bpm, 0, (buffer) => {
-                      this.questionAudioBuffer = buffer;
-                      this.soundPlayer.playBuffer(this.questionAudioBuffer, question.bpm, startBeat);
-                    });
-                  } else { // すでに録音されたものがある場合．（2回目以降の問題再生時）
-                    this.soundPlayer.playBuffer(this.questionAudioBuffer, question.bpm, startBeat);
-                  }
-                } else { // soundPlayer が録音に対応していない場合．midiとしての再生を行う．
-                  this.soundPlayer.play(question.notes, question.bpm, startBeat);
+                if (!this.soundPlayer.playRecord('question', startBeat)) { // 未録音の場合．（初回の問題再生時）
+                  this.soundPlayer.offlineRecord( // 録音を行う
+                    'question',
+                    question.notes,
+                    question.bpm,
+                    () => { this.soundPlayer.playRecord('question', startBeat); } // 録音終了次第，再生
+                  );
+                } else { // すでに録音されたものがある場合．（2回目以降の問題再生時）
+                  this.soundPlayer.playRecord('question', startBeat); // 再生
                 }
                 this.setState({
                   playMode: playModes.PLAY_QUESTION,
