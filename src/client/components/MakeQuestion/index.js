@@ -18,7 +18,8 @@ import Question from '../../data/question';
 
 import displayModes from '../../data/displayModes';
 
-import SoundPlayer from '../../SoundPlayer';
+// import SoundPlayer from '../../SoundPlayer'; //新 (Web audio API スクラッチ実装)
+import SoundPlayer from '../SoundPlayer'; // 旧 (Tone.Offline でオフライン録音)
 
 const playModes = {
   STOP: 'STOP',
