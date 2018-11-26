@@ -16,7 +16,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import StartSetter from '../ui/StartSetter';
 import PianoRollGrid from '../ui/PianoRollGrid';
 import Question from '../../data/question';
-import SoundPlayer from '../SoundPlayer';
+// import SoundPlayer from '../../SoundPlayer'; //新 (Web audio API スクラッチ実装)
+import SoundPlayer from '../SoundPlayer'; // 旧 (Tone.Offline でオフライン録音)
 import displayModes from '../../data/displayModes';
 
 const playModes = {
@@ -211,7 +212,16 @@ class PlayQuestion extends React.Component {
                   playMode: playModes.STOP,
                 });
               } else {
-                this.soundPlayer.play(question.notes, question.bpm, startBeat);
+                if (!this.soundPlayer.playRecord('question', startBeat)) { // 未録音の場合．（初回の問題再生時）
+                  this.soundPlayer.offlineRecord( // 録音を行う
+                    'question',
+                    question.notes,
+                    question.bpm,
+                    () => { this.soundPlayer.playRecord('question', startBeat); } // 録音終了次第，再生
+                  );
+                } else { // すでに録音されたものがある場合．（2回目以降の問題再生時）
+                  this.soundPlayer.playRecord('question', startBeat); // 再生
+                }
                 this.setState({
                   playMode: playModes.PLAY_QUESTION,
                 });
