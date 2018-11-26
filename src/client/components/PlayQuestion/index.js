@@ -120,8 +120,14 @@ class PlayQuestion extends React.Component {
   }
 
   componentDidMount() {
-    const { changeDisplayMode, clearNotes } = this.props;
+    const { changeDisplayMode, clearNotes, loadBestSubmission, questionId } = this.props;
     clearNotes();
+
+    /* 
+      過去に行った回答があるならば，それをセットしたい．
+    */
+    loadBestSubmission(questionId);
+
     changeDisplayMode(displayModes.PLAY_QUESTION);
   }
 
@@ -280,6 +286,7 @@ PlayQuestion.propTypes = {
   clearNotes: PropTypes.func.isRequired,
   saveAnswer: PropTypes.func.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
+  loadBestSubmission: PropTypes.func.isRequired,
 };
 
 export default PlayQuestion;

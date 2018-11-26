@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import {
-  addNote, delNote, shiftPitchRange, setBPM,
+  addNote, delNote, shiftPitchRange, setBPM, loadBestSubmission, setNotes,
   uploadQuestion, saveAnswer, clearNotes, changeDisplayMode,
 } from '../../actions';
 import PlayQuestion from '../../components/PlayQuestion';
@@ -21,6 +21,8 @@ const mapDispatchToProps = dispatch => ({
   changeDisplayMode: mode => dispatch(changeDisplayMode(mode)),
   shiftPitchRange: delta => dispatch(shiftPitchRange(delta)),
   setBPM: bpm => dispatch(setBPM(bpm)),
+  loadBestSubmission: qid => loadBestSubmission(dispatch, qid),
+  setNotes: notes => dispatch(setNotes(notes)),
   uploadQuestion,
   saveAnswer,
 });

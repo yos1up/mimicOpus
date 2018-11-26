@@ -1,3 +1,5 @@
+import Immutable from 'immutable';
+
 import actionTypes from './actionTypes';
 import Question from '../data/question';
 import User from '../data/user';
@@ -133,6 +135,27 @@ export function deleteUploadedQuestion(questionId, callback) {
     .then((res) => {
       callback();
       return res.json();
+    })
+    .catch(console.error);
+}
+
+export function loadBestSubmission(dispatch, questionId) {
+  //
+  // そのユーザーが questionId 番の問題に対して行った回答のうちベストスコアのものをサーバから取得し，．
+  // setNote します
+  // 回答が存在しない場合は，何もしません．
+  const method = 'GET';
+  const params = new URLSearchParams();
+  params.set('qid', questionId);
+  fetch(`./api/loadBestSubmission?${params.toString()}`, { method })
+    .then(res => res.json())
+    .then((result) => {
+      // console.log(result);
+      if (typeof result.notes !== 'undefined') {
+        dispatch(setNotes(Immutable.List(result.notes)));
+      } else {
+        // console.log('reslt.note is undefined');
+      }
     })
     .catch(console.error);
 }
