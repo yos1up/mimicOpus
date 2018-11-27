@@ -66,9 +66,12 @@ class SoundPlayer {
     for (let i = 0; i < notes.size; i += 1) {
       const note = notes.get(i);
 
-      if (note.start >= startBeat) {
+      const diffBeat = note.start - startBeat;
+      if (diffBeat >= -1e-6) {
+        // 再生開始位置わずか手前になってしまった（float の処理の関係で）ノーツも
+        // 再生されるようにするため，1e-6 のマージンを設けている
         timeEventTupleList.push(
-          [(note.start - startBeat) * this.secPerBeat,
+          [Math.max(diffBeat, 0.0) * this.secPerBeat,
             [note.pitch, (note.end - note.start) * this.secPerBeat]],
         );
       }

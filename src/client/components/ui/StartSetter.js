@@ -17,14 +17,14 @@ class StartSetter extends React.Component {
   handleClick(event) {
     const { totalBeat, onChangeStartBeat } = this.props;
     let newStartBeat = event.nativeEvent.offsetX / event.target.clientWidth * totalBeat;
-    newStartBeat = Math.round(newStartBeat / 4) * 4;
+    newStartBeat = Math.round(newStartBeat / 0.5) * 0.5;
     onChangeStartBeat(newStartBeat);
   }
 
   handleMouseMove(event) {
     const { totalBeat } = this.props;
     let hoverBeats = event.nativeEvent.offsetX / event.target.clientWidth * totalBeat;
-    hoverBeats = Math.round(hoverBeats / 4) * 4;
+    hoverBeats = Math.round(hoverBeats / 0.5) * 0.5;
     this.setState({
       hoverBeats,
     });
