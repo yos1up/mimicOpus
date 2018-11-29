@@ -328,6 +328,34 @@ const getMe = (req, res) => {
   }
 };
 
+
+const loadBestSubmission = (req, res) => {
+  if (req.isAuthenticated()) {
+    const urlQuery = defaultQuestionQuery(req.query);
+    const uid = req.user.id;
+    const qid = Number(urlQuery.qid);
+
+    const query = {
+      text: 'SELECT notes from answers where uid = ($1) and qid = ($2) ORDER BY score DESC LIMIT 1',
+      values: [uid, qid],
+    };
+    client.query(query)
+      .then((result) => {
+        if (result.rows[0]) {
+          res.send({ errState: 0, notes: result.rows[0].notes });
+        } else {
+          res.send({ errState: 1 });
+        } // 存在しない場合
+      })
+      .catch((e) => {
+        console.log(e);
+        res.send({ errState: 1 });
+      });
+  } else {
+    res.send({ errState: 1 });
+  }
+};
+
 apiRouter.post('/api/uploadQuestion', uploadQuestion);
 apiRouter.get('/api/loadQuestionsList', loadQuestionsList);
 apiRouter.get('/api/countQuestions', countQuestions);
@@ -336,5 +364,6 @@ apiRouter.post('/api/saveAnswer', saveAnswer);
 apiRouter.post('/api/changeDisplayName', changeDisplayName);
 apiRouter.get('/api/getRanking', getRanking);
 apiRouter.get('/api/getMe', getMe);
+apiRouter.get('/api/loadBestSubmission', loadBestSubmission);
 
 module.exports = apiRouter;
