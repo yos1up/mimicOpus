@@ -61,7 +61,7 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "file-loader": "^2.0.0",
-    "nodemon": "^1.18.4",
+    "nodemon": "^1.18.7",
     "style-loader": "^0.23.0",
     "url-loader": "^1.0.1",
     "webpack-dev-server": "^3.1.3"
