@@ -45,9 +45,11 @@ class MakeQuestion extends React.Component {
   }
 
   componentDidMount() {
-    const { changeDisplayMode, clearNotes } = this.props;
+    const { changeDisplayMode, } = this.props;
     changeDisplayMode(displayModes.MAKE_QUESTION);
-    clearNotes();
+    // clearNotes();
+    // 「複製して編集」では，Search 画面から遷移する直前に notes に譜面が代入されるので
+    // ここで clearNotes してしまうと，その譜面が消されてしまう．
   }
 
   render() {
