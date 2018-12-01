@@ -38,7 +38,7 @@ class Header extends React.Component {
   render() {
     const {
       mode, photoURL, uid, openSignInDialog, provider,
-      openLicenseDialog, openFAQDialog,
+      openLicenseDialog, openFAQDialog, clearNotes,
     } = this.props;
     const { openUserMenu } = this.state;
     return (
@@ -72,7 +72,7 @@ class Header extends React.Component {
             >
               <Tab label="ホーム" value={displayModes.HOME} to="/" component={Link} />
               <Tab label="検索" value={displayModes.SEARCH} to="/search" component={Link} />
-              <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} disabled={provider === 'anonymous'} to="/makequestion" component={Link} />
+              <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} disabled={provider === 'anonymous'} to="/makequestion" component={Link} onClick={ () => clearNotes(3) } />
               <Tab label="ランキング" value={displayModes.RANKING} to="/ranking" component={Link} />
             </Tabs>
             {(photoURL !== null && photoURL !== undefined && photoURL !== '')
