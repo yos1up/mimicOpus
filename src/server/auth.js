@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const GooglePlusTokenStrategy = require('passport-google-plus-token');
 const session = require('express-session');
 const connectPg = require('connect-pg-simple');
 
@@ -20,18 +21,34 @@ passport.use(new GoogleStrategy({
   return done(null, false);
 })));
 
+passport.use(new GooglePlusTokenStrategy({
+  clientID: process.env.MIMICOPUS_GOOGLE_CLIENT_ID,
+  clientSecret: process.env.MIMICOPUS_GOOGLE_CLIENT_SECRET,
+  passReqToCallback: true
+}, (req, accessToken, refreshToken, profile, done) => {
+  if (profile) {
+    console.log(profile);
+    return done(null, profile);
+  }
+  return done(null, false);
+}));
+
 passport.serializeUser((user, done) => {
   let query;
+  let { provider } = user;
+  if (provider === 'google-plus') {
+    provider = 'google';
+  }
   query = {
     text: 'SELECT * FROM users where provider = $1 and idByProvider = $2',
-    values: [user.provider, user.id],
+    values: [provider, user.id],
   };
   client.query(query)
     .then((result) => {
       if (result.rows.length === 0) {
         query = {
           text: 'INSERT INTO users(provider, idByProvider, displayName, photoURL, totalscore, rating) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
-          values: [user.provider, user.id, user.displayName, user.photos[0].value, 0, null],
+          values: [provider, user.id, user.displayName, user.photos[0].value, 0, null],
         };
         client.query(query)
           .then((result2) => {
@@ -98,6 +115,12 @@ authRouter.get('/auth/logout',
     } else {
       res.redirect('/');
     }
+  });
+
+authRouter.get('/auth/google/token',
+  passport.authenticate('google-plus-token'),
+  (req, res) => {
+    res.send(req.user);
   });
 
 module.exports = authRouter;
