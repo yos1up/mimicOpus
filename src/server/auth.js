@@ -98,23 +98,12 @@ authRouter.get('/auth/google', passport.authenticate('google', {
 authRouter.get('/auth/google/callback',
   passport.authenticate('google'),
   (req, res) => {
-    const ua = req.header('user-agent');
-    if (/mobile/i.test(ua)) {
-      res.redirect('mimicopus://');
-    } else {
-      res.redirect('/');
-    }
+    res.redirect('/');
   });
 authRouter.get('/auth/logout',
   (req, res) => {
     req.logout();
-
-    const ua = req.header('user-agent');
-    if (/mobile/i.test(ua)) {
-      res.redirect('mimicopus://');
-    } else {
-      res.redirect('/');
-    }
+    res.redirect('/');
   });
 
 authRouter.get('/auth/google/token',
