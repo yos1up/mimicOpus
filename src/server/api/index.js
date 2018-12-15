@@ -9,6 +9,7 @@ const submitAnswer = require('./submitAnswer');
 const getRanking = require('./getRanking');
 const getMe = require('./getMe');
 const loadBestSubmission = require('./loadBestSubmission');
+const getQuestion = require('./getQuestion');
 
 
 const apiRouter = express.Router();
@@ -22,5 +23,6 @@ apiRouter.post('/api/changeDisplayName', changeDisplayName);
 apiRouter.get('/api/getRanking', getRanking);
 apiRouter.get('/api/getMe', getMe);
 apiRouter.get('/api/loadBestSubmission', loadBestSubmission);
+apiRouter.get('/api/getQuestion', getQuestion);
 
 module.exports = apiRouter;
