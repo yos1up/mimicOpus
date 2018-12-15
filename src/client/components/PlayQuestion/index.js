@@ -144,6 +144,25 @@ class PlayQuestion extends React.Component {
           </Button>
         </Tooltip>
 
+        <Typography
+          variant="h4"
+          color="textPrimary"
+          style={{
+            position: 'absolute', top: 5, left: 250, width: 1000,
+          }}
+        >
+          {question.title}
+        </Typography>
+        <Typography
+          variant="h8"
+          color="textPrimary"
+          style={{
+            position: 'absolute', top: 45, left: 250, width: 1000,
+          }}
+        >
+          {question.displayName}
+        </Typography>
+
         <StartSetter
           style={{
             position: 'absolute', left: 36, top: 100, height: 30, width: 896,
