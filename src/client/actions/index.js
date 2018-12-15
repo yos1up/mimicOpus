@@ -329,15 +329,37 @@ export function loadNewQuestionsList(dispatch) {
     .catch(console.error);
 }
 
-export function saveAnswer(qid, notes, score) {
+export function openScoreDialog(text) {
+  return {
+    type: actionTypes.OPEN_SCORE_DIALOG,
+    text,
+  };
+}
+
+export function closeScoreDialog() {
+  return {
+    type: actionTypes.CLOSE_SCORE_DIALOG,
+  };
+}
+
+export function submitAnswer(dispatch, qid, notes) {
   const method = 'POST';
-  const body = JSON.stringify({ qid, notes, score });
+  const body = JSON.stringify({ qid, notes });
   const headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   };
-  fetch('./api/saveAnswer', { method, headers, body })
+  fetch('./api/submitAnswer', { method, headers, body })
     .then(res => res.json())
+    .then((results) => {
+      let { score } = results;
+      if (score !== undefined && score !== null) {
+        score = parseFloat(score).toFixed(2);
+      } else {
+        score = 'Nothing';
+      }
+      dispatch(openScoreDialog(`YOUR SCORE: ${score}\n`));
+    })
     .catch(console.error);
 }
 

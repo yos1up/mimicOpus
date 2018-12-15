@@ -2,7 +2,8 @@ import { connect } from 'react-redux';
 
 import {
   addNote, delNote, shiftPitchRange, setBPM, loadBestSubmission, setNotes,
-  uploadQuestion, saveAnswer, clearNotes, changeDisplayMode,
+  uploadQuestion, clearNotes, changeDisplayMode, submitAnswer,
+  closeScoreDialog,
 } from '../../actions';
 import PlayQuestion from '../../components/PlayQuestion';
 
@@ -12,6 +13,8 @@ const mapStateToProps = state => ({
   pitchRange: state.music.pitchRange,
   bpm: state.music.bpm,
   questionId: state.music.questionId,
+  isOpenScoreDialog: state.music.isOpenScoreDialog,
+  textScoreDialog: state.music.textScoreDialog,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -24,7 +27,8 @@ const mapDispatchToProps = dispatch => ({
   loadBestSubmission: qid => loadBestSubmission(dispatch, qid),
   setNotes: notes => dispatch(setNotes(notes)),
   uploadQuestion,
-  saveAnswer,
+  submitAnswer: (qid, notes) => submitAnswer(dispatch, qid, notes),
+  closeScoreDialog: () => dispatch(closeScoreDialog()),
 });
 
 export default connect(
