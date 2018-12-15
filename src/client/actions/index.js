@@ -352,7 +352,13 @@ export function submitAnswer(dispatch, qid, notes) {
   fetch('./api/submitAnswer', { method, headers, body })
     .then(res => res.json())
     .then((results) => {
-      dispatch(openScoreDialog(`YOUR SCORE: ${results.score}\n`));
+      let { score } = results;
+      if (score !== undefined && score !== null) {
+        score = parseFloat(score).toFixed(2);
+      } else {
+        score = 'Nothing';
+      }
+      dispatch(openScoreDialog(`YOUR SCORE: ${score}\n`));
     })
     .catch(console.error);
 }
