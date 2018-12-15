@@ -47,7 +47,7 @@ class PlayQuestion extends React.Component {
 
   componentDidMount() {
     const {
-      changeDisplayMode, clearNotes, loadBestSubmission, questionId,
+      changeDisplayMode, clearNotes, loadBestSubmission, questionId, match, loadQuestion,
     } = this.props;
     clearNotes();
 
@@ -57,11 +57,12 @@ class PlayQuestion extends React.Component {
     loadBestSubmission(questionId);
 
     changeDisplayMode(displayModes.PLAY_QUESTION);
+    loadQuestion(match.params.qid);
   }
 
   render() {
     const {
-      notes, question, pitchRange, bpm, addNote, delNote,
+      notes, question, pitchRange, addNote, delNote,
       shiftPitchRange, questionId, submitAnswer, isOpenScoreDialog,
       textScoreDialog, closeScoreDialog,
     } = this.props;
@@ -85,7 +86,7 @@ class PlayQuestion extends React.Component {
                   playMode: playModes.STOP,
                 });
               } else {
-                this.soundPlayer.play(notes, bpm, startBeat);
+                this.soundPlayer.play(notes, question.bpm, startBeat);
                 this.setState({
                   playMode: playModes.PLAY_ANSWER,
                 });
@@ -143,6 +144,25 @@ class PlayQuestion extends React.Component {
           </Button>
         </Tooltip>
 
+        <Typography
+          variant="h4"
+          color="textPrimary"
+          style={{
+            position: 'absolute', top: 5, left: 250, width: 1000,
+          }}
+        >
+          {question.title}
+        </Typography>
+        <Typography
+          variant="h8"
+          color="textPrimary"
+          style={{
+            position: 'absolute', top: 45, left: 250, width: 1000,
+          }}
+        >
+          {question.displayName}
+        </Typography>
+
         <StartSetter
           style={{
             position: 'absolute', left: 36, top: 100, height: 30, width: 896,
@@ -186,7 +206,6 @@ PlayQuestion.propTypes = {
   question: PropTypes.instanceOf(Question).isRequired,
   pitchRange: PropTypes.arrayOf(PropTypes.number).isRequired,
   questionId: PropTypes.string.isRequired,
-  bpm: PropTypes.number.isRequired,
   isOpenScoreDialog: PropTypes.bool.isRequired,
   textScoreDialog: PropTypes.string.isRequired,
   shiftPitchRange: PropTypes.func.isRequired,
@@ -197,6 +216,7 @@ PlayQuestion.propTypes = {
   changeDisplayMode: PropTypes.func.isRequired,
   loadBestSubmission: PropTypes.func.isRequired,
   closeScoreDialog: PropTypes.func.isRequired,
+  loadQuestion: PropTypes.func.isRequired,
 };
 
 export default PlayQuestion;

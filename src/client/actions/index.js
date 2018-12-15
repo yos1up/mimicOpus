@@ -160,6 +160,19 @@ export function loadBestSubmission(dispatch, questionId) {
     .catch(console.error);
 }
 
+export function loadQuestion(dispatch, qid) {
+  const method = 'GET';
+  const params = new URLSearchParams();
+  params.set('qid', qid);
+  fetch(`./api/getQuestion?${params.toString()}`, { method })
+    .then(res => res.json())
+    .then((result) => {
+      dispatch(setQuestion(Question.fromJS(result.question)));
+      dispatch(setQuestionId(qid));
+    })
+    .catch(console.error);
+}
+
 export function uploadQuestion(question) {
   const obj = question.toJS();
   const method = 'POST';

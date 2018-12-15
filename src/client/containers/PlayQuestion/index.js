@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {
   addNote, delNote, shiftPitchRange, setBPM, loadBestSubmission, setNotes,
   uploadQuestion, clearNotes, changeDisplayMode, submitAnswer,
-  closeScoreDialog,
+  closeScoreDialog, loadQuestion,
 } from '../../actions';
 import PlayQuestion from '../../components/PlayQuestion';
 
@@ -29,6 +29,7 @@ const mapDispatchToProps = dispatch => ({
   uploadQuestion,
   submitAnswer: (qid, notes) => submitAnswer(dispatch, qid, notes),
   closeScoreDialog: () => dispatch(closeScoreDialog()),
+  loadQuestion: qid => loadQuestion(dispatch, qid),
 });
 
 export default connect(

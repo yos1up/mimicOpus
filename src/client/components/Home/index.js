@@ -31,7 +31,7 @@ class Home extends React.Component {
 
   render() {
     const {
-      newQuestionsList, osusumeQuestionsList, setQuestion, setBPM, setQuestionId, history,
+      newQuestionsList, osusumeQuestionsList, history,
     } = this.props;
     return (
       <div
@@ -124,10 +124,7 @@ class Home extends React.Component {
                     top: 50,
                   }}
                   onClick={() => {
-                    setQuestion(question);
-                    setBPM(question.bpm);
-                    setQuestionId(id);
-                    history.push('/playquestion');
+                    history.push(`/playquestion/${id}`);
                   }}
                 >
                   <Tooltip title={`${question.title}を解く`}>
@@ -192,10 +189,7 @@ class Home extends React.Component {
                     top: 50,
                   }}
                   onClick={() => {
-                    setQuestion(question);
-                    setBPM(question.bpm);
-                    setQuestionId(id);
-                    history.push('/playquestion');
+                    history.push(`/playquestion/${id}`);
                   }}
                 >
                   <Tooltip title={`${question.title}を解く`}>
@@ -263,9 +257,6 @@ Home.propTypes = {
   osusumeQuestionsList: PropTypes.instanceOf(Immutable.List).isRequired,
   loadNewQuestionsList: PropTypes.func.isRequired,
   loadOsusumeQuestionsList: PropTypes.func.isRequired,
-  setQuestion: PropTypes.func.isRequired,
-  setBPM: PropTypes.func.isRequired,
-  setQuestionId: PropTypes.func.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
 };
 

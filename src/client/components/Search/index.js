@@ -364,10 +364,7 @@ class Search extends React.Component {
                     hover={!bMine}
                     onClick={() => {
                       if (!bMine) {
-                        setQuestion(question);
-                        setBPM(question.bpm);
-                        setQuestionId(id);
-                        history.push('/playquestion');
+                        history.push(`/playquestion/${id}`);
                       }
                     }}
                     style={{ cursor: (bMine) ? 'default' : 'pointer' }}
