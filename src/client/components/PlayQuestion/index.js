@@ -48,14 +48,14 @@ class PlayQuestion extends React.Component {
 
   componentDidMount() {
     const {
-      changeDisplayMode, clearNotes, loadBestSubmission, questionId, match, loadQuestion,
+      changeDisplayMode, clearNotes, loadBestSubmission, match, loadQuestion,
     } = this.props;
     clearNotes();
 
     /*
       過去に行った回答があるならば，それをセットしたい．
     */
-    loadBestSubmission(questionId);
+    loadBestSubmission(match.params.qid);
 
     changeDisplayMode(displayModes.PLAY_QUESTION);
     loadQuestion(match.params.qid);

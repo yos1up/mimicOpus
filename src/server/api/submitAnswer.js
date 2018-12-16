@@ -75,17 +75,18 @@ const evaluateAnswer = (qNotes, aNotes) => {
 
 const submitAnswer = (req, res) => {
   const data = req.body;
-  let query = {
-    text: 'SELECT * from questions WHERE id = $1',
-    values: [data.qid],
-  };
+  let query;
+  if (req.isAuthenticated()) {
+    query = {
+      text: 'SELECT * from questions WHERE id = $1 and uid != $2',
+      values: [data.qid, req.user.id],
+    };
 
-  client.query(query)
-    .then((result) => {
-      const qNotes = result.rows[0].notes;
-      const score = evaluateAnswer(qNotes, data.notes);
+    client.query(query)
+      .then((result) => {
+        const qNotes = result.rows[0].notes;
+        const score = evaluateAnswer(qNotes, data.notes);
 
-      if (req.isAuthenticated()) {
         query = {
           text: 'INSERT INTO answers(qid, uid, notes, score) VALUES($1, $2, $3, $4)',
           values: [data.qid, req.user.id, JSON.stringify(data.notes), score],
@@ -101,17 +102,33 @@ const submitAnswer = (req, res) => {
             console.log(e);
             res.send({ errState: 1 });
           });
-      } else {
+      })
+      .catch((e) => {
+        console.log(e);
+        res.send({ errState: 1 });
+      });
+  } else {
+    query = {
+      text: 'SELECT * from questions WHERE id = $1',
+      values: [data.qid],
+    };
+
+    client.query(query)
+      .then((result) => {
+        const qNotes = result.rows[0].notes;
+        const score = evaluateAnswer(qNotes, data.notes);
+
         res.send({
           score,
           saved: false,
           errState: 0,
         });
-      }
-    }).catch((e) => {
-      console.log(e);
-      res.send({ errState: 1 });
-    });
+      })
+      .catch((e) => {
+        console.log(e);
+        res.send({ errState: 1 });
+      });
+  }
 };
 
 module.exports = submitAnswer;
