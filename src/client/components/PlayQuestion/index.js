@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from "react-helmet";
 
 import Button from '@material-ui/core/Button';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
@@ -73,6 +74,10 @@ class PlayQuestion extends React.Component {
     } = this.state;
     return (
       <div id="PlayQuestion">
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>{`${question.title} - ${question.displayName}`}</title>
+        </Helmet>
         <Tooltip title="再生">
           <Button
             variant="fab"
