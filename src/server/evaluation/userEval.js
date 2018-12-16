@@ -6,7 +6,9 @@ const userEval = (ratings, scores) => {
 
   let l5Norm = 0;
   for (let i = 0; i < ratingScores.length; i += 1) {
-    l5Norm += (ratingScores[i] / 1000) ** 5;
+    if (ratingScores[i] > 0) {
+      l5Norm += (ratingScores[i] / 1000) ** 5;
+    }
   }
   l5Norm = (l5Norm ** 0.2) * 1000;
 
