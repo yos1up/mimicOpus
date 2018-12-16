@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Helmet } from "react-helmet";
+import { Helmet } from 'react-helmet';
 
 import Button from '@material-ui/core/Button';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';

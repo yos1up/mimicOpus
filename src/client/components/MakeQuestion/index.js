@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -60,6 +61,10 @@ class MakeQuestion extends React.Component {
     const { playMode, currentBeat, startBeat } = this.state;
     return (
       <div id="MakeQuestion">
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>mimicopus「耳コピ」はあなたの音楽をより良くする</title>
+        </Helmet>
 
         <Tooltip title="タイトルを編集">
           <Input

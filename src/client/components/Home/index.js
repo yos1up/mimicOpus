@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -43,6 +44,10 @@ class Home extends React.Component {
           padding: 30,
         }}
       >
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>mimicopus「耳コピ」はあなたの音楽をより良くする</title>
+        </Helmet>
         <img
           src="./images/logo_transparent.png"
           alt=""

@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -68,6 +69,10 @@ class Search extends React.Component {
     } = this.state;
     return (
       <div id="Search">
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>mimicopus「耳コピ」はあなたの音楽をより良くする</title>
+        </Helmet>
         <Paper
           style={{
             position: 'absolute', top: 0, left: 0, width: 1000, height: 100,
