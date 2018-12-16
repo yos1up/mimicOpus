@@ -1,4 +1,5 @@
 const client = require('../pgClient');
+const userEval = require('../evaluation/userEval');
 
 const evaluateAnswer = (qNotes, aNotes) => {
   /* 評価関数どうしますかね・・・
@@ -93,11 +94,40 @@ const submitAnswer = (req, res) => {
         };
 
         client.query(query)
-          .then(() => res.send({
-            score,
-            saved: true,
-            errState: 0,
-          }))
+          .then(() => {
+            query = {
+              text: 'SELECT DISTINCT on (a.qid) a.qid, a.score, q.rating FROM answers a '
+                + 'LEFT JOIN questions q ON q.id = a.qid '
+                + 'WHERE a.uid = $1 '
+                + 'ORDER BY a.qid, a.score DESC',
+              values: [req.user.id],
+            };
+            client.query(query)
+              .then((result2) => {
+                const ratings = result2.rows.map(item => item.rating);
+                const scores = result2.rows.map(item => item.score);
+                query = {
+                  text: 'UPDATE users SET rating = ($1) WHERE id=($2)',
+                  values: [userEval(ratings, scores), req.user.id],
+                };
+                client.query(query)
+                  .then(() => {
+                    res.send({
+                      score,
+                      saved: true,
+                      errState: 0,
+                    });
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                    res.send({ errState: 1 });
+                  });
+              })
+              .catch((e) => {
+                console.log(e);
+                res.send({ errState: 1 });
+              });
+          })
           .catch((e) => {
             console.log(e);
             res.send({ errState: 1 });
