@@ -1,4 +1,5 @@
 const client = require('../pgClient');
+const questionEval = require('../evaluation/questionEval');
 
 
 const uploadQuestion = (req, res) => {
@@ -6,7 +7,8 @@ const uploadQuestion = (req, res) => {
     const data = req.body;
     const query = {
       text: 'INSERT INTO questions(notes, bpm, uid, title, uploadedAt, rating) VALUES($1, $2, $3, $4, $5, $6)',
-      values: [JSON.stringify(data.notes), data.bpm, req.user.id, data.title, new Date(), null],
+      values: [JSON.stringify(data.notes), data.bpm, req.user.id, data.title, new Date(),
+        questionEval(data.notes, data.bpm)],
     };
     client.query(query)
       .then(() => res.send({ errState: 0 }))
