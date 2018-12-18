@@ -46,7 +46,7 @@ class Home extends React.Component {
       >
         <Helmet>
           <meta charSet="utf-8" />
-          <title>mimicopus「耳コピ」はあなたの音楽をより良くする</title>
+          <title>mimicOpus「耳コピ」はあなたの音楽をより良くする</title>
         </Helmet>
         <img
           src="./images/logo_transparent.png"
@@ -76,7 +76,7 @@ class Home extends React.Component {
               position: 'absolute', top: 170, width: 800,
             }}
           >
-            mimicopus(ミミックオーパス)は「耳コピ」のスキルアップのためのオンラインサービスです。
+            mimicOpus(ミミックオーパス)は「耳コピ」のスキルアップのためのオンラインサービスです。
             <br />
             みんなが作った曲を耳コピして、ハイスコアを目指しましょう。
             <br />

@@ -36,7 +36,7 @@ class Profile extends React.Component {
       <div>
         <Helmet>
           <meta charSet="utf-8" />
-          <title>mimicopus「耳コピ」はあなたの音楽をより良くする</title>
+          <title>ユーザー - mimicOpus</title>
         </Helmet>
         {(photoURL !== null && photoURL !== undefined && photoURL !== '')
           ? (

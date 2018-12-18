@@ -71,7 +71,7 @@ class Search extends React.Component {
       <div id="Search">
         <Helmet>
           <meta charSet="utf-8" />
-          <title>mimicopus「耳コピ」はあなたの音楽をより良くする</title>
+          <title>検索 - mimicOpus</title>
         </Helmet>
         <Paper
           style={{

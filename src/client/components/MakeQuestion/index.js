@@ -63,7 +63,7 @@ class MakeQuestion extends React.Component {
       <div id="MakeQuestion">
         <Helmet>
           <meta charSet="utf-8" />
-          <title>mimicopus「耳コピ」はあなたの音楽をより良くする</title>
+          <title>問題を作成 - mimicOpus</title>
         </Helmet>
 
         <Tooltip title="タイトルを編集">

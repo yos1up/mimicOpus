@@ -36,7 +36,7 @@ class Ranking extends React.Component {
       <div id="Ranking">
         <Helmet>
           <meta charSet="utf-8" />
-          <title>mimicopus「耳コピ」はあなたの音楽をより良くする</title>
+          <title>ランキング - mimicOpus</title>
         </Helmet>
         <Table
           style={{
