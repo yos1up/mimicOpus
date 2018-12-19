@@ -13,6 +13,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
+import { TwitterShareButton } from 'react-twitter-embed';
 
 import StartSetter from '../ui/StartSetter';
 import PianoRollGrid from '../ui/PianoRollGrid';
@@ -149,11 +150,22 @@ class PlayQuestion extends React.Component {
           </Button>
         </Tooltip>
 
+        <div
+          style={{
+            position: 'absolute', top: 25, left: 220, width: 1000,
+          }}
+        >
+          <TwitterShareButton
+            url={`https://www.mimicopus.com/playquestion/${questionId}`}
+            options={{ text: `${question.title} - ${question.displayName} #mimicOpus`, size: 'large' }}
+          />
+        </div>
+
         <Typography
           variant="h4"
           color="textPrimary"
           style={{
-            position: 'absolute', top: 5, left: 250, width: 1000,
+            position: 'absolute', top: 5, left: 310, width: 1000,
           }}
         >
           {question.title}
@@ -162,7 +174,7 @@ class PlayQuestion extends React.Component {
           variant="h8"
           color="textPrimary"
           style={{
-            position: 'absolute', top: 45, left: 250, width: 1000,
+            position: 'absolute', top: 45, left: 310, width: 1000,
           }}
         >
           {question.displayName}
