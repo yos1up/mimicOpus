@@ -161,6 +161,10 @@ export function loadBestSubmission(dispatch, questionId) {
 }
 
 export function loadQuestion(dispatch, qid) {
+  dispatch({
+    type: actionTypes.SET_WAITING_LOAD_QUESTION,
+    waitingLoadQuestion: true,
+  });
   const method = 'GET';
   const params = new URLSearchParams();
   params.set('qid', qid);
@@ -169,8 +173,18 @@ export function loadQuestion(dispatch, qid) {
     .then((result) => {
       dispatch(setQuestion(Question.fromJS(result.question)));
       dispatch(setQuestionId(qid));
+      dispatch({
+        type: actionTypes.SET_WAITING_LOAD_QUESTION,
+        waitingLoadQuestion: false,
+      });
     })
-    .catch(console.error);
+    .catch((e) => {
+      dispatch({
+        type: actionTypes.SET_WAITING_LOAD_QUESTION,
+        waitingLoadQuestion: false,
+      });
+      console.error(e);
+    });
 }
 
 export function uploadQuestion(question) {
