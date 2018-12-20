@@ -41,24 +41,33 @@ class NoteBlock extends React.Component { // ノーツ
     const {
       start, end, uw, uh, beatPerCol,
     } = this.props;
-    const divStyle = {
-      width: uw * (end - start) / beatPerCol,
-      height: uh,
-      backgroundColor: 'blue',
-      borderRadius: 10,
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      opacity: 0.5,
-    };
     return (
       <Tooltip title="クリックして音を削除">
         <div
-          style={divStyle}
+          style={{
+            width: uw * (end - start) / beatPerCol,
+            height: uh,
+            backgroundColor: 'rgba(0,0,0,0.0)',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
           onMouseDown={this.handleClick}
           role="button"
           tabIndex="0"
-        />
+        >
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'blue',
+              borderRadius: 10,
+              top: 0,
+              left: 0,
+              opacity: 0.5,
+            }}
+          />
+        </div>
       </Tooltip>
     );
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
+import { Helmet } from 'react-helmet';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -33,6 +34,10 @@ class Ranking extends React.Component {
     const { page } = this.state;
     return (
       <div id="Ranking">
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>ランキング - mimicOpus</title>
+        </Helmet>
         <Table
           style={{
             position: 'absolute',

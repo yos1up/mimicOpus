@@ -12,6 +12,8 @@ const MusicState = Immutable.Record({
   bpm: 120,
   title: '',
   questionId: '',
+  isOpenScoreDialog: false,
+  textScoreDialog: '',
 });
 
 export default MusicState;

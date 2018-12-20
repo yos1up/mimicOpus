@@ -4,6 +4,7 @@ import Avatar from '@material-ui/core/Avatar';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
+import { Helmet } from 'react-helmet';
 
 import displayModes from '../../data/displayModes';
 
@@ -33,6 +34,10 @@ class Profile extends React.Component {
     };
     return (
       <div>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>ユーザー - mimicOpus</title>
+        </Helmet>
         {(photoURL !== null && photoURL !== undefined && photoURL !== '')
           ? (
             <Avatar

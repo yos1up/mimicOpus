@@ -38,6 +38,7 @@ module.exports = {
       '/instrument_piano': 'http://localhost:8080',
       '/style.css': 'http://localhost:8080',
       '/auth': 'http://localhost:8080',
+      '/sitemap.xml': 'http://localhost:8080',
     },
     historyApiFallback: true,
   },

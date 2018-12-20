@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -31,7 +32,7 @@ class Home extends React.Component {
 
   render() {
     const {
-      newQuestionsList, osusumeQuestionsList, setQuestion, setBPM, setQuestionId, history,
+      newQuestionsList, osusumeQuestionsList, history,
     } = this.props;
     return (
       <div
@@ -43,6 +44,10 @@ class Home extends React.Component {
           padding: 30,
         }}
       >
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>mimicOpus「耳コピ」はあなたの音楽をより良くする</title>
+        </Helmet>
         <img
           src="./images/logo_transparent.png"
           alt=""
@@ -71,7 +76,7 @@ class Home extends React.Component {
               position: 'absolute', top: 170, width: 800,
             }}
           >
-            mimicopus(ミミックオーパス)は「耳コピ」のスキルアップのためのオンラインサービスです。
+            mimicOpus(ミミックオーパス)は「耳コピ」のスキルアップのためのオンラインサービスです。
             <br />
             みんなが作った曲を耳コピして、ハイスコアを目指しましょう。
             <br />
@@ -124,10 +129,7 @@ class Home extends React.Component {
                     top: 50,
                   }}
                   onClick={() => {
-                    setQuestion(question);
-                    setBPM(question.bpm);
-                    setQuestionId(id);
-                    history.push('/playquestion');
+                    history.push(`/playquestion/${id}`);
                   }}
                 >
                   <Tooltip title={`${question.title}を解く`}>
@@ -192,10 +194,7 @@ class Home extends React.Component {
                     top: 50,
                   }}
                   onClick={() => {
-                    setQuestion(question);
-                    setBPM(question.bpm);
-                    setQuestionId(id);
-                    history.push('/playquestion');
+                    history.push(`/playquestion/${id}`);
                   }}
                 >
                   <Tooltip title={`${question.title}を解く`}>
@@ -263,9 +262,6 @@ Home.propTypes = {
   osusumeQuestionsList: PropTypes.instanceOf(Immutable.List).isRequired,
   loadNewQuestionsList: PropTypes.func.isRequired,
   loadOsusumeQuestionsList: PropTypes.func.isRequired,
-  setQuestion: PropTypes.func.isRequired,
-  setBPM: PropTypes.func.isRequired,
-  setQuestionId: PropTypes.func.isRequired,
   changeDisplayMode: PropTypes.func.isRequired,
 };
 

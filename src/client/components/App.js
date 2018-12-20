@@ -53,7 +53,7 @@ class App extends React.Component {
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route path="/makequestion" component={MakeQuestion} />
-                <Route path="/playquestion" component={PlayQuestion} />
+                <Route path="/playquestion/:qid" component={PlayQuestion} />
                 <Route path="/search" component={Search} />
                 <Route path="/user" component={Profile} />
                 <Route path="/ranking" component={Ranking} />

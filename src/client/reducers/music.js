@@ -59,6 +59,12 @@ export default function (state = new MusicState(), action) {
     case actionTypes.CLEAR_OSUSUME_QUESTIONS_LIST:
       return state.set('osusumeQuestionsList', Immutable.List());
 
+    case actionTypes.OPEN_SCORE_DIALOG:
+      return state.set('isOpenScoreDialog', true).set('textScoreDialog', action.text);
+
+    case actionTypes.CLOSE_SCORE_DIALOG:
+      return state.set('isOpenScoreDialog', false);
+
     default:
       return state;
   }

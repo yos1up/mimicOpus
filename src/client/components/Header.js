@@ -74,6 +74,7 @@ class Header extends React.Component {
               <Tab label="検索" value={displayModes.SEARCH} to="/search" component={Link} />
               <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} disabled={provider === 'anonymous'} to="/makequestion" component={Link} onClick={ () => clearNotes(3) } />
               <Tab label="ランキング" value={displayModes.RANKING} to="/ranking" component={Link} />
+              <Tab label="blog" onClick={() => { location.href = 'https://blog.mimicopus.com/'; }} />
             </Tabs>
             {(photoURL !== null && photoURL !== undefined && photoURL !== '')
               ? (

@@ -160,6 +160,19 @@ export function loadBestSubmission(dispatch, questionId) {
     .catch(console.error);
 }
 
+export function loadQuestion(dispatch, qid) {
+  const method = 'GET';
+  const params = new URLSearchParams();
+  params.set('qid', qid);
+  fetch(`./api/getQuestion?${params.toString()}`, { method })
+    .then(res => res.json())
+    .then((result) => {
+      dispatch(setQuestion(Question.fromJS(result.question)));
+      dispatch(setQuestionId(qid));
+    })
+    .catch(console.error);
+}
+
 export function uploadQuestion(question) {
   const obj = question.toJS();
   const method = 'POST';
@@ -329,15 +342,37 @@ export function loadNewQuestionsList(dispatch) {
     .catch(console.error);
 }
 
-export function saveAnswer(qid, notes, score) {
+export function openScoreDialog(text) {
+  return {
+    type: actionTypes.OPEN_SCORE_DIALOG,
+    text,
+  };
+}
+
+export function closeScoreDialog() {
+  return {
+    type: actionTypes.CLOSE_SCORE_DIALOG,
+  };
+}
+
+export function submitAnswer(dispatch, qid, notes) {
   const method = 'POST';
-  const body = JSON.stringify({ qid, notes, score });
+  const body = JSON.stringify({ qid, notes });
   const headers = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   };
-  fetch('./api/saveAnswer', { method, headers, body })
+  fetch('./api/submitAnswer', { method, headers, body })
     .then(res => res.json())
+    .then((results) => {
+      let { score } = results;
+      if (score !== undefined && score !== null) {
+        score = parseFloat(score).toFixed(2);
+      } else {
+        score = 'Nothing';
+      }
+      dispatch(openScoreDialog(`YOUR SCORE: ${score}\n`));
+    })
     .catch(console.error);
 }
 
