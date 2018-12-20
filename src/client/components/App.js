@@ -16,6 +16,8 @@ import Search from '../containers/Search';
 import Profile from '../containers/Profile';
 import Ranking from '../containers/Ranking';
 
+import EmbedPianoRoll from './embed/PianoRoll';
+
 import { history } from '../configureStore';
 
 import theme from './theme';
@@ -35,7 +37,7 @@ class App extends React.Component {
         <ConnectedRouter history={history}>
           <div>
             <Switch>
-              <Route path="/embed" component={() => (<div>embed</div>)} />
+              <Route path="/embed/pianoroll" component={EmbedPianoRoll} />
               <Route>
                 <div
                   style={{

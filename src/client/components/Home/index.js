@@ -2,7 +2,6 @@ import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
