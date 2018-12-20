@@ -15,6 +15,7 @@ const mapStateToProps = state => ({
   questionId: state.music.questionId,
   isOpenScoreDialog: state.music.isOpenScoreDialog,
   textScoreDialog: state.music.textScoreDialog,
+  waitingLoadQuestion: state.display.waitingLoadQuestion,
 });
 
 const mapDispatchToProps = dispatch => ({

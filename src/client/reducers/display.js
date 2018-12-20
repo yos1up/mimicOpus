@@ -19,6 +19,9 @@ const display = (state = new DisplayState(), action) => {
     case actionTypes.CLOSE_FAQ_DIALOG:
       return state.set('showFAQ', false);
 
+    case actionTypes.SET_WAITING_LOAD_QUESTION:
+      return state.set('waitingLoadQuestion', action.waitingLoadQuestion);
+
     default:
       return state;
   }
