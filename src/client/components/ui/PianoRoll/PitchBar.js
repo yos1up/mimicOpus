@@ -8,7 +8,7 @@ class PitchBar extends React.Component {
       heightPerPitch, numPitch,
     } = this.props;
     return (heightPerPitch !== nextProps.heightPerPitch
-      && numPitch !== nextProps.numPitch
+      || numPitch !== nextProps.numPitch
     );
   }
 

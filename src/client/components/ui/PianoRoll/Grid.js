@@ -21,10 +21,10 @@ class Grid extends React.Component {
       widthPerBeat, heightPerPitch, numPitch, numBeats, beatsPerBar
     } = this.props;
     return (widthPerBeat !== nextProps.widthPerBeat
-      && heightPerPitch !== nextProps.heightPerPitch
-      && numPitch !== nextProps.numPitch
-      && numBeats !== nextProps.numBeats
-      && beatsPerBar !== nextProps.beatsPerBar
+      || heightPerPitch !== nextProps.heightPerPitch
+      || numPitch !== nextProps.numPitch
+      || numBeats !== nextProps.numBeats
+      || beatsPerBar !== nextProps.beatsPerBar
     );
   }
 
@@ -58,26 +58,32 @@ class Grid extends React.Component {
     const {
       widthPerBeat, heightPerPitch, numPitch, onDragEnd,
     } = this.props;
-    this.setState({
-      isDragged: false,
-    });
-    onDragEnd(
-      event.nativeEvent.offsetX / widthPerBeat,
-      parseInt((heightPerPitch * numPitch - event.nativeEvent.offsetY) / heightPerPitch, 10)
-    );
+    const { isDragged } = this.state;
+    if (isDragged) {
+      this.setState({
+        isDragged: false,
+      });
+      onDragEnd(
+        event.nativeEvent.offsetX / widthPerBeat,
+        parseInt((heightPerPitch * numPitch - event.nativeEvent.offsetY) / heightPerPitch, 10)
+      );
+    }
   }
 
   handleMouseLeave(event) {
     const {
-      widthPerBeat, heightPerPitch, numPitch, onDragEnd,
+      widthPerBeat, heightPerPitch, numPitch, onDragCancel,
     } = this.props;
-    this.setState({
-      isDragged: false,
-    });
-    onDragEnd(
-      event.nativeEvent.offsetX / widthPerBeat,
-      parseInt((heightPerPitch * numPitch - event.nativeEvent.offsetY) / heightPerPitch, 10)
-    );
+    const { isDragged } = this.state;
+    if (isDragged) {
+      this.setState({
+        isDragged: false,
+      });
+      onDragCancel(
+        event.nativeEvent.offsetX / widthPerBeat,
+        parseInt((heightPerPitch * numPitch - event.nativeEvent.offsetY) / heightPerPitch, 10)
+      );
+    }
   }
 
   render() {
@@ -131,6 +137,7 @@ class Grid extends React.Component {
             height: heightPerPitch * numPitch,
             backgroundColor: '#FFFFFF',
             opacity: 0.0,
+            zIndex: 1,
           }}
           onMouseDown={this.handleMouseDown}
           onMouseMove={this.handleMouseMove}
@@ -157,6 +164,7 @@ Grid.defaultProps = {
   onDragStart: () => {},
   onDrag: () => {},
   onDragEnd: () => {},
+  onDragCancel: () => {},
 };
 
 export default Grid;

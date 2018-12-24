@@ -5,6 +5,7 @@ import Immutable from 'immutable';
 import Grid from './Grid';
 import PitchBar from './PitchBar';
 import PositionBar from './PositionBar';
+import Note from '../../../data/note';
 
 
 class PianoRoll extends React.Component {
@@ -17,6 +18,9 @@ class PianoRoll extends React.Component {
       yScroll: false,
       scrollTop: 0,
       scrollLeft: 0,
+      inputStart: null,
+      inputPitch: null,
+      inputEnd: null,
     };
 
     this.handleMainGridWheel = this.handleMainGridWheel.bind(this);
@@ -69,9 +73,11 @@ class PianoRoll extends React.Component {
     const {
       style, pitchBarWidth, positionBarHeight, widthPerBeat, heightPerPitch,
       numPitch, numBeats, beatsPerBar, notes, deleteNote, currentBeats, startBeats,
+      addNote, quantizeBeats, previewSound, onChangeStartBeat,
     } = this.props;
     const {
       width, height, scrollTop, scrollLeft, mainGridWidth, mainGridHeight,
+      inputStart, inputEnd, inputPitch,
     } = this.state;
     const pianoRollStyle = {
       height: 400,
@@ -106,6 +112,8 @@ class PianoRoll extends React.Component {
               widthPerBeat={widthPerBeat}
               numBeats={numBeats}
               beatsPerBar={beatsPerBar}
+              onChangeStartBeat={onChangeStartBeat}
+              quantizeBeats={quantizeBeats}
             />
           </div>
         </div>
@@ -158,32 +166,94 @@ class PianoRoll extends React.Component {
               numPitch={numPitch}
               numBeats={numBeats}
               beatsPerBar={beatsPerBar}
-              onDragStart={()=>{console.log("start");}}
-              onDrag={()=>{console.log("dragging");}}
-              onDragEnd={()=>{console.log("end");}}
+              onDragStart={(beats, pitch) => {
+                const quantizedBeats = quantizeBeats * Math.floor(beats / quantizeBeats);
+                previewSound(pitch);
+                this.setState({
+                  inputStart: quantizedBeats,
+                  inputEnd: quantizedBeats + quantizeBeats,
+                  inputPitch: pitch
+                });
+              }}
+              onDrag={(beats) => {
+                const quantizedBeats = quantizeBeats * Math.floor(beats / quantizeBeats);
+                this.setState({
+                  inputEnd: quantizedBeats + quantizeBeats,
+                });
+              }}
+              onDragEnd={(beats) => {
+                const quantizedBeats = quantizeBeats * Math.floor(beats / quantizeBeats);
+                const note = new Note({
+                  start: inputStart,
+                  end: quantizedBeats + quantizeBeats,
+                  pitch: inputPitch,
+                });
+                addNote(note);
+                this.setState({
+                  inputStart: null,
+                  inputEnd: null,
+                  inputPitch: null
+                });
+              }}
+              onDragCancel={() => {
+                this.setState({
+                  inputStart: null,
+                  inputEnd: null,
+                  inputPitch: null
+                });
+              }}
             />
             {notes.map((note, idx) => {
               const { pitch, start, end } = note;
               return (
                 <div
                   key={idx}
-                  role="button"
-                  tabIndex="0"
-                  style={{
-                    position: 'absolute',
-                    left: start * widthPerBeat,
-                    top: numPitch * heightPerPitch - (pitch + 1) * heightPerPitch,
-                    width: (end - start) * widthPerBeat,
-                    height: heightPerPitch,
-                    backgroundColor: 'blue',
-                    opacity: 0.5,
-                  }}
-                  onMouseDown={() => {
-                    deleteNote(idx);
-                  }}
-                />
+                >
+                  <div
+                    style={{
+                      position: 'absolute',
+                      left: start * widthPerBeat,
+                      top: numPitch * heightPerPitch - (pitch + 1) * heightPerPitch,
+                      width: (end - start) * widthPerBeat - 1,
+                      height: heightPerPitch - 1,
+                      backgroundColor: 'blue',
+                      opacity: 0.5,
+                      borderRadius: 2,
+                      boxShadow: '1px 1px 3px gray',
+                    }}
+                  />
+                  <div
+                    role="button"
+                    tabIndex="0"
+                    style={{
+                      position: 'absolute',
+                      left: start * widthPerBeat,
+                      top: numPitch * heightPerPitch - (pitch + 1) * heightPerPitch,
+                      width: (end - start) * widthPerBeat,
+                      height: heightPerPitch,
+                      backgroundColor: '#FFFFFF',
+                      opacity: 0,
+                      zIndex: 2,
+                    }}
+                    onMouseDown={() => {
+                      deleteNote(idx);
+                    }}
+                  />
+                </div>
               );
             })}
+            <div
+              id="inputNote"
+              style={{
+                position: 'absolute',
+                left: inputStart * widthPerBeat,
+                top: numPitch * heightPerPitch - (inputPitch + 1) * heightPerPitch,
+                width: (inputEnd - inputStart) * widthPerBeat,
+                height: heightPerPitch,
+                backgroundColor: 'blue',
+                opacity: 0.2,
+              }}
+            />
           </div>
         </div>
         <div
@@ -222,11 +292,12 @@ PianoRoll.propTypes = {
   style: PropTypes.object,
   addNote: PropTypes.func,
   deleteNote: PropTypes.func,
-  pitchName: PropTypes.object,
   pitchBarWidth: PropTypes.number,
   positionBarHeight: PropTypes.number,
   currentBeats: PropTypes.number,
   startBeats: PropTypes.number,
+  previewSound: PropTypes.func,
+  onChangeStartBeat: PropTypes.func,
 };
 
 PianoRoll.defaultProps = {
@@ -240,16 +311,12 @@ PianoRoll.defaultProps = {
   style: {},
   addNote: () => {},
   deleteNote: () => {},
-  pitchName: Array.from(Array(128), (v, k) => k).map((pitch) => {
-    const pitchName = ['C', '', 'D', '', 'E', 'F', '', 'G', '', 'A', '', 'B'];
-    let label = pitchName[pitch % 12];
-    if (label === 'C') label += (pitch / 12 - 1);
-    return label;
-  }),
   positionBarHeight: 50,
   pitchBarWidth: 70,
   currentBeats: 0,
   startBeats: 0,
+  previewSound: () => {},
+  onChangeStartBeat: () => {},
 };
 
 export default PianoRoll;
