@@ -158,6 +158,9 @@ class PianoRoll extends React.Component {
               numPitch={numPitch}
               numBeats={numBeats}
               beatsPerBar={beatsPerBar}
+              onDragStart={()=>{console.log("start");}}
+              onDrag={()=>{console.log("dragging");}}
+              onDragEnd={()=>{console.log("end");}}
             />
             {notes.map((note, idx) => {
               const { pitch, start, end } = note;

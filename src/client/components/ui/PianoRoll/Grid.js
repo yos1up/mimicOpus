@@ -3,6 +3,19 @@ import PropTypes from 'prop-types';
 
 
 class Grid extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isDragged: false,
+    };
+
+    this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.handleMouseUp = this.handleMouseUp.bind(this);
+    this.handleMouseLeave = this.handleMouseLeave.bind(this);
+  }
+
   shouldComponentUpdate(nextProps) {
     const {
       widthPerBeat, heightPerPitch, numPitch, numBeats, beatsPerBar
@@ -12,6 +25,58 @@ class Grid extends React.Component {
       && numPitch !== nextProps.numPitch
       && numBeats !== nextProps.numBeats
       && beatsPerBar !== nextProps.beatsPerBar
+    );
+  }
+
+  handleMouseDown(event) {
+    const {
+      widthPerBeat, heightPerPitch, numPitch, onDragStart,
+    } = this.props;
+    this.setState({
+      isDragged: true,
+    });
+    onDragStart(
+      event.nativeEvent.offsetX / widthPerBeat,
+      parseInt((heightPerPitch * numPitch - event.nativeEvent.offsetY) / heightPerPitch, 10)
+    );
+  }
+
+  handleMouseMove(event) {
+    const {
+      widthPerBeat, heightPerPitch, numPitch, onDrag,
+    } = this.props;
+    const { isDragged } = this.state;
+    if (isDragged) {
+      onDrag(
+        event.nativeEvent.offsetX / widthPerBeat,
+        parseInt((heightPerPitch * numPitch - event.nativeEvent.offsetY) / heightPerPitch, 10)
+      );
+    }
+  }
+
+  handleMouseUp(event) {
+    const {
+      widthPerBeat, heightPerPitch, numPitch, onDragEnd,
+    } = this.props;
+    this.setState({
+      isDragged: false,
+    });
+    onDragEnd(
+      event.nativeEvent.offsetX / widthPerBeat,
+      parseInt((heightPerPitch * numPitch - event.nativeEvent.offsetY) / heightPerPitch, 10)
+    );
+  }
+
+  handleMouseLeave(event) {
+    const {
+      widthPerBeat, heightPerPitch, numPitch, onDragEnd,
+    } = this.props;
+    this.setState({
+      isDragged: false,
+    });
+    onDragEnd(
+      event.nativeEvent.offsetX / widthPerBeat,
+      parseInt((heightPerPitch * numPitch - event.nativeEvent.offsetY) / heightPerPitch, 10)
     );
   }
 
@@ -58,6 +123,20 @@ class Grid extends React.Component {
             }}
           />))
         }
+        <div
+          role="presentation"
+          style={{
+            position: 'absolute',
+            width: widthPerBeat * numBeats,
+            height: heightPerPitch * numPitch,
+            backgroundColor: '#FFFFFF',
+            opacity: 0.0,
+          }}
+          onMouseDown={this.handleMouseDown}
+          onMouseMove={this.handleMouseMove}
+          onMouseUp={this.handleMouseUp}
+          onMouseLeave={this.handleMouseLeave}
+        />
       </div>
     );
   }
@@ -69,10 +148,15 @@ Grid.propTypes = {
   numPitch: PropTypes.number.isRequired,
   numBeats: PropTypes.number.isRequired,
   beatsPerBar: PropTypes.number.isRequired,
+  onDragStart: PropTypes.func,
+  onDrag: PropTypes.func,
+  onDragEnd: PropTypes.func,
 };
 
 Grid.defaultProps = {
-  style: {},
+  onDragStart: () => {},
+  onDrag: () => {},
+  onDragEnd: () => {},
 };
 
 export default Grid;
