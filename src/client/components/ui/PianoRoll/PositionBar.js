@@ -96,6 +96,7 @@ class PositionBar extends React.Component {
             backgroundColor: '#FFFFFF',
             opacity: 0.0,
             zIndex: 1,
+            cursor: 'pointer',
           }}
           onMouseDown={this.handleMouseDown}
           onMouseMove={this.handleMouseMove}

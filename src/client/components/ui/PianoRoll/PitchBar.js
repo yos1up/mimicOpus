@@ -51,6 +51,7 @@ class PitchBar extends React.Component {
                   backgroundColor: '#FFFFFF',
                   opacity: 0,
                   zIndex: 1,
+                  cursor: 'pointer',
                 }}
 
                 onMouseDown={() => {
@@ -71,6 +72,7 @@ class PitchBar extends React.Component {
                     borderRadius: '3px',
                     boxShadow: '1px 1px 3px gray',
                     zIndex: 2,
+                    cursor: 'pointer',
                   }}
 
                   onMouseDown={() => {
