@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -39,7 +40,7 @@ class Home extends React.Component {
         id="Home"
         style={{
           width: 1000,
-          height: 830,
+          height: 900,
           backgroundColor: '#FFFFFF',
           padding: 30,
         }}
@@ -231,12 +232,32 @@ class Home extends React.Component {
             })
           }
         </div>
+        <Button
+          style={{
+            position: 'absolute', top: 780,
+          }}
+          variant="contained"
+          color="primary"
+        >
+          <Typography
+            variant="body1"
+            style={{
+              fontSize: 24,
+              color: '#FFFFFF',
+            }}
+            onClick={() => {
+              location.href = '/makeembedpianoroll';
+            }}
+          >
+            埋め込みピアノロール
+          </Typography>
+        </Button>
         <div>
           <Typography
             variant="body1"
             color="textPrimary"
             style={{
-              position: 'absolute', top: 800, width: 800,
+              position: 'absolute', top: 850, width: 800,
             }}
           >
             mimicopusはAlpha Versionとなっております。
