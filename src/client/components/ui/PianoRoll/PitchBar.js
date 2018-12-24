@@ -48,6 +48,8 @@ class PitchBar extends React.Component {
                     top: heightPerPitch * (numPitch) - octave * octaveHeight
                       - (pitch + 0.3) * (octaveHeight / 7),
                     backgroundColor: '#777777',
+                    borderRadius: '3px',
+                    boxShadow: '1px 1px 3px gray',
                   }}
                 />
               ) : null}
