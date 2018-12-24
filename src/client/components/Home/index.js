@@ -251,6 +251,20 @@ class Home extends React.Component {
             )
           </Typography>
         </div>
+        <div
+          id="Embed"
+          style={{
+            position: 'absolute', top: 1000,
+          }}
+        >
+          <iframe
+            id="inlinePianoRoll"
+            title="Inline Piano Roll"
+            width="800"
+            height="400"
+            src='http://localhost:5000/embed/pianoroll?notes=[{"start":0,"end":1,"pitch":60}]'
+          />
+        </div>
       </div>
     );
   }

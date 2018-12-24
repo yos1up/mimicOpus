@@ -38,7 +38,7 @@ class PianoRoll extends React.Component {
       mainGridHeight: this.element.offsetHeight - positionBarHeight,
       xScroll: (this.element.offsetWidth - pitchBarWidth) < (widthPerBeat * numBeats),
       yScroll: (this.element.offsetHeight - positionBarHeight) < (heightPerPitch * numPitch),
-      scrollTop: - heightPerPitch * numPitch / 2 + this.element.offsetHeight / 2,
+      scrollTop: -71 * heightPerPitch + this.element.offsetHeight,
     });
   }
 
@@ -312,7 +312,7 @@ PianoRoll.defaultProps = {
   style: {},
   addNote: () => {},
   deleteNote: () => {},
-  positionBarHeight: 50,
+  positionBarHeight: 30,
   pitchBarWidth: 70,
   currentBeats: 0,
   startBeats: 0,
