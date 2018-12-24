@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 
 import Grid from './Grid';
+import PitchBar from './PitchBar';
 
 
 class PianoRoll extends React.Component {
@@ -17,7 +18,7 @@ class PianoRoll extends React.Component {
       scrollLeft: 0,
     };
 
-    this.handleMainGridScroll = this.handleMainGridScroll.bind(this);
+    this.handleMainGridWheel = this.handleMainGridWheel.bind(this);
   }
 
   componentDidMount() {
@@ -35,10 +36,32 @@ class PianoRoll extends React.Component {
     });
   }
 
-  handleMainGridScroll(e) {
-    console.log(e);
-    return false;
-  };
+  handleMainGridWheel(e) {
+    const {
+      widthPerBeat, numBeats, heightPerPitch, numPitch,
+    } = this.props;
+    const {
+      scrollTop, scrollLeft, mainGridWidth, mainGridHeight, xScroll, yScroll
+    } = this.state;
+    e.preventDefault();
+    let newScrollTop = scrollTop;
+    let newScrollLeft = scrollLeft;
+
+    if (xScroll) {
+      newScrollLeft -= e.deltaX;
+      newScrollLeft = Math.min(0, newScrollLeft);
+      newScrollLeft = Math.max(-widthPerBeat * numBeats + mainGridWidth, newScrollLeft);
+    }
+    if (yScroll) {
+      newScrollTop -= e.deltaY;
+      newScrollTop = Math.min(0, newScrollTop);
+      newScrollTop = Math.max(-heightPerPitch * numPitch + mainGridHeight, newScrollTop);
+    }
+    this.setState({
+      scrollTop: newScrollTop,
+      scrollLeft: newScrollLeft,
+    });
+  }
 
   render() {
     const {
@@ -80,7 +103,20 @@ class PianoRoll extends React.Component {
             width: pitchBarWidth,
             height: height - positionBarHeight,
           }}
-        />
+        >
+          <div
+            style={{
+              position: 'absolute',
+              top: scrollTop,
+              width: '100%',
+            }}
+          >
+            <PitchBar
+              heightPerPitch={heightPerPitch}
+              numPitch={numPitch}
+            />
+          </div>
+        </div>
         <div
           id="mainGrid"
           style={{
@@ -91,26 +127,7 @@ class PianoRoll extends React.Component {
             height: height - positionBarHeight,
             overflow: 'hidden',
           }}
-          onWheel={(e) => {
-            e.preventDefault();
-            let newScrollTop = scrollTop;
-            let newScrollLeft = scrollLeft;
-
-            if (xScroll) {
-              newScrollLeft -= e.deltaX;
-              newScrollLeft = Math.min(0, newScrollLeft);
-              newScrollLeft = Math.max(-widthPerBeat * numBeats + mainGridWidth, newScrollLeft);
-            }
-            if (yScroll) {
-              newScrollTop -= e.deltaY;
-              newScrollTop = Math.min(0, newScrollTop);
-              newScrollTop = Math.max(-heightPerPitch * numPitch + mainGridHeight, newScrollTop);
-            }
-            this.setState({
-              scrollTop: newScrollTop,
-              scrollLeft: newScrollLeft,
-            });
-          }}
+          onWheel={this.handleMainGridWheel}
         >
           <div
             style={{
@@ -150,8 +167,8 @@ PianoRoll.propTypes = {
 };
 
 PianoRoll.defaultProps = {
-  widthPerBeat: 60,
-  heightPerPitch: 25,
+  widthPerBeat: 58,
+  heightPerPitch: 20,
   numPitch: 128,
   numBeats: 16,
   beatsPerBar: 4,
@@ -166,8 +183,8 @@ PianoRoll.defaultProps = {
     if (label === 'C') label += (pitch / 12 - 1);
     return label;
   }),
-  positionBarHeight: 30,
-  pitchBarWidth: 30,
+  positionBarHeight: 50,
+  pitchBarWidth: 70,
 };
 
 export default PianoRoll;
