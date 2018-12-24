@@ -138,6 +138,7 @@ class PianoRoll extends React.Component {
             <PitchBar
               heightPerPitch={heightPerPitch}
               numPitch={numPitch}
+              previewSound={previewSound}
             />
           </div>
         </div>

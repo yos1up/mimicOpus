@@ -13,10 +13,12 @@ class PitchBar extends React.Component {
   }
 
   render() {
-    const { heightPerPitch, numPitch } = this.props;
+    const { heightPerPitch, numPitch, previewSound } = this.props;
     const numOctave = parseInt((numPitch - 1) / 12, 10) + 1;
     const octaveHeight = heightPerPitch * 12;
     const isBlack = [0, 1, 1, 0, 1, 1, 1];
+    const blackPitch = [null, 1, 3, null, 6, 8, 10];
+    const whitePitch = [0, 2, 4, 5, 7, 9, 11];
 
     return (
       <div
@@ -39,6 +41,24 @@ class PitchBar extends React.Component {
                   backgroundColor: '#EEEEEE',
                 }}
               />
+              <div
+                style={{
+                  position: 'absolute',
+                  width: '100%',
+                  height: octaveHeight / 7,
+                  top: heightPerPitch * (numPitch) - octave * octaveHeight
+                    - (pitch + 1) * (octaveHeight / 7),
+                  backgroundColor: '#FFFFFF',
+                  opacity: 0,
+                  zIndex: 1,
+                }}
+
+                onMouseDown={() => {
+                  previewSound(12 * octave + whitePitch[pitch]);
+                }}
+              >
+                {pitch}
+              </div>
               {(isBlack[pitch] === 1) ? (
                 <div
                   style={{
@@ -50,6 +70,11 @@ class PitchBar extends React.Component {
                     backgroundColor: '#777777',
                     borderRadius: '3px',
                     boxShadow: '1px 1px 3px gray',
+                    zIndex: 2,
+                  }}
+
+                  onMouseDown={() => {
+                    previewSound(12 * octave + blackPitch[pitch]);
                   }}
                 />
               ) : null}
@@ -82,6 +107,7 @@ class PitchBar extends React.Component {
 PitchBar.propTypes = {
   heightPerPitch: PropTypes.number.isRequired,
   numPitch: PropTypes.number.isRequired,
+  previewSound: PropTypes.func,
 };
 
 export default PitchBar;
