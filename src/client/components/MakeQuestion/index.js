@@ -15,6 +15,7 @@ import { withRouter } from 'react-router';
 
 import StartSetter from '../ui/StartSetter';
 import PianoRollGrid from '../ui/PianoRollGrid';
+import PianoRoll from '../ui/PianoRoll';
 import Question from '../../data/question';
 
 import displayModes from '../../data/displayModes';
@@ -165,6 +166,14 @@ class MakeQuestion extends React.Component {
             currentBeat={(currentBeat !== null) ? currentBeat : startBeat}
           />
         </div>
+        <PianoRoll
+          style={{
+            position: 'absolute',
+            top: 550,
+            height: 400,
+            width: 1000,
+          }}
+        />
       </div>
     );
   }
