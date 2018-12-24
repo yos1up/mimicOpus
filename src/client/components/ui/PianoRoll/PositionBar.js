@@ -69,9 +69,9 @@ class PositionBar extends React.Component {
             key={i}
             style={{
               position: 'absolute',
-              width: (i % beatsPerBar === 0) ? 4 : 1,
+              width: (i % beatsPerBar === 0) ? 4 : 2,
               height: '100%',
-              left: (i % beatsPerBar === 0) ? i * widthPerBeat - 2 : i * widthPerBeat,
+              left: (i % beatsPerBar === 0) ? i * widthPerBeat - 2 : i * widthPerBeat - 1,
               backgroundColor: '#AAAAAA',
             }}
           />))

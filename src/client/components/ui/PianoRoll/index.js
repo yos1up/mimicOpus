@@ -167,6 +167,7 @@ class PianoRoll extends React.Component {
               numPitch={numPitch}
               numBeats={numBeats}
               beatsPerBar={beatsPerBar}
+              quantizeBeats={quantizeBeats}
               onDragStart={(beats, pitch) => {
                 const quantizedBeats = quantizeBeats * Math.floor(beats / quantizeBeats);
                 previewSound(pitch);
@@ -303,7 +304,7 @@ PianoRoll.propTypes = {
 
 PianoRoll.defaultProps = {
   widthPerBeat: 58,
-  heightPerPitch: 17,
+  heightPerPitch: 22,
   numPitch: 128,
   numBeats: 16,
   beatsPerBar: 4,

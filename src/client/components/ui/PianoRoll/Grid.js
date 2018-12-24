@@ -88,7 +88,7 @@ class Grid extends React.Component {
 
   render() {
     const {
-      widthPerBeat, heightPerPitch, numPitch, numBeats, beatsPerBar,
+      widthPerBeat, heightPerPitch, numPitch, numBeats, beatsPerBar, quantizeBeats,
     } = this.props;
     const isBlackKey = [0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0];
     return (
@@ -122,12 +122,30 @@ class Grid extends React.Component {
             key={i}
             style={{
               position: 'absolute',
-              width: (i % beatsPerBar === 0) ? 4 : 1,
+              width: (i % beatsPerBar === 0) ? 4 : 2,
               height: heightPerPitch * numPitch,
-              left: (i % beatsPerBar === 0) ? i * widthPerBeat - 2 : i * widthPerBeat,
+              left: (i % beatsPerBar === 0) ? i * widthPerBeat - 2 : i * widthPerBeat - 1,
               backgroundColor: '#AAAAAA',
             }}
           />))
+        }
+        {Array.from(Array(numBeats / quantizeBeats + 1), (v, k) => k).map((i) => {
+          if ((i * quantizeBeats) % 1.0 > 0.0) {
+            return (
+              <div
+                key={i}
+                style={{
+                  position: 'absolute',
+                  width: 1,
+                  height: heightPerPitch * numPitch,
+                  left: (i * quantizeBeats) * widthPerBeat,
+                  backgroundColor: '#CCCCCC',
+                }}
+              />
+            );
+          }
+          return null;
+        })
         }
         <div
           role="presentation"
@@ -156,6 +174,7 @@ Grid.propTypes = {
   numPitch: PropTypes.number.isRequired,
   numBeats: PropTypes.number.isRequired,
   beatsPerBar: PropTypes.number.isRequired,
+  quantizeBeats: PropTypes.number.isRequired,
   onDragStart: PropTypes.func,
   onDrag: PropTypes.func,
   onDragEnd: PropTypes.func,
