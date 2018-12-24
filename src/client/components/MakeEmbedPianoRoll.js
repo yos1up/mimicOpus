@@ -2,48 +2,39 @@ import Immutable from 'immutable';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { withRouter } from 'react-router';
-import { parse } from 'query-string';
-import Tooltip from '@material-ui/core/Tooltip';
+
 import Button from '@material-ui/core/Button';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import StopIcon from '@material-ui/icons/Stop';
+import CodeIcon from '@material-ui/icons/Code';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
 import Slider from '@material-ui/lab/Slider';
+import TextField from '@material-ui/core/TextField';
 
-import PianoRoll from '../ui/PianoRoll';
-import SoundPlayer from '../SoundPlayer';
-import Note from '../../data/note';
-
+import PianoRoll from './ui/PianoRoll';
+// import SoundPlayer from '../SoundPlayer'; //新 (Web audio API スクラッチ実装)
+import SoundPlayer from './SoundPlayer'; // 旧 (Tone.Offline でオフライン録音)
+import displayModes from '../data/displayModes';
 
 const playModes = {
   STOP: 'STOP',
   PLAY: 'PLAY',
 };
 
-class EmbedPianoRoll extends React.Component {
+class MakeEmbedPianoRoll extends React.Component {
   constructor(props) {
     super(props);
 
-    // ex. http://localhost:5000/embed/pianoroll?notes=[{"start":0,"end":1,"pitch":60}]
-    let notes = Immutable.List();
-    const query = parse(location.search);
-    if (query.notes !== undefined) {
-      const queryNotes = JSON.parse(query.notes);
-      for (let i = 0; i < queryNotes.length; i += 1) {
-        notes = notes.push(new Note(queryNotes[i]));
-      }
-    }
-
     this.state = {
+      notes: Immutable.List(),
       playMode: playModes.STOP,
-      currentBeat: null,
+      currentBeat: 0,
       startBeat: 0,
-      notes,
-      width: 0,
-      height: 0,
       bpm: 120,
+      code: "",
     };
+
     this.soundPlayer = new SoundPlayer(50, (beats) => {
       if (beats > 16) {
         this.soundPlayer.stop();
@@ -55,23 +46,17 @@ class EmbedPianoRoll extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({
-      width: this.element.offsetWidth,
-      height: this.element.offsetHeight,
-    });
+    const { changeDisplayMode } = this.props;
+    changeDisplayMode(displayModes.MAKE_EMBED_PIANO_ROLL);
   }
 
   render() {
-    const { playMode, currentBeat, startBeat, notes, width, height, bpm } = this.state;
+    const {
+      notes, playMode, currentBeat, startBeat, bpm, code,
+    } = this.state;
     return (
       <div
-        id="PianoRoll"
-        style={{
-          width: '100%',
-          height: '100vh',
-          backgroundColor: '#FFFFFF',
-        }}
-        ref={(element) => { this.element = element; }}
+        id="MakeEmbedPianoRoll"
       >
         <Tooltip title="再生">
           <Button
@@ -119,33 +104,53 @@ class EmbedPianoRoll extends React.Component {
             }}
           />
         </Tooltip>
-        {(width > 0 && height > 0) ? (
-          <PianoRoll
-            style={{
-              position: 'absolute',
-              top: 100,
-              height: height - 100,
-              width,
+        <Tooltip title="埋め込みピアノロール作成">
+          <Button
+            variant="fab"
+            color="primary"
+            aria-label="Export"
+            style={{ position: 'absolute', top: 10, left: 330 }}
+            onClick={() => {
+              this.setState({ code: `<iframe
+  width="800"
+  height="400"
+  frameBorder="0"
+  src='https://www.mimicopus.com/embed/pianoroll?notes=${JSON.stringify(notes)}'
+/>` });
             }}
-            notes={notes}
-            addNote={(note) => {
-              this.setState({ notes: notes.push(note) });
-            }}
-            deleteNote={(idx) => {
-              this.setState({ notes: notes.delete(idx) });
-            }}
-            currentBeats={(currentBeat !== null) ? currentBeat : startBeat}
-            startBeats={startBeat}
-            previewSound={pitch => this.soundPlayer.preview(pitch)}
-            onChangeStartBeat={(newStartBeat) => { this.setState({ startBeat: newStartBeat }); }}
-          />
-        ) : null}
+          >
+            <CodeIcon />
+          </Button>
+        </Tooltip>
+        <TextField
+          style={{
+            position: 'absolute', top: 10, left: 410, height: 70, width: 500,
+          }}
+          multiline
+          inputProps={{
+            'aria-label': 'Description',
+          }}
+          value={code}
+          onChange={e => this.setState({ code: e.target.value })}
+        />
+        <PianoRoll
+          style={{
+            position: 'absolute',
+            top: 100,
+            height: 500,
+            width: 1000,
+          }}
+          notes={notes}
+          addNote={note => this.setState({ notes: notes.push(note) })}
+          deleteNote={idx => this.setState({ notes: notes.remove(idx) })}
+          currentBeats={(currentBeat !== null) ? currentBeat : startBeat}
+          startBeats={startBeat}
+          previewSound={pitch => this.soundPlayer.preview(pitch)}
+          onChangeStartBeat={(newStartBeat) => { this.setState({ startBeat: newStartBeat }); }}
+        />
       </div>
     );
   }
 }
 
-EmbedPianoRoll.propTypes = {
-};
-
-export default withRouter(EmbedPianoRoll);
+export default MakeEmbedPianoRoll;

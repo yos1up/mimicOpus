@@ -15,6 +15,7 @@ import PlayQuestion from '../containers/PlayQuestion';
 import Search from '../containers/Search';
 import Profile from '../containers/Profile';
 import Ranking from '../containers/Ranking';
+import MakeEmbedPianoRoll from '../containers/MakeEmbedPianoRoll';
 
 import EmbedPianoRoll from './embed/PianoRoll';
 
@@ -62,6 +63,7 @@ class App extends React.Component {
                       <Route path="/search" component={Search} />
                       <Route path="/user" component={Profile} />
                       <Route path="/ranking" component={Ranking} />
+                      <Route path="/makeembedpianoroll" component={MakeEmbedPianoRoll} />
                     </Switch>
                   </div>
                   <SignIn />
