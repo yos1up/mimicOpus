@@ -68,7 +68,7 @@ class PianoRoll extends React.Component {
   render() {
     const {
       style, pitchBarWidth, positionBarHeight, widthPerBeat, heightPerPitch,
-      numPitch, numBeats, beatsPerBar, notes, deleteNote,
+      numPitch, numBeats, beatsPerBar, notes, deleteNote, currentBeats,
     } = this.props;
     const {
       width, height, scrollTop, scrollLeft, mainGridWidth, mainGridHeight,
@@ -183,6 +183,16 @@ class PianoRoll extends React.Component {
             })}
           </div>
         </div>
+        <div
+          id="position"
+          style={{
+            position: 'absolute',
+            height,
+            width: 5,
+            left: currentBeats * widthPerBeat + scrollLeft + pitchBarWidth,
+            backgroundColor: '#555555',
+          }}
+        />
       </div>
     );
   }
@@ -202,6 +212,7 @@ PianoRoll.propTypes = {
   pitchName: PropTypes.object,
   pitchBarWidth: PropTypes.number,
   positionBarHeight: PropTypes.number,
+  currentBeats: PropTypes.number,
 };
 
 PianoRoll.defaultProps = {
@@ -223,6 +234,7 @@ PianoRoll.defaultProps = {
   }),
   positionBarHeight: 50,
   pitchBarWidth: 70,
+  currentBeats: 0,
 };
 
 export default PianoRoll;
