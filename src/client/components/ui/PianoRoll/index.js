@@ -4,6 +4,7 @@ import Immutable from 'immutable';
 
 import Grid from './Grid';
 import PitchBar from './PitchBar';
+import PositionBar from './PositionBar';
 
 
 class PianoRoll extends React.Component {
@@ -92,7 +93,21 @@ class PianoRoll extends React.Component {
             width: width - pitchBarWidth,
             height: positionBarHeight,
           }}
-        />
+        >
+          <div
+            style={{
+              position: 'absolute',
+              left: scrollLeft,
+              height: '100%',
+            }}
+          >
+            <PositionBar
+              widthPerBeat={widthPerBeat}
+              numBeats={numBeats}
+              beatsPerBar={beatsPerBar}
+            />
+          </div>
+        </div>
         <div
           id="pitchBar"
           style={{
