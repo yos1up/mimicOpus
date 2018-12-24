@@ -12,6 +12,7 @@ const SearchQuery = Immutable.Record({
   unanswered: true,
   level: filterLevels.ALL,
   showNoLevel: true,
+  completed: false,
 });
 
 export default SearchQuery;

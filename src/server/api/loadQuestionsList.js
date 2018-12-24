@@ -32,6 +32,9 @@ const loadQuestionsList = (req, res) => {
     filterQuery += ' or (s.score is null and q.uid != $1)';
   }
   filterQuery += ')';
+  if (urlQuery.completed === false) {
+    filterQuery += ' and (s.score < 99.9999 or s.score is null)';
+  }
 
   let query;
   let myRating;
@@ -75,7 +78,7 @@ const loadQuestionsList = (req, res) => {
       }${levelFilterQuery
       }${' ORDER BY abs($8 - q.rating) LIMIT $9 OFFSET $10'}`,
       values: [uid, urlQuery.lowBPM, urlQuery.highBPM, queryTitle, queryUser,
-        urlQuery.lowRating, urlQuery.highRating, myRating - 1000,
+        urlQuery.lowRating, urlQuery.highRating, 0.7 * myRating,
         urlQuery.stop - urlQuery.start + 1, urlQuery.start - 1],
     };
   }

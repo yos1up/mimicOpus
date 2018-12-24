@@ -26,6 +26,9 @@ const countQuestions = (req, res) => {
     filterQuery += ' or s.score is null';
   }
   filterQuery += ')';
+  if (urlQuery.completed === false) {
+    filterQuery += ' and (s.score < 99.9999 or s.score is null)';
+  }
 
   let uid;
   if (req.isAuthenticated()) {

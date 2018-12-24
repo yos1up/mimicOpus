@@ -257,7 +257,7 @@ class Search extends React.Component {
           </div>
           <FormGroup
             style={{
-              position: 'absolute', top: 5, left: 680, height: 200,
+              position: 'absolute', top: 5, left: 680, height: 180,
             }}
           >
             <FormControlLabel
@@ -315,11 +315,35 @@ class Search extends React.Component {
               label="未回答"
             />
           </FormGroup>
+          <FormGroup
+            style={{
+              position: 'absolute', top: 5, left: 800, height: 180,
+            }}
+          >
+            <FormControlLabel
+              disabled={uid === -1}
+              control={(
+                <Checkbox
+                  checked={tempSearchQuery.completed}
+                  onChange={(e) => {
+                    this.setState({
+                      tempSearchQuery: tempSearchQuery.set('completed', e.target.checked),
+                    });
+                  }}
+                  value="checkedB"
+                />
+              )}
+              style={{
+                height: 30,
+              }}
+              label="満点の問題を表示"
+            />
+          </FormGroup>
           <Button
             variant="contained"
             color="primary"
             style={{
-              position: 'absolute', top: 35, left: 820, width: 100,
+              position: 'absolute', top: 45, left: 820, width: 100,
             }}
             onClick={() => {
               loadCountQuestions(tempSearchQuery);
