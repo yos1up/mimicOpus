@@ -13,8 +13,6 @@ import Input from '@material-ui/core/Input';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withRouter } from 'react-router';
 
-import StartSetter from '../ui/StartSetter';
-import PianoRollGrid from '../ui/PianoRollGrid';
 import PianoRoll from '../ui/PianoRoll';
 import Question from '../../data/question';
 
@@ -56,7 +54,7 @@ class MakeQuestion extends React.Component {
 
   render() {
     const {
-      notes, pitchRange, bpm, title, addNote, delNote, shiftPitchRange, setBPM,
+      notes, bpm, title, addNote, delNote, setBPM,
       uploadQuestion, setTitle, clearNotes, history,
     } = this.props;
     const { playMode, currentBeat, startBeat } = this.state;
@@ -147,46 +145,21 @@ class MakeQuestion extends React.Component {
           </Button>
         </Tooltip>
 
-        {(false) ? (
-          <div>
-            <StartSetter
-              style={{
-                position: 'absolute', left: 36, top: 100, height: 30, width: 896,
-              }}
-              startBeat={startBeat}
-              totalBeat={16}
-              onChangeStartBeat={(newStartBeat) => { this.setState({ startBeat: newStartBeat }); }}
-            />
-
-            <div style={{ position: 'absolute', top: 130 }}>
-              <PianoRollGrid
-                addNote={addNote}
-                delNote={delNote}
-                shiftPitchRange={shiftPitchRange}
-                notes={notes}
-                pitchRange={pitchRange}
-                soundPlayer={this.soundPlayer}
-                currentBeat={(currentBeat !== null) ? currentBeat : startBeat}
-              />
-            </div>
-          </div>
-        ) : (
-          <PianoRoll
-            style={{
-              position: 'absolute',
-              top: 130,
-              height: 500,
-              width: 1000,
-            }}
-            notes={notes}
-            addNote={addNote}
-            deleteNote={delNote}
-            currentBeats={(currentBeat !== null) ? currentBeat : startBeat}
-            startBeats={startBeat}
-            previewSound={pitch => this.soundPlayer.preview(pitch)}
-            onChangeStartBeat={(newStartBeat) => { this.setState({ startBeat: newStartBeat }); }}
-          />
-        )}
+        <PianoRoll
+          style={{
+            position: 'absolute',
+            top: 100,
+            height: 500,
+            width: 1000,
+          }}
+          notes={notes}
+          addNote={addNote}
+          deleteNote={delNote}
+          currentBeats={(currentBeat !== null) ? currentBeat : startBeat}
+          startBeats={startBeat}
+          previewSound={pitch => this.soundPlayer.preview(pitch)}
+          onChangeStartBeat={(newStartBeat) => { this.setState({ startBeat: newStartBeat }); }}
+        />
       </div>
     );
   }
@@ -194,10 +167,8 @@ class MakeQuestion extends React.Component {
 
 MakeQuestion.propTypes = {
   notes: PropTypes.instanceOf(Immutable.List).isRequired,
-  pitchRange: PropTypes.arrayOf(PropTypes.number).isRequired,
   bpm: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  shiftPitchRange: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
   setBPM: PropTypes.func.isRequired,

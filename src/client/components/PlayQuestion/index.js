@@ -15,8 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import { TwitterShareButton } from 'react-twitter-embed';
 
-import StartSetter from '../ui/StartSetter';
-import PianoRollGrid from '../ui/PianoRollGrid';
+import PianoRoll from '../ui/PianoRoll';
 import Question from '../../data/question';
 // import SoundPlayer from '../../SoundPlayer'; //新 (Web audio API スクラッチ実装)
 import SoundPlayer from '../SoundPlayer'; // 旧 (Tone.Offline でオフライン録音)
@@ -64,8 +63,8 @@ class PlayQuestion extends React.Component {
 
   render() {
     const {
-      notes, question, pitchRange, addNote, delNote,
-      shiftPitchRange, questionId, submitAnswer, isOpenScoreDialog,
+      notes, question, addNote, delNote,
+      questionId, submitAnswer, isOpenScoreDialog,
       textScoreDialog, closeScoreDialog,
     } = this.props;
     const {
@@ -180,25 +179,21 @@ class PlayQuestion extends React.Component {
           {question.displayName}
         </Typography>
 
-        <StartSetter
+        <PianoRoll
           style={{
-            position: 'absolute', left: 36, top: 100, height: 30, width: 896,
+            position: 'absolute',
+            top: 100,
+            height: 500,
+            width: 1000,
           }}
-          startBeat={startBeat}
-          totalBeat={16}
+          notes={notes}
+          addNote={addNote}
+          deleteNote={delNote}
+          currentBeats={(currentBeat !== null) ? currentBeat : startBeat}
+          startBeats={startBeat}
+          previewSound={pitch => this.soundPlayer.preview(pitch)}
           onChangeStartBeat={(newStartBeat) => { this.setState({ startBeat: newStartBeat }); }}
         />
-        <div style={{ position: 'absolute', top: 130 }}>
-          <PianoRollGrid
-            addNote={addNote}
-            delNote={delNote}
-            shiftPitchRange={shiftPitchRange}
-            notes={notes}
-            pitchRange={pitchRange}
-            soundPlayer={this.soundPlayer}
-            currentBeat={(currentBeat !== null) ? currentBeat : startBeat}
-          />
-        </div>
 
         <Dialog
           open={isOpenScoreDialog}
@@ -221,11 +216,9 @@ class PlayQuestion extends React.Component {
 PlayQuestion.propTypes = {
   notes: PropTypes.instanceOf(Immutable.List).isRequired,
   question: PropTypes.instanceOf(Question).isRequired,
-  pitchRange: PropTypes.arrayOf(PropTypes.number).isRequired,
   questionId: PropTypes.string.isRequired,
   isOpenScoreDialog: PropTypes.bool.isRequired,
   textScoreDialog: PropTypes.string.isRequired,
-  shiftPitchRange: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   delNote: PropTypes.func.isRequired,
   clearNotes: PropTypes.func.isRequired,

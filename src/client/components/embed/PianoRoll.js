@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { withRouter } from 'react-router';
 
-import PianoRollGrid from '../ui/PianoRollGrid';
+import PianoRoll from '../ui/PianoRoll';
 import SoundPlayer from '../SoundPlayer';
 
 
@@ -13,7 +13,7 @@ const playModes = {
   PLAY: 'PLAY',
 };
 
-class PianoRoll extends React.Component {
+class EmbedPianoRoll extends React.Component {
   constructor(props) {
     super(props);
 
@@ -44,23 +44,31 @@ class PianoRoll extends React.Component {
           backgroundColor: '#FFFFFF',
         }}
       >
-        <PianoRollGrid
-          soundPlayer={this.soundPlayer}
+        <PianoRoll
+          style={{
+            position: 'absolute',
+            top: 100,
+            height: 500,
+            width: '100%',
+          }}
           notes={notes}
           addNote={(note) => {
             this.setState({ notes: notes.push(note) });
           }}
-          delNote={(idx) => {
+          deleteNote={(idx) => {
             this.setState({ notes: notes.delete(idx) });
           }}
-          currentBeat={(currentBeat !== null) ? currentBeat : startBeat}
+          currentBeats={(currentBeat !== null) ? currentBeat : startBeat}
+          startBeats={startBeat}
+          previewSound={pitch => this.soundPlayer.preview(pitch)}
+          onChangeStartBeat={(newStartBeat) => { this.setState({ startBeat: newStartBeat }); }}
         />
       </div>
     );
   }
 }
 
-PianoRoll.propTypes = {
+EmbedPianoRoll.propTypes = {
 };
 
-export default withRouter(PianoRoll);
+export default withRouter(EmbedPianoRoll);
