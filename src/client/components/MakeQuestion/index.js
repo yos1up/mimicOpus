@@ -176,6 +176,7 @@ class MakeQuestion extends React.Component {
           notes={notes}
           deleteNote={delNote}
           currentBeats={(currentBeat !== null) ? currentBeat : startBeat}
+          startBeats={startBeat}
         />
       </div>
     );
