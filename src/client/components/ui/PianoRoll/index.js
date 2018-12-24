@@ -34,6 +34,7 @@ class PianoRoll extends React.Component {
       mainGridHeight: this.element.offsetHeight - positionBarHeight,
       xScroll: (this.element.offsetWidth - pitchBarWidth) < (widthPerBeat * numBeats),
       yScroll: (this.element.offsetHeight - positionBarHeight) < (heightPerPitch * numPitch),
+      scrollTop: - heightPerPitch * numPitch / 2 + this.element.offsetHeight,
     });
   }
 
@@ -67,10 +68,10 @@ class PianoRoll extends React.Component {
   render() {
     const {
       style, pitchBarWidth, positionBarHeight, widthPerBeat, heightPerPitch,
-      numPitch, numBeats, beatsPerBar,
+      numPitch, numBeats, beatsPerBar, notes, deleteNote,
     } = this.props;
     const {
-      width, height, scrollTop, scrollLeft, xScroll, yScroll, mainGridWidth, mainGridHeight,
+      width, height, scrollTop, scrollLeft, mainGridWidth, mainGridHeight,
     } = this.state;
     const pianoRollStyle = {
       height: 400,
@@ -90,7 +91,7 @@ class PianoRoll extends React.Component {
             overflow: 'hidden',
             left: pitchBarWidth,
             top: 0,
-            width: width - pitchBarWidth,
+            width: mainGridWidth,
             height: positionBarHeight,
           }}
         >
@@ -116,7 +117,7 @@ class PianoRoll extends React.Component {
             left: 0,
             top: positionBarHeight,
             width: pitchBarWidth,
-            height: height - positionBarHeight,
+            height: mainGridHeight,
           }}
         >
           <div
@@ -138,8 +139,8 @@ class PianoRoll extends React.Component {
             position: 'absolute',
             left: pitchBarWidth,
             top: positionBarHeight,
-            width: width - pitchBarWidth,
-            height: height - positionBarHeight,
+            width: mainGridWidth,
+            height: mainGridHeight,
             overflow: 'hidden',
           }}
           onWheel={this.handleMainGridWheel}
@@ -158,6 +159,28 @@ class PianoRoll extends React.Component {
               numBeats={numBeats}
               beatsPerBar={beatsPerBar}
             />
+            {notes.map((note, idx) => {
+              const { pitch, start, end } = note;
+              return (
+                <div
+                  key={idx}
+                  role="button"
+                  tabIndex="0"
+                  style={{
+                    position: 'absolute',
+                    left: start * widthPerBeat,
+                    top: numPitch * heightPerPitch - (pitch + 1) * heightPerPitch,
+                    width: (end - start) * widthPerBeat,
+                    height: heightPerPitch,
+                    backgroundColor: 'blue',
+                    opacity: 0.5,
+                  }}
+                  onMouseDown={() => {
+                    deleteNote(idx);
+                  }}
+                />
+              );
+            })}
           </div>
         </div>
       </div>

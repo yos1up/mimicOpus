@@ -173,6 +173,8 @@ class MakeQuestion extends React.Component {
             height: 400,
             width: 1000,
           }}
+          notes={notes}
+          deleteNote={delNote}
         />
       </div>
     );
