@@ -24,6 +24,8 @@ class PianoRoll extends React.Component {
     };
 
     this.handleMainGridWheel = this.handleMainGridWheel.bind(this);
+    this.handlePitchBarWheel = this.handlePitchBarWheel.bind(this);
+    this.handlePositionBarWheel = this.handlePositionBarWheel.bind(this);
   }
 
   componentDidMount() {
@@ -69,6 +71,46 @@ class PianoRoll extends React.Component {
     });
   }
 
+  handlePitchBarWheel(e) {
+    const {
+      heightPerPitch, numPitch,
+    } = this.props;
+    const {
+      scrollTop, mainGridHeight, yScroll
+    } = this.state;
+    e.preventDefault();
+    let newScrollTop = scrollTop;
+
+    if (yScroll) {
+      newScrollTop -= e.deltaY;
+      newScrollTop = Math.min(0, newScrollTop);
+      newScrollTop = Math.max(-heightPerPitch * numPitch + mainGridHeight, newScrollTop);
+    }
+    this.setState({
+      scrollTop: newScrollTop,
+    });
+  }
+
+  handlePositionBarWheel(e) {
+    const {
+      widthPerBeat, numBeats,
+    } = this.props;
+    const {
+      scrollLeft, mainGridWidth, xScroll,
+    } = this.state;
+    e.preventDefault();
+    let newScrollLeft = scrollLeft;
+
+    if (xScroll) {
+      newScrollLeft -= e.deltaX;
+      newScrollLeft = Math.min(0, newScrollLeft);
+      newScrollLeft = Math.max(-widthPerBeat * numBeats + mainGridWidth, newScrollLeft);
+    }
+    this.setState({
+      scrollLeft: newScrollLeft,
+    });
+  }
+
   render() {
     const {
       style, pitchBarWidth, positionBarHeight, widthPerBeat, heightPerPitch,
@@ -82,6 +124,7 @@ class PianoRoll extends React.Component {
     const pianoRollStyle = {
       height: 400,
       width: 1000,
+      boxShadow: '1px 1px 5px gray',
     };
     Object.assign(pianoRollStyle, style);
     return (
@@ -100,6 +143,7 @@ class PianoRoll extends React.Component {
             width: mainGridWidth,
             height: positionBarHeight,
           }}
+          onWheel={this.handlePositionBarWheel}
         >
           <div
             style={{
@@ -127,6 +171,7 @@ class PianoRoll extends React.Component {
             width: pitchBarWidth,
             height: mainGridHeight,
           }}
+          onWheel={this.handlePitchBarWheel}
         >
           <div
             style={{

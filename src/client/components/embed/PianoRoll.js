@@ -6,6 +6,7 @@ import { withRouter } from 'react-router';
 import { parse } from 'query-string';
 import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import StopIcon from '@material-ui/icons/Stop';
 import Typography from '@material-ui/core/Typography';
@@ -73,12 +74,36 @@ class EmbedPianoRoll extends React.Component {
         }}
         ref={(element) => { this.element = element; }}
       >
+        <ButtonBase
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: 75,
+            height: 75,
+          }}
+          onClick={() => {
+            window.open('https://www.mimicopus.com', '_blank');
+          }}
+        >
+          <img
+            src="./images/logo_transparent.png"
+            alt="mimicOpus"
+            style={{
+              position: 'absolute',
+              width: 105,
+              height: 105,
+              top: -10,
+              left: -15,
+            }}
+          />
+        </ButtonBase>
         <Tooltip title="再生">
           <Button
             variant="fab"
             color="primary"
             aria-label="Play"
-            style={{ position: 'absolute', top: 10, left: 10 }}
+            style={{ position: 'absolute', top: 7, left: 80 }}
             onClick={() => {
               if (playMode === playModes.PLAY_ANSWER) {
                 this.soundPlayer.stop();
@@ -97,7 +122,7 @@ class EmbedPianoRoll extends React.Component {
           </Button>
         </Tooltip>
         <Typography
-          style={{ position: 'absolute', top: 20, left: 100 }}
+          style={{ position: 'absolute', top: 15, left: 150 }}
           variant="body1"
         >
           BPM
@@ -112,8 +137,8 @@ class EmbedPianoRoll extends React.Component {
             onChange={(e, v) => this.setState({ bpm: v })}
             style={{
               position: 'absolute',
-              top: 50,
-              left: 100,
+              top: 45,
+              left: 150,
               width: 200,
               height: 30,
             }}
@@ -123,8 +148,8 @@ class EmbedPianoRoll extends React.Component {
           <PianoRoll
             style={{
               position: 'absolute',
-              top: 100,
-              height: height - 100,
+              top: 75,
+              height: height - 75,
               width,
             }}
             notes={notes}
