@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 
 import Paper from '@material-ui/core/Paper';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActionArea from '@material-ui/core/CardActionArea';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -357,6 +360,58 @@ class Search extends React.Component {
             検索
           </Button>
         </Paper>
+        {
+          [...questionsList].map((item, i) => {
+            const { id, question } = item;
+            const date = `${question.uploadedAt.getFullYear()}/${question.uploadedAt.getMonth() + 1}/${question.uploadedAt.getDate()}`;
+            const bMine = (uid === question.uid);
+            return(
+              <Card
+                style={{
+                  position: 'absolute',
+                  width: 1000,
+                  left: 0,
+                  height: 95,
+                  top: 100 * i + 120,
+                }}
+                onClick={() => {
+                  history.push(`/playquestion/${id}`);
+                }}
+              >
+                <Tooltip title={`${question.title}を解く`}>
+                  <CardActionArea style={{ width: '100%', height: '100%' }}>
+                    <CardContent>
+                      <Typography
+                        variant="h5"
+                        color="textSecondary"
+                        style={{
+                          position: 'absolute', top: 10, left: 30, width: 900,
+                        }}
+                      >
+                        {question.title}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Tooltip>
+                <Tooltip title={`${question.title}を再生`}>
+                  <IconButton
+                    aria-label="Play"
+                    style={{
+                      position: 'absolute', left: 90, top: 70, width: 50, height: 50,
+                    }}
+                    onClick={(e) => {
+                      this.soundPlayer.play(question.notes, question.bpm);
+                      e.stopPropagation();
+                    }}
+                  >
+                    <PlayArrowIcon />
+                  </IconButton>
+                </Tooltip>
+              </Card>
+            );
+          })
+        }
+        {/*
         <Table
           style={{
             position: 'absolute',
@@ -490,6 +545,7 @@ class Search extends React.Component {
             />
           </TableFooter>
         </Table>
+        */}
       </div>
     );
   }
