@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 
 import Paper from '@material-ui/core/Paper';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActionArea from '@material-ui/core/CardActionArea';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -75,7 +78,7 @@ class Search extends React.Component {
         </Helmet>
         <Paper
           style={{
-            position: 'absolute', top: 0, left: 0, width: 1000, height: 100,
+            position: 'absolute', top: 10, left: 0, width: 1000, height: 100,
           }}
         >
           <div
@@ -233,27 +236,6 @@ class Search extends React.Component {
                 <MenuItem value={filterLevels.ALL}>すべての難易度</MenuItem>
               </Select>
             </FormControl>
-            <FormControlLabel
-              disabled={uid === -1}
-              control={(
-                <Checkbox
-                  checked={tempSearchQuery.showNoLevel}
-                  onChange={(e) => {
-                    this.setState({
-                      tempSearchQuery: tempSearchQuery.set('showNoLevel', e.target.checked),
-                    });
-                  }}
-                  value="checkedB"
-                />
-              )}
-              style={{
-                position: 'absolute',
-                height: 30,
-                top: 50,
-                width: 160,
-              }}
-              label="未評価も表示"
-            />
           </div>
           <FormGroup
             style={{
@@ -357,125 +339,192 @@ class Search extends React.Component {
             検索
           </Button>
         </Paper>
+        {
+          [...questionsList].map((item, i) => {
+            const { id, question } = item;
+            const date = `${question.uploadedAt.getFullYear()}/${question.uploadedAt.getMonth() + 1}/${question.uploadedAt.getDate()}`;
+            const bMine = (uid === question.uid);
+            console.log(question.score);
+            let scoreColor = '#CCCCCC';
+            if (question.score >= 100) {
+              scoreColor = '#EA5455';
+            } else if (question.score >= 80) {
+              scoreColor = '#DE4313';
+            } else if (question.score >= 60) {
+              scoreColor = '#FFF886';
+            } else if (question.score >= 40) {
+              scoreColor = '#49C628';
+            } else if (question.score >= 20) {
+              scoreColor = '#58CFFB';
+            } else if (question.score > 0) {
+              scoreColor = '#97ABFF';
+            }
+            return (
+              <Card
+                style={{
+                  position: 'absolute',
+                  width: 1000,
+                  left: 0,
+                  height: 95,
+                  top: 100 * i + 120,
+                }}
+                onClick={() => {
+                  history.push(`/playquestion/${id}`);
+                }}
+              >
+                <CardActionArea style={{ width: '100%', height: '100%' }}>
+                  <CardContent>
+                    <Typography
+                      variant="h5"
+                      color="textSecondary"
+                      style={{
+                        position: 'absolute', top: 30, left: 30, width: 900,
+                      }}
+                    >
+                      {question.title}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      color="textSecondary"
+                      style={{
+                        position: 'absolute', top: 60, left: 30, width: 900,
+                      }}
+                    >
+                      {question.displayName}
+                    </Typography>
+                    <Typography
+                      variant="subtitle2"
+                      color="textSecondary"
+                      style={{
+                        position: 'absolute', top: 10, left: 30, width: 900,
+                      }}
+                    >
+                      {date}
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      color="textSecondary"
+                      style={{
+                        position: 'absolute', top: 10, left: 400, width: 900,
+                      }}
+                    >
+                      {`BPM ${question.bpm}`}
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      color="textSecondary"
+                      style={{
+                        position: 'absolute', top: 35, left: 400, width: 900,
+                      }}
+                    >
+                      {`▶︎ ${question.playedUserNum}`}
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      color="textSecondary"
+                      style={{
+                        position: 'absolute', top: 60, left: 400, width: 900,
+                      }}
+                    >
+                      {`難易度 ${parseFloat(question.rating).toFixed()}`}
+                    </Typography>
+                    {(!bMine) ? (
+                      <div>
+                        <Typography
+                          variant="subtitle2"
+                          color="textSecondary"
+                          style={{
+                            position: 'absolute', top: 10, left: 700, width: 900,
+                          }}
+                        >
+                          {'myscore'}
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          color="textSecondary"
+                          style={{
+                            position: 'absolute',
+                            top: 30,
+                            left: 700,
+                            width: 900,
+                            fontSize: 32,
+                            color: scoreColor,
+                          }}
+                        >
+                          {(question.score !== undefined && question.score !== null) ? parseFloat(question.score).toFixed(2) : '??.??'}
+                        </Typography>
+                      </div>
+                    ) : null
+                    }
+                  </CardContent>
+                </CardActionArea>
+                <Tooltip title={`${question.title}を再生`}>
+                  <IconButton
+                    aria-label="Play"
+                    onClick={(e) => {
+                      this.soundPlayer.play(question.notes, question.bpm);
+                      e.stopPropagation();
+                    }}
+                    style={{
+                      position: 'absolute', top: 25, left: 600, width: 50, height: 50,
+                    }}
+                  >
+                    <PlayArrowIcon />
+                  </IconButton>
+                </Tooltip>
+                {(bMine) ? (
+                  <Tooltip title={`${question.title}を編集して別名保存`}>
+                    <IconButton
+                      aria-label="Edit"
+                      onClick={(e) => {
+                        setNotes(question.notes);
+                        setBPM(question.bpm);
+                        setQuestionId(id);
+                        setTitle(question.title);
+                        history.push('/makequestion');
+                        e.stopPropagation();
+                      }}
+                      style={{
+                        position: 'absolute', top: 25, left: 670, width: 50, height: 50,
+                      }}
+                    >
+                      <FileCopyIcon />
+                    </IconButton>
+                  </Tooltip>
+                ) : null
+                }
+                {(bMine) ? (
+                  <Tooltip title={`${question.title}を削除`}>
+                    <IconButton
+                      aria-label="Delete"
+                      onClick={(e) => {
+                        deleteUploadedQuestion(id, () => {
+                          loadCountQuestions(tempSearchQuery);
+                          loadQuestionsList(tempSearchQuery, 1, 10);
+                        });
+                        e.stopPropagation();
+                      }}
+                      style={{
+                        position: 'absolute', top: 25, left: 740, width: 50, height: 50,
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                ) : null
+                }
+              </Card>
+            );
+          })
+        }
         <Table
           style={{
             position: 'absolute',
-            top: 110,
+            top: questionsList.size * 100 + 120,
             left: 0,
             width: 1000,
           }}
         >
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell>タイトル</TableCell>
-              <TableCell>難易度</TableCell>
-              <TableCell>
-                プレイ
-                <br />
-                ユーザー
-              </TableCell>
-              <TableCell>BPM</TableCell>
-              <TableCell>作成者</TableCell>
-              <TableCell>得点</TableCell>
-              <TableCell>作成日</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {// TODO do not use array index
-              [...questionsList].map((item) => {
-                const { id, question } = item;
-                const date = `${question.uploadedAt.getFullYear()}/${question.uploadedAt.getMonth() + 1}/${question.uploadedAt.getDate()}`;
-                const bMine = (uid === question.uid);
-                return (
-                  <TableRow
-                    key={id}
-                    hover={!bMine}
-                    onClick={() => {
-                      if (!bMine) {
-                        history.push(`/playquestion/${id}`);
-                      }
-                    }}
-                    style={{ cursor: (bMine) ? 'default' : 'pointer' }}
-                  >
-                    <TableCell>
-                      <div
-                        style={{
-                          width: 150,
-                        }}
-                      >
-                        <Tooltip title={`${question.title}を再生`}>
-                          <IconButton
-                            aria-label="Play"
-                            onClick={(e) => {
-                              this.soundPlayer.play(question.notes, question.bpm);
-                              e.stopPropagation();
-                            }}
-                          >
-                            <PlayArrowIcon />
-                          </IconButton>
-                        </Tooltip>
-                        {(bMine) ? (
-                          <Tooltip title={`${question.title}を編集して別名保存`}>
-                            <IconButton
-                              aria-label="Edit"
-                              onClick={(e) => {
-                                setNotes(question.notes);
-                                setBPM(question.bpm);
-                                setQuestionId(id);
-                                setTitle(question.title);
-                                history.push('/makequestion');
-                                e.stopPropagation();
-                              }}
-                            >
-                              <FileCopyIcon />
-                            </IconButton>
-                          </Tooltip>
-                        ) : null
-                        }
-                        {(bMine) ? (
-                          <Tooltip title={`${question.title}を削除`}>
-                            <IconButton
-                              aria-label="Delete"
-                              onClick={(e) => {
-                                deleteUploadedQuestion(id, () => {
-                                  loadCountQuestions(tempSearchQuery);
-                                  loadQuestionsList(tempSearchQuery, 1, 10);
-                                });
-                                e.stopPropagation();
-                              }}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip>
-                        ) : null
-                        }
-                      </div>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      <div style={{ width: 100 }}>
-                        {question.title}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div style={{ width: 30 }}>
-                        {(question.rating !== undefined && question.rating !== null) ? parseFloat(question.rating).toFixed() : ''}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div style={{ width: 50 }}>
-                        {question.playedUserNum}
-                      </div>
-                    </TableCell>
-                    <TableCell>{question.bpm}</TableCell>
-                    <TableCell>{question.displayName}</TableCell>
-                    <TableCell>{(question.score !== undefined && question.score !== null) ? parseFloat(question.score).toFixed(2) : ''}</TableCell>
-                    <TableCell>{date}</TableCell>
-                  </TableRow>
-                );
-              })
-            }
-          </TableBody>
           <TableFooter>
             <TablePagination
               colSpan={3}
