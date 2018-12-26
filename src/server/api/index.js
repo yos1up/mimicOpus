@@ -10,6 +10,7 @@ const getRanking = require('./getRanking');
 const getMe = require('./getMe');
 const loadBestSubmission = require('./loadBestSubmission');
 const getQuestion = require('./getQuestion');
+const test = require('./test');
 
 
 const apiRouter = express.Router();
@@ -24,5 +25,6 @@ apiRouter.get('/api/getRanking', getRanking);
 apiRouter.get('/api/getMe', getMe);
 apiRouter.get('/api/loadBestSubmission', loadBestSubmission);
 apiRouter.get('/api/getQuestion', getQuestion);
+apiRouter.get('/api/test', test);
 
 module.exports = apiRouter;
