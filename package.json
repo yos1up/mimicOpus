@@ -38,6 +38,7 @@
     "passport-google-plus-token": "^2.1.0",
     "pg": "^7.5.0",
     "prop-types": "^15.6.2",
+    "query-string": "^6.2.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-ga": "^2.5.3",

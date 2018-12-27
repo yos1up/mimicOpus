@@ -15,6 +15,9 @@ import PlayQuestion from '../containers/PlayQuestion';
 import Search from '../containers/Search';
 import Profile from '../containers/Profile';
 import Ranking from '../containers/Ranking';
+import MakeEmbedPianoRoll from '../containers/MakeEmbedPianoRoll';
+
+import EmbedPianoRoll from './embed/PianoRoll';
 
 import { history } from '../configureStore';
 
@@ -32,38 +35,45 @@ class App extends React.Component {
   render() {
     return (
       <MuiThemeProvider theme={theme}>
-        <div
-          style={{
-            position: 'relative',
-            margin: '0px auto',
-            width: 1000,
-          }}
-        >
-          <Header />
-          <ConnectedRouter history={history}>
-            <div
-              id="contents"
-              style={{
-                position: 'absolute',
-                top: 50,
-              }}
-            >
-
-              <Route component={Tracker} />
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route path="/makequestion" component={MakeQuestion} />
-                <Route path="/playquestion/:qid" component={PlayQuestion} />
-                <Route path="/search" component={Search} />
-                <Route path="/user" component={Profile} />
-                <Route path="/ranking" component={Ranking} />
-              </Switch>
-            </div>
-          </ConnectedRouter>
-          <SignIn />
-          <License />
-          <FAQ />
-        </div>
+        <ConnectedRouter history={history}>
+          <div>
+            <Switch>
+              <Route path="/embed/pianoroll" component={EmbedPianoRoll} />
+              <Route>
+                <div
+                  style={{
+                    position: 'relative',
+                    margin: '0px auto',
+                    width: 1000,
+                  }}
+                >
+                  <Header />
+                  <div
+                    id="contents"
+                    style={{
+                      position: 'absolute',
+                      top: 50,
+                    }}
+                  >
+                    <Route component={Tracker} />
+                    <Switch>
+                      <Route exact path="/" component={Home} />
+                      <Route path="/makequestion" component={MakeQuestion} />
+                      <Route path="/playquestion/:qid" component={PlayQuestion} />
+                      <Route path="/search" component={Search} />
+                      <Route path="/user" component={Profile} />
+                      <Route path="/ranking" component={Ranking} />
+                      <Route path="/makeembedpianoroll" component={MakeEmbedPianoRoll} />
+                    </Switch>
+                  </div>
+                  <SignIn />
+                  <License />
+                  <FAQ />
+                </div>
+              </Route>
+            </Switch>
+          </div>
+        </ConnectedRouter>
       </MuiThemeProvider>
     );
   }

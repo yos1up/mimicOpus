@@ -5,6 +5,7 @@ const displayModes = {
   SEARCH: 'SEARCH',
   USER: 'USER',
   RANKING: 'RANKING',
+  MAKE_EMBED_PIANO_ROLL: 'MAKE_EMBED_PIANO_ROLL',
 };
 
 export default displayModes;

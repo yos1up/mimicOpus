@@ -41,6 +41,11 @@ const defaultQuestionQuery = (query_) => {
   if (query.orderMode === null || query.orderMode === undefined) {
     query.orderMode = 'new';
   }
+  if (query.completed === 'false' || query.completed === null || query.completed === undefined) {
+    query.completed = false;
+  } else {
+    query.completed = true;
+  }
   return query;
 };
 

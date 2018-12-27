@@ -219,7 +219,7 @@ export function loadQuestionsList(dispatch, searchQuery, start = 1, stop = 10) {
   params.set('madeByMe', searchQuery.madeByMe);
   params.set('answered', searchQuery.answered);
   params.set('unanswered', searchQuery.unanswered);
-
+  params.set('completed', searchQuery.completed);
   let lowRating;
   let highRating;
   switch (searchQuery.level) {
@@ -279,6 +279,7 @@ export function loadCountQuestions(dispatch, searchQuery) {
   params.set('madeByMe', searchQuery.madeByMe);
   params.set('answered', searchQuery.answered);
   params.set('unanswered', searchQuery.unanswered);
+  params.set('completed', searchQuery.completed);
 
   let lowRating;
   let highRating;
