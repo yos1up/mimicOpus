@@ -344,7 +344,6 @@ class Search extends React.Component {
             const { id, question } = item;
             const date = `${question.uploadedAt.getFullYear()}/${question.uploadedAt.getMonth() + 1}/${question.uploadedAt.getDate()}`;
             const bMine = (uid === question.uid);
-            console.log(question.score);
             let scoreColor = '#CCCCCC';
             if (question.score >= 100) {
               scoreColor = '#EA5455';
