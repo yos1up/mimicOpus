@@ -235,7 +235,9 @@ class PianoRoll extends React.Component {
                   end: quantizedBeats + quantizeBeats,
                   pitch: inputPitch,
                 });
-                addNote(note);
+                if (note.start < note.end) {
+                  addNote(note);
+                }
                 this.setState({
                   inputStart: null,
                   inputEnd: null,
@@ -261,12 +263,12 @@ class PianoRoll extends React.Component {
                       position: 'absolute',
                       left: start * widthPerBeat,
                       top: numPitch * heightPerPitch - (pitch + 1) * heightPerPitch,
-                      width: (end - start) * widthPerBeat - 1,
+                      width: (end - start) * widthPerBeat - 2,
                       height: heightPerPitch - 1,
                       backgroundColor: 'blue',
                       opacity: 0.5,
-                      borderRadius: 2,
-                      boxShadow: '1px 1px 3px gray',
+                      borderRadius: 3,
+                      boxShadow: '2px 2px 3px #DDDDDD',
                     }}
                   />
                   <div
