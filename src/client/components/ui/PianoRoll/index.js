@@ -6,6 +6,7 @@ import Grid from './Grid';
 import PitchBar from './PitchBar';
 import PositionBar from './PositionBar';
 import Note from '../../../data/note';
+import device from './device';
 
 
 class PianoRoll extends React.Component {
