@@ -7,9 +7,9 @@ import {
   changeDisplayMode,
   setBPM,
   setQuestionId,
-} from '../../actions';
+} from '../actions';
 
-import Home from '../../components/Home';
+import Home from '../components/Home';
 
 const mapStateToProps = state => ({
   newQuestionsList: state.music.newQuestionsList,

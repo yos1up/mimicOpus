@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import {
   addNote, delNote, shiftPitchRange, setBPM, uploadQuestion,
   setTitle, clearNotes, changeDisplayMode,
-} from '../../actions';
-import MakeQuestion from '../../components/MakeQuestion';
+} from '../actions';
+import MakeQuestion from '../components/MakeQuestion';
 
 const mapStateToProps = state => ({
   notes: state.music.notes,

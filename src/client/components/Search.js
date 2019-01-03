@@ -30,11 +30,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withRouter } from 'react-router';
 
-import displayModes from '../../data/displayModes';
-import filterLevels from '../../data/filterLevels';
-import SearchQuery from '../../data/searchQuery';
+import displayModes from '../data/displayModes';
+import filterLevels from '../data/filterLevels';
+import SearchQuery from '../data/searchQuery';
 
-import SoundPlayer from '../SoundPlayer';
+import SoundPlayer from './SoundPlayer';
 
 class Search extends React.Component {
   constructor(props) {

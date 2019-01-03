@@ -2,9 +2,9 @@ import { connect } from 'react-redux';
 
 import {
   loadRanking, changeDisplayMode,
-} from '../../actions';
+} from '../actions';
 
-import Ranking from '../../components/Ranking';
+import Ranking from '../components/Ranking';
 
 const mapStateToProps = state => ({
   rankedUsers: state.ranking.rankedUsers,

@@ -11,7 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 
-import displayModes from '../../data/displayModes';
+import displayModes from '../data/displayModes';
 
 
 class Ranking extends React.Component {
