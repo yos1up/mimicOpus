@@ -14,9 +14,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { withRouter } from 'react-router';
 import { TwitterTimelineEmbed, TwitterHashtagButton } from 'react-twitter-embed';
 
-import displayModes from '../data/displayModes';
+import displayModes from '../../data/displayModes';
 
-import SoundPlayer from './SoundPlayer';
+import SoundPlayer from '../SoundPlayer';
 
 class Home extends React.Component {
   constructor(props) {

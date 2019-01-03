@@ -21,7 +21,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import Typography from '@material-ui/core/Typography';
 
-import displayModes from '../data/displayModes';
+import displayModes from '../../data/displayModes';
 
 
 class Header extends React.Component {

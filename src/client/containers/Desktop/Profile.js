@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 
 import {
   changeDisplayName, changeDisplayMode,
-} from '../actions';
-import Profile from '../components/Profile';
+} from '../../actions';
+import Profile from '../../components/Desktop/Profile';
 
 const mapStateToProps = state => ({
   photoURL: state.auth.photoURL,

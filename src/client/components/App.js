@@ -4,19 +4,8 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import { Route, Switch } from 'react-router';
 import { ConnectedRouter } from 'connected-react-router';
 
-import SignIn from '../containers/SignIn';
-import License from '../containers/License';
-import FAQ from '../containers/FAQ';
-import Header from '../containers/Header';
-import MobileHeader from '../containers/MobileHeader';
-
-import Home from '../containers/Home';
-import MakeQuestion from '../containers/MakeQuestion';
-import PlayQuestion from '../containers/PlayQuestion';
-import Search from '../containers/Search';
-import Profile from '../containers/Profile';
-import Ranking from '../containers/Ranking';
-import MakeEmbedPianoRoll from '../containers/MakeEmbedPianoRoll';
+import DesktopApp from './Desktop/App';
+import MobileApp from './Mobile/App';
 
 import EmbedPianoRoll from './embed/PianoRoll';
 
@@ -44,59 +33,9 @@ class App extends React.Component {
               <Route path="/embed/pianoroll" component={EmbedPianoRoll} />
               <Route>
                 {device.isMobile() ? (
-                  <div
-                    style={{
-                      width: '100%',
-                    }}
-                  >
-                    <MobileHeader />
-                    <div
-                      id="contents"
-                      style={{
-                        position: 'absolute',
-                        top: 100,
-                        width: '100%',
-                      }}
-                    >
-                      <Route component={Tracker} />
-                      <Switch>
-                      </Switch>
-                    </div>
-                    <SignIn />
-                    <License />
-                    <FAQ />
-                  </div>
+                  <MobileApp />
                 ) : (
-                  <div
-                    style={{
-                      position: 'relative',
-                      margin: '0px auto',
-                      width: 1000,
-                    }}
-                  >
-                    <Header />
-                    <div
-                      id="contents"
-                      style={{
-                        position: 'absolute',
-                        top: 50,
-                      }}
-                    >
-                      <Route component={Tracker} />
-                      <Switch>
-                        <Route exact path="/" component={Home} />
-                        <Route path="/makequestion" component={MakeQuestion} />
-                        <Route path="/playquestion/:qid" component={PlayQuestion} />
-                        <Route path="/search" component={Search} />
-                        <Route path="/user" component={Profile} />
-                        <Route path="/ranking" component={Ranking} />
-                        <Route path="/makeembedpianoroll" component={MakeEmbedPianoRoll} />
-                      </Switch>
-                    </div>
-                    <SignIn />
-                    <License />
-                    <FAQ />
-                  </div>
+                  <DesktopApp />
                 )}
               </Route>
             </Switch>

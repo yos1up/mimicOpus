@@ -1,18 +1,21 @@
 import { connect } from 'react-redux';
 
 import {
-  changeDisplayMode,
-} from '../actions';
-import PlayQuestion from '../components/MakeEmbedPianoRoll';
+  loadRanking, changeDisplayMode,
+} from '../../actions';
+
+import Ranking from '../../components/Desktop/Ranking';
 
 const mapStateToProps = state => ({
+  rankedUsers: state.ranking.rankedUsers,
 });
 
 const mapDispatchToProps = dispatch => ({
+  loadRanking: (start, stop) => loadRanking(dispatch, start, stop),
   changeDisplayMode: mode => dispatch(changeDisplayMode(mode)),
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(PlayQuestion);
+)(Ranking);

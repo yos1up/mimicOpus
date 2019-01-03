@@ -6,7 +6,7 @@ import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import { Helmet } from 'react-helmet';
 
-import displayModes from '../data/displayModes';
+import displayModes from '../../data/displayModes';
 
 
 class Profile extends React.Component {

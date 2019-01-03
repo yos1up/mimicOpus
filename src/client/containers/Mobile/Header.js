@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 
 import {
   changeDisplayMode, openSignInDialog, openLicenseDialog, openFAQDialog, clearNotes, setBPM,
-} from '../actions';
-import Header from '../components/Header';
+} from '../../actions';
+import MobileHeader from '../../components/Mobile/Header';
 
 const mapStateToProps = state => ({
   mode: state.display.mode,
@@ -24,4 +24,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Header);
+)(MobileHeader);

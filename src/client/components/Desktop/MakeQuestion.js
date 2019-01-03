@@ -13,13 +13,13 @@ import Input from '@material-ui/core/Input';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withRouter } from 'react-router';
 
-import PianoRoll from './ui/PianoRoll';
-import Question from '../data/question';
+import PianoRoll from '../ui/PianoRoll';
+import Question from '../../data/question';
 
-import displayModes from '../data/displayModes';
+import displayModes from '../../data/displayModes';
 
-// import SoundPlayer from '../SoundPlayer'; //新 (Web audio API スクラッチ実装)
-import SoundPlayer from './SoundPlayer'; // 旧 (Tone.Offline でオフライン録音)
+// import SoundPlayer from '../../SoundPlayer'; //新 (Web audio API スクラッチ実装)
+import SoundPlayer from '../SoundPlayer'; // 旧 (Tone.Offline でオフライン録音)
 
 const playModes = {
   STOP: 'STOP',

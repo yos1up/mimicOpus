@@ -16,11 +16,11 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { TwitterShareButton } from 'react-twitter-embed';
 
-import PianoRoll from './ui/PianoRoll';
-import Question from '../data/question';
-// import SoundPlayer from '../SoundPlayer'; //新 (Web audio API スクラッチ実装)
-import SoundPlayer from './SoundPlayer'; // 旧 (Tone.Offline でオフライン録音)
-import displayModes from '../data/displayModes';
+import PianoRoll from '../ui/PianoRoll';
+import Question from '../../data/question';
+// import SoundPlayer from '../../SoundPlayer'; //新 (Web audio API スクラッチ実装)
+import SoundPlayer from '../SoundPlayer'; // 旧 (Tone.Offline でオフライン録音)
+import displayModes from '../../data/displayModes';
 
 const playModes = {
   STOP: 'STOP',

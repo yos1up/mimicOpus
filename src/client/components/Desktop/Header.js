@@ -16,7 +16,7 @@ import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 
-import displayModes from '../data/displayModes';
+import displayModes from '../../data/displayModes';
 
 
 class Header extends React.Component {
