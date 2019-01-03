@@ -14,6 +14,8 @@ class Profile extends React.Component {
     super(props);
     this.state = {
       tempDisplayName: props.displayName,
+      width: null,
+      height: null,
     };
   }
 
@@ -25,15 +27,27 @@ class Profile extends React.Component {
   render() {
     const { photoURL, changeDisplayName } = this.props;
     const { tempDisplayName } = this.state;
-    const avatarStyle = {
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      width: 200,
-      height: 200,
-    };
     return (
-      <div>
+      <div
+        id="Profile"
+        style={{
+          width: '100%',
+          height: '100%',
+          margin: 0,
+        }}
+        ref={(element) => {
+          const { width: width_, height: height_ } = this.state;
+          this.element = element;
+          if (this.element !== null
+            && (this.element.offsetWidth !== width_
+            || this.element.offsetHeight !== height_)) {
+            this.setState({
+              width: this.element.offsetWidth,
+              height: this.element.offsetHeight,
+            });
+          }
+        }}
+      >
         <Helmet>
           <meta charSet="utf-8" />
           <title>ユーザー - mimicOpus</title>
@@ -43,11 +57,23 @@ class Profile extends React.Component {
             <Avatar
               alt="no image"
               src={photoURL}
-              style={avatarStyle}
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                width: 100,
+                height: 100,
+              }}
             />
           ) : (
             <Avatar
-              style={avatarStyle}
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                width: 100,
+                height: 100,
+              }}
             >
               <AccountCircleIcon />
             </Avatar>
@@ -59,7 +85,7 @@ class Profile extends React.Component {
             'aria-label': 'Description',
           }}
           style={{
-            position: 'absolute', top: 210, left: 10, height: 40, width: 180,
+            position: 'absolute', top: 110, left: 10, height: 40, width: 180,
           }}
           onChange={e => this.setState({ tempDisplayName: e.target.value })}
         />
@@ -67,7 +93,7 @@ class Profile extends React.Component {
           variant="contained"
           color="primary"
           style={{
-            position: 'absolute', top: 10, left: 810, height: 40, width: 120,
+            position: 'absolute', top: 210, left: 10, height: 40, width: 120,
           }}
           onClick={() => {
             changeDisplayName(tempDisplayName);

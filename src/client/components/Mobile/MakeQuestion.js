@@ -10,7 +10,6 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SaveIcon from '@material-ui/icons/Save';
 import Slider from '@material-ui/lab/Slider';
 import Input from '@material-ui/core/Input';
-import Tooltip from '@material-ui/core/Tooltip';
 import { withRouter } from 'react-router';
 
 import PianoRoll from '../ui/PianoRoll';
@@ -49,11 +48,6 @@ class MakeQuestion extends React.Component {
   componentDidMount() {
     const { changeDisplayMode, } = this.props;
     changeDisplayMode(displayModes.MAKE_QUESTION);
-
-    this.setState({
-      width: this.element.offsetWidth,
-      height: this.element.offsetHeight,
-    });
   }
 
   render() {
@@ -90,42 +84,40 @@ class MakeQuestion extends React.Component {
           <title>問題を作成 - mimicOpus</title>
         </Helmet>
 
-        <Tooltip title="タイトルを編集">
-          <Input
-            placeholder="Untitled"
-            inputProps={{
-              'aria-label': 'Description',
-            }}
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            style={{
-              position: 'absolute', top: 0, left: 10, height: 40, width: 180,
-            }}
-          />
-        </Tooltip>
-        <Tooltip title="再生">
-          <Button
-            variant="fab"
-            color="primary"
-            aria-label="Play"
-            style={{ position: 'absolute', top: 10, left: 210 }}
-            onClick={() => {
-              if (playMode === playModes.PLAY) {
-                this.soundPlayer.stop();
-                this.setState({
-                  playMode: playModes.STOP,
-                });
-              } else {
-                this.soundPlayer.play(notes, bpm, startBeat);
-                this.setState({
-                  playMode: playModes.PLAY,
-                });
-              }
-            }}
-          >
-            {(playMode === playModes.PLAY) ? (<StopIcon />) : (<PlayArrowIcon />)}
-          </Button>
-        </Tooltip>
+        <Input
+          placeholder="Untitled"
+          inputProps={{
+            'aria-label': 'Description',
+          }}
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          style={{
+            position: 'absolute', top: 0, left: 10, height: 40, width: 180,
+          }}
+        />
+
+        <Button
+          variant="fab"
+          color="primary"
+          aria-label="Play"
+          style={{ position: 'absolute', top: 10, left: 210 }}
+          onClick={() => {
+            if (playMode === playModes.PLAY) {
+              this.soundPlayer.stop();
+              this.setState({
+                playMode: playModes.STOP,
+              });
+            } else {
+              this.soundPlayer.play(notes, bpm, startBeat);
+              this.setState({
+                playMode: playModes.PLAY,
+              });
+            }
+          }}
+        >
+          {(playMode === playModes.PLAY) ? (<StopIcon />) : (<PlayArrowIcon />)}
+        </Button>
+
         <Typography
           style={{ position: 'absolute', top: 45, left: 10 }}
           variant="body1"
@@ -133,42 +125,40 @@ class MakeQuestion extends React.Component {
           BPM
           {bpm}
         </Typography>
-        <Tooltip title="BPMを変更">
-          <Slider
-            min={60}
-            max={200}
-            step={1}
-            value={bpm}
-            onChange={(e, v) => setBPM(v)}
-            style={{
-              position: 'absolute',
-              top: 75,
-              left: 10,
-              width: 200,
-              height: 30,
-            }}
-          />
-        </Tooltip>
-        <Tooltip title="問題を保存">
-          <Button
-            variant="fab"
-            color="primary"
-            aria-label="Save"
-            style={{ position: 'absolute', top: 10, left: 280 }}
-            onClick={() => {
-              uploadQuestion(new Question({
-                notes,
-                bpm,
-                title: (title !== '') ? title : 'Untitled',
-              }));
-              clearNotes();
-              setBPM(120);
-              history.push('/');
-            }}
-          >
-            <SaveIcon />
-          </Button>
-        </Tooltip>
+
+        <Slider
+          min={60}
+          max={200}
+          step={1}
+          value={bpm}
+          onChange={(e, v) => setBPM(v)}
+          style={{
+            position: 'absolute',
+            top: 75,
+            left: 10,
+            width: 200,
+            height: 30,
+          }}
+        />
+
+        <Button
+          variant="fab"
+          color="primary"
+          aria-label="Save"
+          style={{ position: 'absolute', top: 10, left: 280 }}
+          onClick={() => {
+            uploadQuestion(new Question({
+              notes,
+              bpm,
+              title: (title !== '') ? title : 'Untitled',
+            }));
+            clearNotes();
+            setBPM(120);
+            history.push('/');
+          }}
+        >
+          <SaveIcon />
+        </Button>
 
         {(height > 0) ? (
           <PianoRoll

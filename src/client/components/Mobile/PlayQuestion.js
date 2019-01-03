@@ -12,7 +12,6 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { TwitterShareButton } from 'react-twitter-embed';
 
@@ -36,6 +35,8 @@ class PlayQuestion extends React.Component {
       playMode: playModes.STOP,
       currentBeat: null,
       startBeat: 0,
+      width: null,
+      height: null,
     };
     this.soundPlayer = new SoundPlayer(50, (beats) => {
       if (beats > 16) {
@@ -72,89 +73,69 @@ class PlayQuestion extends React.Component {
       playMode,
       currentBeat,
       startBeat,
+      width,
+      height,
     } = this.state;
     return (
-      <div id="PlayQuestion">
+      <div
+        id="PlayQuestion"
+        style={{
+          width: '100%',
+          height: '100%',
+          margin: 0,
+        }}
+        ref={(element) => {
+          const { width: width_, height: height_ } = this.state;
+          this.element = element;
+          if (this.element !== null
+            && (this.element.offsetWidth !== width_
+            || this.element.offsetHeight !== height_)) {
+            this.setState({
+              width: this.element.offsetWidth,
+              height: this.element.offsetHeight,
+            });
+          }
+        }}
+      >
         {(waitingLoadQuestion === false) ? (
           <div>
             <Helmet>
               <meta charSet="utf-8" />
               <title>{`${question.title} - ${question.displayName}`}</title>
             </Helmet>
-            <Tooltip title="再生">
-              <Button
-                variant="fab"
-                color="primary"
-                aria-label="Play"
-                style={{ position: 'absolute', top: 10, left: 10 }}
-                onClick={() => {
-                  if (playMode === playModes.PLAY_ANSWER) {
-                    this.soundPlayer.stop();
-                    this.setState({
-                      playMode: playModes.STOP,
-                    });
-                  } else {
-                    this.soundPlayer.play(notes, question.bpm, startBeat);
-                    this.setState({
-                      playMode: playModes.PLAY_ANSWER,
-                    });
-                  }
-                }}
-              >
-                {(playMode === playModes.PLAY_ANSWER) ? (<StopIcon />) : (<PlayArrowIcon />)}
-              </Button>
-            </Tooltip>
 
-            <Tooltip title="問題を再生">
-              <Button
-                variant="fab"
-                color="primary"
-                aria-label="PlayQuestion"
-                style={{ position: 'absolute', top: 10, left: 80 }}
-                onClick={() => {
-                  if (playMode === playModes.PLAY_QUESTION) {
-                    this.soundPlayer.stop();
-                    this.setState({
-                      playMode: playModes.STOP,
-                    });
-                  } else {
-                    if (!this.soundPlayer.playRecord('question', startBeat)) { // 未録音の場合．（初回の問題再生時）
-                      this.soundPlayer.offlineRecord( // 録音を行う
-                        'question',
-                        question.notes,
-                        question.bpm,
-                        () => { this.soundPlayer.playRecord('question', startBeat); } // 録音終了次第，再生
-                      );
-                    } else { // すでに録音されたものがある場合．（2回目以降の問題再生時）
-                      this.soundPlayer.playRecord('question', startBeat); // 再生
-                    }
-                    this.setState({
-                      playMode: playModes.PLAY_QUESTION,
-                    });
-                  }
-                }}
-              >
-                {(playMode === playModes.PLAY_QUESTION) ? (<StopIcon />) : (<PlayCircleOutlineIcon />)}
-              </Button>
-            </Tooltip>
-
-            <Tooltip title="提出">
-              <Button
-                variant="fab"
-                color="primary"
-                aria-label="Submit"
-                style={{ position: 'absolute', top: 10, left: 150 }}
-                onClick={() => {
-                  submitAnswer(questionId, notes);
-                }}
-              >
-                <SendIcon />
-              </Button>
-            </Tooltip>
-
+            <Typography
+              variant="subtitle1"
+              color="textPrimary"
+              style={{
+                position: 'absolute',
+                top: 10,
+                left: 10,
+                width: 200,
+                overflow: 'hidden',
+                fontWeight: 'bold',
+              }}
+            >
+              {question.title}
+            </Typography>
+            <Typography
+              variant="subtitle2"
+              color="textPrimary"
+              style={{
+                position: 'absolute',
+                top: 40,
+                left: 10,
+                width: 100,
+                overflow: 'hidden',
+                fontWeight: 'normal',
+                color: '#777777',
+              }}
+            >
+              {question.displayName}
+            </Typography>
             <div
               style={{
-                position: 'absolute', top: 25, left: 220, width: 1000,
+                position: 'absolute', top: 40, left: 120,
               }}
             >
               <TwitterShareButton
@@ -163,40 +144,89 @@ class PlayQuestion extends React.Component {
               />
             </div>
 
-            <Typography
-              variant="h4"
-              color="textPrimary"
-              style={{
-                position: 'absolute', top: 5, left: 310, width: 1000,
+            <Button
+              variant="fab"
+              color="primary"
+              aria-label="Play"
+              style={{ position: 'absolute', top: 10, left: 230 }}
+              onClick={() => {
+                if (playMode === playModes.PLAY_ANSWER) {
+                  this.soundPlayer.stop();
+                  this.setState({
+                    playMode: playModes.STOP,
+                  });
+                } else {
+                  this.soundPlayer.play(notes, question.bpm, startBeat);
+                  this.setState({
+                    playMode: playModes.PLAY_ANSWER,
+                  });
+                }
               }}
             >
-              {question.title}
-            </Typography>
-            <Typography
-              variant="h8"
-              color="textPrimary"
-              style={{
-                position: 'absolute', top: 45, left: 310, width: 1000,
-              }}
-            >
-              {question.displayName}
-            </Typography>
+              {(playMode === playModes.PLAY_ANSWER) ? (<StopIcon />) : (<PlayArrowIcon />)}
+            </Button>
 
-            <PianoRoll
-              style={{
-                position: 'absolute',
-                top: 100,
-                height: 500,
-                width: 1000,
+            <Button
+              variant="fab"
+              color="primary"
+              aria-label="PlayQuestion"
+              style={{ position: 'absolute', top: 10, left: 290 }}
+              onClick={() => {
+                if (playMode === playModes.PLAY_QUESTION) {
+                  this.soundPlayer.stop();
+                  this.setState({
+                    playMode: playModes.STOP,
+                  });
+                } else {
+                  if (!this.soundPlayer.playRecord('question', startBeat)) { // 未録音の場合．（初回の問題再生時）
+                    this.soundPlayer.offlineRecord( // 録音を行う
+                      'question',
+                      question.notes,
+                      question.bpm,
+                      () => { this.soundPlayer.playRecord('question', startBeat); } // 録音終了次第，再生
+                    );
+                  } else { // すでに録音されたものがある場合．（2回目以降の問題再生時）
+                    this.soundPlayer.playRecord('question', startBeat); // 再生
+                  }
+                  this.setState({
+                    playMode: playModes.PLAY_QUESTION,
+                  });
+                }
               }}
-              notes={notes}
-              addNote={addNote}
-              deleteNote={delNote}
-              currentBeats={(currentBeat !== null) ? currentBeat : startBeat}
-              startBeats={startBeat}
-              previewSound={pitch => this.soundPlayer.preview(pitch)}
-              onChangeStartBeat={(newStartBeat) => { this.setState({ startBeat: newStartBeat }); }}
-            />
+            >
+              {(playMode === playModes.PLAY_QUESTION) ? (<StopIcon />) : (<PlayCircleOutlineIcon />)}
+            </Button>
+
+            <Button
+              variant="fab"
+              color="primary"
+              aria-label="Submit"
+              style={{ position: 'absolute', top: 10, left: 350 }}
+              onClick={() => {
+                submitAnswer(questionId, notes);
+              }}
+            >
+              <SendIcon />
+            </Button>
+
+            {(height > 0) ? (
+              <PianoRoll
+                style={{
+                  position: 'absolute',
+                  top: 100,
+                  left: 10,
+                  height: height - 110,
+                  width: width - 20,
+                }}
+                notes={notes}
+                addNote={addNote}
+                deleteNote={delNote}
+                currentBeats={(currentBeat !== null) ? currentBeat : startBeat}
+                startBeats={startBeat}
+                previewSound={pitch => this.soundPlayer.preview(pitch)}
+                onChangeStartBeat={(newStartBeat) => { this.setState({ startBeat: newStartBeat }); }}
+              />
+            ) : null }
 
             <Dialog
               open={isOpenScoreDialog}
@@ -216,11 +246,10 @@ class PlayQuestion extends React.Component {
           <CircularProgress
             style={{
               position: 'absolute',
-              left: 400,
+              left: 200,
             }}
           />
         )}
-
       </div>
     );
   }
