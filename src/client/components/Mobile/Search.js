@@ -104,37 +104,171 @@ class Search extends React.Component {
               }
               return (
                 <div>
-                  <ListItem>
-                    <ListItemText
-                      primary={question.title}
-                      secondary={(
-                        <div>
-                          <Typography component="span" color="textPrimary">
-                            {question.displayName}
-                          </Typography>
-                          <div>
-                            {`${date}`}
-                          </div>
-                          <div>
-                            {`BPM ${question.bpm}`}
-                          </div>
-                          <div>
-                            {`▶︎ ${question.playedUserNum}`}
-                          </div>
-                          <div>
-                            {`難易度 ${parseFloat(question.rating).toFixed()}`}
-                          </div>
-                        </div>
-                      )}
-                    />
+                  <ListItem
+                    button={!bMine}
+                    onClick={bMine ? (
+                      () => {}
+                    ) : (
+                      () => {
+                        history.push(`/playquestion/${id}`);
+                      }
+                    )}
+                    style={{
+                      height: 90,
+                    }}
+                  >
+                    <div>
+                      <Typography
+                        variant="body1"
+                        component="span"
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          color: '#999999',
+                        }}
+                      >
+                        {question.displayName}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        component="span"
+                        style={{
+                          position: 'absolute',
+                          left: 100,
+                          top: 10,
+                          color: '#999999',
+                        }}
+                      >
+                        {`${date}`}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        component="span"
+                        style={{
+                          position: 'absolute',
+                          fontWeight: 'bold',
+                          top: 30,
+                        }}
+                      >
+                        {question.title}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        component="span"
+                        style={{
+                          position: 'absolute',
+                          top: 60,
+                        }}
+                      >
+                        {`BPM ${question.bpm}`}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        component="span"
+                        style={{
+                          position: 'absolute',
+                          top: 60,
+                          left: 90,
+                        }}
+                      >
+                        {`▶︎ ${question.playedUserNum}`}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        component="span"
+                        style={{
+                          position: 'absolute',
+                          top: 60,
+                          left: 130,
+                        }}
+                      >
+                        {`難易度 ${parseFloat(question.rating).toFixed()}`}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        component="span"
+                        style={{
+                          position: 'absolute',
+                          top: 10,
+                          left: 230,
+                          color: '#999999',
+                        }}
+                      >
+                        My Score
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        component="span"
+                        style={{
+                          position: 'absolute',
+                          top: 5,
+                          left: 300,
+                          color: scoreColor,
+                          fontWeight: 'bold',
+                          fontSize: 20,
+                        }}
+                      >
+                        {(question.score !== undefined && question.score !== null) ? parseFloat(question.score).toFixed(2) : '??.??'}
+                      </Typography>
+                      <IconButton
+                        aria-label="Play"
+                        onClick={(e) => {
+                          this.soundPlayer.play(question.notes, question.bpm);
+                          e.stopPropagation();
+                        }}
+                        style={{
+                          position: 'absolute', top: 40, left: 220, width: 50, height: 50,
+                        }}
+                      >
+                        <PlayArrowIcon />
+                      </IconButton>
+                      {(bMine) ? (
+                        <IconButton
+                          aria-label="Edit"
+                          onClick={(e) => {
+                            setNotes(question.notes);
+                            setBPM(question.bpm);
+                            setQuestionId(id);
+                            setTitle(question.title);
+                            history.push('/makequestion');
+                            e.stopPropagation();
+                          }}
+                          style={{
+                            position: 'absolute', top: 40, left: 275, width: 50, height: 50,
+                          }}
+                        >
+                          <FileCopyIcon />
+                        </IconButton>
+                      ) : null
+                      }
+                      {(bMine) ? (
+                        <Tooltip title={`${question.title}を削除`}>
+                          <IconButton
+                            aria-label="Delete"
+                            onClick={(e) => {
+                              deleteUploadedQuestion(id, () => {
+                                loadCountQuestions(tempSearchQuery);
+                                loadQuestionsList(tempSearchQuery, 1, 10);
+                              });
+                              e.stopPropagation();
+                            }}
+                            style={{
+                              position: 'absolute', top: 40, left: 330, width: 50, height: 50,
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Tooltip>
+                      ) : null
+                      }
+                    </div>
                   </ListItem>
                   <Divider />
                 </div>
               );
             })
           }
-          <Table
-          >
+          <Table>
             <TableFooter>
               <TablePagination
                 colSpan={3}

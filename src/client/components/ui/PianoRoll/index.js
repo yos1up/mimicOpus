@@ -481,25 +481,35 @@ class PianoRoll extends React.Component {
           </div>
         </div>
         <div
-          id="start"
           style={{
             position: 'absolute',
+            left: pitchBarWidth,
+            width: mainGridWidth,
             height,
-            width: 3,
-            left: startBeats * widthPerBeat + scrollLeft + pitchBarWidth,
-            backgroundColor: '#888888',
+            overflow: 'hidden',
           }}
-        />
-        <div
-          id="position"
-          style={{
-            position: 'absolute',
-            height,
-            width: 5,
-            left: currentBeats * widthPerBeat + scrollLeft + pitchBarWidth,
-            backgroundColor: '#555555',
-          }}
-        />
+        >
+          <div
+            id="start"
+            style={{
+              position: 'absolute',
+              height,
+              width: 3,
+              left: startBeats * widthPerBeat + scrollLeft,
+              backgroundColor: '#888888',
+            }}
+          />
+          <div
+            id="position"
+            style={{
+              position: 'absolute',
+              height,
+              width: 5,
+              left: currentBeats * widthPerBeat + scrollLeft,
+              backgroundColor: '#555555',
+            }}
+          />
+        </div>
       </div>
     );
   }
