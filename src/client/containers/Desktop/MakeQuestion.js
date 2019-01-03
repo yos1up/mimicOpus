@@ -4,7 +4,7 @@ import {
   addNote, delNote, shiftPitchRange, setBPM, uploadQuestion,
   setTitle, clearNotes, changeDisplayMode,
 } from '../../actions';
-import MakeQuestion from '../../components/MakeQuestion';
+import MakeQuestion from '../../components/Desktop/MakeQuestion';
 
 const mapStateToProps = state => ({
   notes: state.music.notes,

@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 
 import {
   changeDisplayMode, openSignInDialog, openLicenseDialog, openFAQDialog, clearNotes, setBPM,
-} from '../actions';
-import Header from '../components/Header';
+} from '../../actions';
+import Header from '../../components/Desktop/Header';
 
 const mapStateToProps = state => ({
   mode: state.display.mode,

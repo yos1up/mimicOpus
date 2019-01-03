@@ -4,7 +4,7 @@ import {
   loadRanking, changeDisplayMode,
 } from '../../actions';
 
-import Ranking from '../../components/Ranking';
+import Ranking from '../../components/Mobile/Ranking';
 
 const mapStateToProps = state => ({
   rankedUsers: state.ranking.rankedUsers,

@@ -1,18 +1,21 @@
 import { connect } from 'react-redux';
 
 import {
-  changeDisplayMode,
-} from '../actions';
-import PlayQuestion from '../components/MakeEmbedPianoRoll';
+  changeDisplayName, changeDisplayMode,
+} from '../../actions';
+import Profile from '../../components/Mobile/Profile';
 
 const mapStateToProps = state => ({
+  photoURL: state.auth.photoURL,
+  displayName: state.auth.displayName,
 });
 
 const mapDispatchToProps = dispatch => ({
+  changeDisplayName: name => changeDisplayName(dispatch, name),
   changeDisplayMode: mode => dispatch(changeDisplayMode(mode)),
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(PlayQuestion);
+)(Profile);

@@ -11,7 +11,7 @@ import {
   deleteUploadedQuestion,
   loadCountQuestions,
 } from '../../actions';
-import Search from '../../components/Search';
+import Search from '../../components/Desktop/Search';
 
 const mapStateToProps = state => ({
   questionsList: state.music.questionsList,

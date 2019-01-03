@@ -12,10 +12,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Slider from '@material-ui/lab/Slider';
 import TextField from '@material-ui/core/TextField';
 
-import PianoRoll from './ui/PianoRoll';
-// import SoundPlayer from '../SoundPlayer'; //新 (Web audio API スクラッチ実装)
-import SoundPlayer from './SoundPlayer'; // 旧 (Tone.Offline でオフライン録音)
-import displayModes from '../data/displayModes';
+import PianoRoll from '../ui/PianoRoll';
+// import SoundPlayer from '../../SoundPlayer'; //新 (Web audio API スクラッチ実装)
+import SoundPlayer from '../SoundPlayer'; // 旧 (Tone.Offline でオフライン録音)
+import displayModes from '../../data/displayModes';
 
 const playModes = {
   STOP: 'STOP',

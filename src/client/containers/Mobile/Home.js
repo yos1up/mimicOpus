@@ -9,7 +9,7 @@ import {
   setQuestionId,
 } from '../../actions';
 
-import Home from '../../components/Home';
+import Home from '../../components/Mobile/Home';
 
 const mapStateToProps = state => ({
   newQuestionsList: state.music.newQuestionsList,

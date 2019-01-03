@@ -16,7 +16,7 @@ import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 
-import displayModes from '../data/displayModes';
+import displayModes from '../../data/displayModes';
 
 
 class Header extends React.Component {
@@ -72,7 +72,7 @@ class Header extends React.Component {
             >
               <Tab label="ホーム" value={displayModes.HOME} to="/" component={Link} />
               <Tab label="検索" value={displayModes.SEARCH} to="/search" component={Link} />
-              <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} disabled={provider === 'anonymous'} to="/makequestion" component={Link} onClick={ () => clearNotes(3) } />
+              <Tab label="問題を作る" value={displayModes.MAKE_QUESTION} disabled={provider === 'anonymous'} to="/makequestion" component={Link} onClick={ () => clearNotes() } />
               <Tab label="ランキング" value={displayModes.RANKING} to="/ranking" component={Link} />
               <Tab label="blog" onClick={() => { location.href = 'https://blog.mimicopus.com/'; }} />
             </Tabs>
