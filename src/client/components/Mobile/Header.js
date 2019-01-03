@@ -11,6 +11,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import EditIcon from '@material-ui/icons/Edit';
 import GradeIcon from '@material-ui/icons/Grade';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import Drawer from '@material-ui/core/Drawer';
 import { Link } from 'react-router-dom';
 
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -50,6 +51,24 @@ class Header extends React.Component {
     switch (mode) {
       case displayModes.HOME:
         modeText = 'ホーム';
+        break;
+      case displayModes.MAKE_QUESTION:
+        modeText = '問題を作成';
+        break;
+      case displayModes.PLAY_QUESTION:
+        modeText = '問題を回答';
+        break;
+      case displayModes.SEARCH:
+        modeText = '検索';
+        break;
+      case displayModes.USER:
+        modeText = 'プロフィール';
+        break;
+      case displayModes.RANKING:
+        modeText = 'ランキング';
+        break;
+      case displayModes.MAKE_EMBED_PIANO_ROLL:
+        modeText = '埋め込みピアノロール';
         break;
       default:
         break;
@@ -101,62 +120,54 @@ class Header extends React.Component {
               </ButtonBase>
             )
           }
-          <Popper open={openUserMenu} anchorEl={this.anchorEl} transition disablePortal>
-            {({ TransitionProps, placement }) => (
-              <Grow
-                {...TransitionProps}
-                id="menu-list-grow"
-                style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-              >
-                <Paper>
-                  <ClickAwayListener onClickAway={this.handleCloseUserMenu}>
-                    <MenuList>
-                      <MenuItem
-                        disabled={uid === -1}
-                        onClick={() => {
-                          this.handleCloseUserMenu();
-                        }}
-                        to="/user"
-                        component={Link}
-                      >
-                        プロフィール
-                      </MenuItem>
-                      <MenuItem onClick={() => {
-                        this.handleCloseUserMenu();
-                        openSignInDialog();
-                      }}
-                      >
-                        サインイン
-                      </MenuItem>
-                      <MenuItem onClick={() => {
-                        this.handleCloseUserMenu();
-                        openFAQDialog();
-                      }}
-                      >
-                        FAQ（よくある質問）
-                      </MenuItem>
-                      <MenuItem onClick={() => {
-                        this.handleCloseUserMenu();
-                        openLicenseDialog();
-                      }}
-                      >
-                        ライセンス&クレジット
-                      </MenuItem>
-                      <MenuItem
-                        disabled={uid === -1}
-                        onClick={() => {
-                          this.handleCloseUserMenu();
-                          location.href = '/auth/logout';
-                        }}
-                      >
-                        ログアウト
-                      </MenuItem>
-                    </MenuList>
-                  </ClickAwayListener>
-                </Paper>
-              </Grow>
-            )}
-          </Popper>
+          <Drawer open={openUserMenu}>
+            <Paper>
+              <ClickAwayListener onClickAway={this.handleCloseUserMenu}>
+                <MenuList>
+                  <MenuItem
+                    disabled={uid === -1}
+                    onClick={() => {
+                      this.handleCloseUserMenu();
+                    }}
+                    to="/user"
+                    component={Link}
+                  >
+                    プロフィール
+                  </MenuItem>
+                  <MenuItem onClick={() => {
+                    this.handleCloseUserMenu();
+                    openSignInDialog();
+                  }}
+                  >
+                    サインイン
+                  </MenuItem>
+                  <MenuItem onClick={() => {
+                    this.handleCloseUserMenu();
+                    openFAQDialog();
+                  }}
+                  >
+                    FAQ（よくある質問）
+                  </MenuItem>
+                  <MenuItem onClick={() => {
+                    this.handleCloseUserMenu();
+                    openLicenseDialog();
+                  }}
+                  >
+                    ライセンス&クレジット
+                  </MenuItem>
+                  <MenuItem
+                    disabled={uid === -1}
+                    onClick={() => {
+                      this.handleCloseUserMenu();
+                      location.href = '/auth/logout';
+                    }}
+                  >
+                    ログアウト
+                  </MenuItem>
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Drawer>
           <Typography
             style={{
               position: 'absolute',

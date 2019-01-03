@@ -227,7 +227,18 @@ class PianoRoll extends React.Component {
       <div
         id="pianoRoll"
         style={pianoRollStyle}
-        ref={(element) => { this.element = element; }}
+        ref={(element) => {
+          const { width: width_, height: height_ } = this.state;
+          this.element = element;
+          if (this.element !== null
+            && (this.element.offsetWidth !== width_
+            || this.element.offsetHeight !== height_)) {
+            this.setState({
+              width: this.element.offsetWidth,
+              height: this.element.offsetHeight,
+            });
+          }
+        }}
       >
         <div
           id="positionBar"
