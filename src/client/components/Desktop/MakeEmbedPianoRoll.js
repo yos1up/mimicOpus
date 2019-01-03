@@ -32,7 +32,7 @@ class MakeEmbedPianoRoll extends React.Component {
       currentBeat: 0,
       startBeat: 0,
       bpm: 120,
-      code: "",
+      code: '',
     };
 
     this.soundPlayer = new SoundPlayer(50, (beats) => {
@@ -111,12 +111,27 @@ class MakeEmbedPianoRoll extends React.Component {
             aria-label="Export"
             style={{ position: 'absolute', top: 10, left: 330 }}
             onClick={() => {
-              this.setState({ code: `<iframe
+              if (notes.size > 0) {
+                this.setState({
+                  code:
+`<iframe
   width="800"
   height="400"
   frameBorder="0"
   src='https://www.mimicopus.com/embed/pianoroll?notes=${JSON.stringify(notes)}'
-/>` });
+/>`
+                });
+              } else {
+                this.setState({
+                  code:
+`<iframe
+  width="800"
+  height="400"
+  frameBorder="0"
+  src='https://www.mimicopus.com/embed/pianoroll'
+/>`
+                });
+              }
             }}
           >
             <CodeIcon />
