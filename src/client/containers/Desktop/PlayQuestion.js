@@ -5,7 +5,7 @@ import {
   uploadQuestion, clearNotes, changeDisplayMode, submitAnswer,
   closeScoreDialog, loadQuestion,
 } from '../../actions';
-import PlayQuestion from '../../components/PlayQuestion';
+import PlayQuestion from '../../components/Desktop/PlayQuestion';
 
 const mapStateToProps = state => ({
   notes: state.music.notes,

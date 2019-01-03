@@ -6,6 +6,7 @@ import Grid from './Grid';
 import PitchBar from './PitchBar';
 import PositionBar from './PositionBar';
 import Note from '../../../data/note';
+import device from './device';
 
 
 class PianoRoll extends React.Component {
@@ -18,12 +19,20 @@ class PianoRoll extends React.Component {
       yScroll: false,
       scrollTop: 0,
       scrollLeft: 0,
+      prevScrollTop: null,
+      prevScrollLeft: null,
+      touchStartX: null,
+      touchStartY: null,
       inputStart: null,
       inputPitch: null,
       inputEnd: null,
     };
 
     this.handleMainGridWheel = this.handleMainGridWheel.bind(this);
+    this.handleMainGridTouchStart = this.handleMainGridTouchStart.bind(this);
+    this.handleMainGridTouchMove = this.handleMainGridTouchMove.bind(this);
+    this.handleMainGridTouchCancel = this.handleMainGridTouchCancel.bind(this);
+    this.handleMainGridTouchEnd = this.handleMainGridTouchEnd.bind(this);
     this.handlePitchBarWheel = this.handlePitchBarWheel.bind(this);
     this.handlePositionBarWheel = this.handlePositionBarWheel.bind(this);
   }
@@ -52,8 +61,8 @@ class PianoRoll extends React.Component {
       scrollTop, scrollLeft, mainGridWidth, mainGridHeight, xScroll, yScroll
     } = this.state;
     e.preventDefault();
-    let newScrollTop = scrollTop;
     let newScrollLeft = scrollLeft;
+    let newScrollTop = scrollTop;
 
     if (xScroll) {
       newScrollLeft -= e.deltaX;
@@ -69,6 +78,92 @@ class PianoRoll extends React.Component {
       scrollTop: newScrollTop,
       scrollLeft: newScrollLeft,
     });
+  }
+
+  handleMainGridTouchStart(e) {
+    const { scrollLeft, scrollTop } = this.state;
+    this.setState({
+      prevScrollLeft: scrollLeft,
+      prevScrollTop: scrollTop,
+      touchStartX: e.changedTouches[0].pageX,
+      touchStartY: e.changedTouches[0].pageY,
+    });
+    e.preventDefault();
+  }
+
+  handleMainGridTouchMove(e) {
+    const {
+      widthPerBeat, numBeats, heightPerPitch, numPitch,
+    } = this.props;
+    const {
+      prevScrollLeft, prevScrollTop, touchStartX, touchStartY, xScroll, yScroll,
+      mainGridWidth, mainGridHeight,
+    } = this.state;
+    let newScrollLeft = prevScrollLeft;
+    let newScrollTop = prevScrollTop;
+
+    if (xScroll) {
+      newScrollLeft += e.changedTouches[0].pageX - touchStartX;
+      newScrollLeft = Math.min(0, newScrollLeft);
+      newScrollLeft = Math.max(-widthPerBeat * numBeats + mainGridWidth, newScrollLeft);
+    }
+    if (yScroll) {
+      newScrollTop += e.changedTouches[0].pageY - touchStartY;
+      newScrollTop = Math.min(0, newScrollTop);
+      newScrollTop = Math.max(-heightPerPitch * numPitch + mainGridHeight, newScrollTop);
+    }
+
+    this.setState({
+      scrollLeft: newScrollLeft,
+      scrollTop: newScrollTop,
+    });
+    e.preventDefault();
+  }
+
+  handleMainGridTouchCancel(e) {
+    const { prevScrollLeft, prevScrollTop } = this.state;
+    this.setState({
+      scrollLeft: prevScrollLeft,
+      scrollTop: prevScrollTop,
+      prevScrollLeft: null,
+      prevScrollTop: null,
+      touchStartX: null,
+      touchStartY: null,
+    });
+    e.preventDefault();
+  }
+
+  handleMainGridTouchEnd(e) {
+    const {
+      widthPerBeat, numBeats, heightPerPitch, numPitch,
+    } = this.props;
+    const {
+      prevScrollLeft, prevScrollTop, touchStartX, touchStartY, xScroll, yScroll,
+      mainGridWidth, mainGridHeight,
+    } = this.state;
+    let newScrollLeft = prevScrollLeft;
+    let newScrollTop = prevScrollTop;
+
+    if (xScroll) {
+      newScrollLeft += e.changedTouches[0].pageX - touchStartX;
+      newScrollLeft = Math.min(0, newScrollLeft);
+      newScrollLeft = Math.max(-widthPerBeat * numBeats + mainGridWidth, newScrollLeft);
+    }
+    if (yScroll) {
+      newScrollTop += e.changedTouches[0].pageY - touchStartY;
+      newScrollTop = Math.min(0, newScrollTop);
+      newScrollTop = Math.max(-heightPerPitch * numPitch + mainGridHeight, newScrollTop);
+    }
+
+    this.setState({
+      scrollLeft: newScrollLeft,
+      scrollTop: newScrollTop,
+      prevScrollLeft: null,
+      prevScrollTop: null,
+      touchStartX: null,
+      touchStartY: null,
+    });
+    e.preventDefault();
   }
 
   handlePitchBarWheel(e) {
@@ -121,6 +216,7 @@ class PianoRoll extends React.Component {
       width, height, scrollTop, scrollLeft, mainGridWidth, mainGridHeight,
       inputStart, inputEnd, inputPitch,
     } = this.state;
+    const isMobile = device.isMobile();
     const pianoRollStyle = {
       height: 400,
       width: 1000,
@@ -131,7 +227,18 @@ class PianoRoll extends React.Component {
       <div
         id="pianoRoll"
         style={pianoRollStyle}
-        ref={(element) => { this.element = element; }}
+        ref={(element) => {
+          const { width: width_, height: height_ } = this.state;
+          this.element = element;
+          if (this.element !== null
+            && (this.element.offsetWidth !== width_
+            || this.element.offsetHeight !== height_)) {
+            this.setState({
+              width: this.element.offsetWidth,
+              height: this.element.offsetHeight,
+            });
+          }
+        }}
       >
         <div
           id="positionBar"
@@ -199,6 +306,74 @@ class PianoRoll extends React.Component {
           }}
           onWheel={this.handleMainGridWheel}
         >
+          {(isMobile) ? (
+            <div
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                width: mainGridWidth,
+                height: 0.1 * mainGridHeight,
+                zIndex: 2,
+              }}
+              ref={(element) => {
+                if (this.upperTouchBar === undefined || this.upperTouchBar === null) {
+                  this.upperTouchBar = element;
+                  if (element !== null) {
+                    element.addEventListener('touchmove', this.handleMainGridTouchMove, { passive: false });
+                    element.addEventListener('touchstart', this.handleMainGridTouchStart, { passive: false });
+                    element.addEventListener('touchend', this.handleMainGridTouchEnd, { passive: false });
+                    element.addEventListener('touchcancel', this.handleMainGridTouchCancel, { passive: false });
+                  }
+                }
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: '#000000',
+                  opacity: 0.1,
+                }}
+              />
+              ここをドラッグすると、ピアノロールが移動します。
+            </div>
+          ) : null}
+          {(isMobile) ? (
+            <div
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0.9 * mainGridHeight,
+                width: mainGridWidth,
+                height: 0.1 * mainGridHeight,
+                zIndex: 2,
+              }}
+              ref={(element) => {
+                if (this.lowerTouchBar === undefined || this.lowerTouchBar === null) {
+                  this.lowerTouchBar = element;
+                  if (element !== null) {
+                    element.addEventListener('touchmove', this.handleMainGridTouchMove, { passive: false });
+                    element.addEventListener('touchstart', this.handleMainGridTouchStart, { passive: false });
+                    element.addEventListener('touchend', this.handleMainGridTouchEnd, { passive: false });
+                    element.addEventListener('touchcancel', this.handleMainGridTouchCancel, { passive: false });
+                  }
+                }
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: '#000000',
+                  opacity: 0.1,
+                }}
+              />
+              ここをドラッグすると、ピアノロールが移動します。
+            </div>
+          ) : null}
           <div
             style={{
               position: 'absolute',
@@ -306,25 +481,35 @@ class PianoRoll extends React.Component {
           </div>
         </div>
         <div
-          id="start"
           style={{
             position: 'absolute',
+            left: pitchBarWidth,
+            width: mainGridWidth,
             height,
-            width: 3,
-            left: startBeats * widthPerBeat + scrollLeft + pitchBarWidth,
-            backgroundColor: '#888888',
+            overflow: 'hidden',
           }}
-        />
-        <div
-          id="position"
-          style={{
-            position: 'absolute',
-            height,
-            width: 5,
-            left: currentBeats * widthPerBeat + scrollLeft + pitchBarWidth,
-            backgroundColor: '#555555',
-          }}
-        />
+        >
+          <div
+            id="start"
+            style={{
+              position: 'absolute',
+              height,
+              width: 3,
+              left: startBeats * widthPerBeat + scrollLeft,
+              backgroundColor: '#888888',
+            }}
+          />
+          <div
+            id="position"
+            style={{
+              position: 'absolute',
+              height,
+              width: 5,
+              left: currentBeats * widthPerBeat + scrollLeft,
+              backgroundColor: '#555555',
+            }}
+          />
+        </div>
       </div>
     );
   }

@@ -14,6 +14,10 @@ class Grid extends React.Component {
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
+    this.handleTouchStart = this.handleTouchStart.bind(this);
+    this.handleTouchMove = this.handleTouchMove.bind(this);
+    this.handleTouchCancel = this.handleTouchCancel.bind(this);
+    this.handleTouchEnd = this.handleTouchEnd.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -84,6 +88,84 @@ class Grid extends React.Component {
         parseInt((heightPerPitch * numPitch - event.nativeEvent.offsetY) / heightPerPitch, 10)
       );
     }
+  }
+
+  handleTouchStart(e) {
+    const {
+      widthPerBeat, heightPerPitch, numPitch, onDragStart,
+    } = this.props;
+    const rect = e.target.getBoundingClientRect();
+    const offsetX = e.targetTouches[0].pageX - rect.left;
+    const offsetY = e.targetTouches[0].pageY - rect.top;
+
+    this.setState({
+      isDragged: true,
+    });
+    onDragStart(
+      offsetX / widthPerBeat,
+      parseInt((heightPerPitch * numPitch - offsetY) / heightPerPitch, 10)
+    );
+    e.preventDefault();
+  }
+
+  handleTouchMove(e) {
+    const {
+      widthPerBeat, heightPerPitch, numPitch, onDrag,
+    } = this.props;
+    const { isDragged } = this.state;
+    const rect = e.target.getBoundingClientRect();
+    const offsetX = e.targetTouches[0].pageX - rect.left;
+    const offsetY = e.targetTouches[0].pageY - rect.top;
+
+    if (isDragged) {
+      onDrag(
+        offsetX / widthPerBeat,
+        parseInt((heightPerPitch * numPitch - offsetY) / heightPerPitch, 10)
+      );
+    }
+    e.preventDefault();
+  }
+
+  handleTouchCancel(e) {
+    const {
+      widthPerBeat, heightPerPitch, numPitch, onDragCancel,
+    } = this.props;
+    const { isDragged } = this.state;
+    const rect = e.target.getBoundingClientRect();
+    const offsetX = e.targetTouches[0].pageX - rect.left;
+    const offsetY = e.targetTouches[0].pageY - rect.top;
+
+    if (isDragged) {
+      this.setState({
+        isDragged: false,
+      });
+      onDragCancel(
+        offsetX / widthPerBeat,
+        parseInt((heightPerPitch * numPitch - offsetY) / heightPerPitch, 10)
+      );
+    }
+    e.preventDefault();
+  }
+
+  handleTouchEnd(e) {
+    const {
+      widthPerBeat, heightPerPitch, numPitch, onDragEnd,
+    } = this.props;
+    const { isDragged } = this.state;
+    const rect = e.target.getBoundingClientRect();
+    const offsetX = e.changedTouches[0].pageX - rect.left;
+    const offsetY = e.changedTouches[0].pageY - rect.top;
+
+    if (isDragged) {
+      this.setState({
+        isDragged: false,
+      });
+      onDragEnd(
+        offsetX / widthPerBeat,
+        parseInt((heightPerPitch * numPitch - offsetY) / heightPerPitch, 10)
+      );
+    }
+    e.preventDefault();
   }
 
   render() {
@@ -162,6 +244,17 @@ class Grid extends React.Component {
           onMouseMove={this.handleMouseMove}
           onMouseUp={this.handleMouseUp}
           onMouseLeave={this.handleMouseLeave}
+          ref={(element) => {
+            if (this.dragView === undefined || this.dragView === null) {
+              this.dragView = element;
+              if (element !== null) {
+                element.addEventListener('touchstart', this.handleTouchStart, { passive: false });
+                element.addEventListener('touchmove', this.handleTouchMove, { passive: false });
+                element.addEventListener('touchend', this.handleTouchEnd, { passive: false });
+                element.addEventListener('touchcancel', this.handleTouchCancel, { passive: false });
+              }
+            }
+          }}
         />
       </div>
     );
@@ -178,6 +271,7 @@ Grid.propTypes = {
   onDragStart: PropTypes.func,
   onDrag: PropTypes.func,
   onDragEnd: PropTypes.func,
+  onDragCancel: PropTypes.func,
 };
 
 Grid.defaultProps = {
