@@ -8,6 +8,7 @@ import SignIn from '../containers/SignIn';
 import License from '../containers/License';
 import FAQ from '../containers/FAQ';
 import Header from '../containers/Header';
+import MobileHeader from '../containers/MobileHeader';
 
 import Home from '../containers/Home';
 import MakeQuestion from '../containers/MakeQuestion';
@@ -18,6 +19,8 @@ import Ranking from '../containers/Ranking';
 import MakeEmbedPianoRoll from '../containers/MakeEmbedPianoRoll';
 
 import EmbedPianoRoll from './embed/PianoRoll';
+
+import device from '../data/device';
 
 import { history } from '../configureStore';
 
@@ -40,36 +43,61 @@ class App extends React.Component {
             <Switch>
               <Route path="/embed/pianoroll" component={EmbedPianoRoll} />
               <Route>
-                <div
-                  style={{
-                    position: 'relative',
-                    margin: '0px auto',
-                    width: 1000,
-                  }}
-                >
-                  <Header />
+                {device.isMobile() ? (
                   <div
-                    id="contents"
                     style={{
-                      position: 'absolute',
-                      top: 50,
+                      width: '100%',
                     }}
                   >
-                    <Route component={Tracker} />
-                    <Switch>
-                      <Route exact path="/" component={Home} />
-                      <Route path="/makequestion" component={MakeQuestion} />
-                      <Route path="/playquestion/:qid" component={PlayQuestion} />
-                      <Route path="/search" component={Search} />
-                      <Route path="/user" component={Profile} />
-                      <Route path="/ranking" component={Ranking} />
-                      <Route path="/makeembedpianoroll" component={MakeEmbedPianoRoll} />
-                    </Switch>
+                    <MobileHeader />
+                    <div
+                      id="contents"
+                      style={{
+                        position: 'absolute',
+                        top: 100,
+                        width: '100%',
+                      }}
+                    >
+                      <Route component={Tracker} />
+                      <Switch>
+                      </Switch>
+                    </div>
+                    <SignIn />
+                    <License />
+                    <FAQ />
                   </div>
-                  <SignIn />
-                  <License />
-                  <FAQ />
-                </div>
+                ) : (
+                  <div
+                    style={{
+                      position: 'relative',
+                      margin: '0px auto',
+                      width: 1000,
+                    }}
+                  >
+                    <Header />
+                    <div
+                      id="contents"
+                      style={{
+                        position: 'absolute',
+                        top: 50,
+                      }}
+                    >
+                      <Route component={Tracker} />
+                      <Switch>
+                        <Route exact path="/" component={Home} />
+                        <Route path="/makequestion" component={MakeQuestion} />
+                        <Route path="/playquestion/:qid" component={PlayQuestion} />
+                        <Route path="/search" component={Search} />
+                        <Route path="/user" component={Profile} />
+                        <Route path="/ranking" component={Ranking} />
+                        <Route path="/makeembedpianoroll" component={MakeEmbedPianoRoll} />
+                      </Switch>
+                    </div>
+                    <SignIn />
+                    <License />
+                    <FAQ />
+                  </div>
+                )}
               </Route>
             </Switch>
           </div>
