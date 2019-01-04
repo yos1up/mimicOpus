@@ -129,31 +129,20 @@ class EmbedPianoRoll extends React.Component {
           {bpm}
         </Typography>
         <Tooltip title="BPMを変更">
-          <div
-            style={{ // スマホページで、ページの大きさが100%より大きくなるのを防ぐ目的
+          <Slider
+            min={60}
+            max={200}
+            step={1}
+            value={bpm}
+            onChange={(e, v) => this.setState({ bpm: v })}
+            style={{
               position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              overflow: 'hidden',
+              top: 45,
+              left: 150,
+              width: 150,
+              height: 30,
             }}
-          >
-            <Slider
-              min={60}
-              max={200}
-              step={1}
-              value={bpm}
-              onChange={(e, v) => this.setState({ bpm: v })}
-              style={{
-                position: 'absolute',
-                top: 45,
-                left: 150,
-                width: 200,
-                height: 30,
-              }}
-            />
-          </div>
+          />
         </Tooltip>
         {(width > 0 && height > 0) ? (
           <PianoRoll
